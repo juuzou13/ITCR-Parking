@@ -1,0 +1,40 @@
+<h1>Bienvenido (a) {{nombre_perfil}}</h1>
+<mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+    <mat-grid-tile>
+        <button routerLink="/registrar-vehiculo" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">add_box</mat-icon>
+            Registrar vehículo
+        </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button [routerLink]="['/consultar-funcionario',{editarFunc: true}]" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">edit</mat-icon>
+            Editar perfil
+        </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button (click)="registrarHorario()" routerLink="/consultar-parqueo" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">add_box</mat-icon>
+            Registrar horario propio
+        </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button routerLink="/consultar-parqueo" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">search</mat-icon>
+            Consultar parqueos disponibles
+        </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button routerLink="/consultar-funcionario" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">search</mat-icon>
+            Consulta de funcionario
+        </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button (click)="manejarPlanilla()" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">engineering</mat-icon>
+            Manejar planilla
+        </button>
+    </mat-grid-tile>
+</mat-grid-list>
+    

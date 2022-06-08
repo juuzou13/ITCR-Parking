@@ -1,0 +1,57 @@
+
+<form (submit)="onDescargaInformes(postForm)" #postForm="ngForm">
+    <div>
+        <div style="margin-bottom: 2cm">
+            <h1>Descarga de informes</h1>
+        </div>
+        <div class="container">
+            <div class="subcontainer">
+                <mat-card class="card">
+                    <h2>Descargar informe de los funcionarios</h2>
+                    <h3>Selecione el campus y departamento</h3>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Campus</mat-label>
+                        <mat-select 
+                            name="campus"
+                            required
+                            ngModel
+                            #campus="ngModel"
+                            [(ngModel)]="campus_selected"
+                            (click)="desactivarDepartamento()">
+                            <mat-error *ngIf="campus.invalid">Por favor ingrese una opción</mat-error>
+                                <mat-option value="Cartago" (click)="activarDepartamento(campus.value)">Cartago</mat-option>
+                                <mat-option value="San José" (click)="activarDepartamento(campus.value)">San José</mat-option>
+                                <mat-option value="Alajuela" (click)="activarDepartamento(campus.value)">Alajuela</mat-option>
+                                <mat-option value="San Carlos" (click)="activarDepartamento(campus.value)">San Carlos</mat-option>
+                                <mat-option value="Limón" (click)="activarDepartamento(campus.value)">Limón</mat-option>
+                            </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Departamento</mat-label>
+                        <mat-select 
+                            name="departamento"
+                            required
+                            ngModel
+                            #departamento="ngModel"
+                            [(ngModel)]="departamentoSelected"
+                            [disabled]="!activado">
+                            <mat-error *ngIf="departamento.invalid">Por favor ingrese una opción</mat-error>
+                                <mat-option *ngFor="let departamento of departamentosRegistrados" [value]="departamento.departamento">
+                                    {{departamento.departamento}}
+                                </mat-option>
+                            </mat-select>
+                    </mat-form-field>
+                    <button (click)="descargarInformeFunc()" mat-button color="primary" [disabled]="!activado">
+                        <mat-icon class="icono-boton-menu">download</mat-icon>
+                        Funcionarios del campus
+                    </button>
+                    <h2>Descargar informe de los parqueos</h2>
+                    <button (click)="descargarInformeParqueos()" mat-button color="primary" style="margin-bottom: 1cm">
+                        <mat-icon class="icono-boton-menu">download</mat-icon>
+                        Parqueos registrados
+                    </button>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</form>

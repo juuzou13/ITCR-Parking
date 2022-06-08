@@ -1,0 +1,228 @@
+
+<h1 >Registro de parqueo</h1>
+<form (submit)="onRegistrarParqueo(postForm)" #postForm="ngForm">
+    <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill" (click)="activarParqueoSub(0)">
+                <mat-label>Tipo de parqueo</mat-label>
+                <mat-select required name="parqueo"
+                    required
+                    ngModel
+                    #parqueo="ngModel">
+                    <mat-error *ngIf="parqueo.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option value="1" (click)="activarParqueoSub(1)">Parqueo principal</mat-option>
+                    <mat-option value="2" (click)="activarParqueoSub(2)">Parqueo subcontratado</mat-option>
+                </mat-select>
+            </mat-form-field>  
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="seleccionado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Nombre</mat-label>
+                <input matInput  
+                type="text" 
+                name="nombre"
+                required
+                ngModel
+                #nombre="ngModel">
+                <mat-error *ngIf="nombre.invalid">Por favor ingrese el nombre del parqueo</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="seleccionado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Capacidad total</mat-label>
+                <input matInput  
+                type="number" 
+                name="capacidad_total"
+                min="0"
+                required
+                ngModel
+                #capacidad_total="ngModel">
+                <mat-error *ngIf="capacidad_total.invalid">Por favor ingrese una capacidad total</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="seleccionado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Campus</mat-label>
+                <mat-select required name="campus"
+                    required
+                    ngModel
+                    #campus="ngModel">
+                    <mat-error *ngIf="campus.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let campus of campusRegistrados" [value]="campus">
+                        {{campus.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>    
+        <mat-grid-tile *ngIf="seleccionado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Jefatura</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_jefatura"
+                min="0"
+                required
+                ngModel
+                #espacios_jefatura="ngModel">
+                <mat-error *ngIf="espacios_jefatura.invalid">Por favor ingrese espacios jefatura</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="seleccionado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Vehículos Oficiales</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_vOficiales"
+                min="0"
+                required
+                ngModel
+                #espacios_vOficiales="ngModel">
+                <mat-error *ngIf="espacios_vOficiales.invalid">Por favor ingrese espacios vehículos oficiales</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="seleccionado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Visitantes</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_visitantes"
+                min="0"
+                required
+                ngModel
+                #espacios_visitantes="ngModel">
+                <mat-error *ngIf="espacios_visitantes.invalid">Por favor ingrese espacios visitantes</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="seleccionado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Especiales</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_especiales"
+                min="0"
+                required
+                ngModel
+                #espacios_especiales="ngModel">
+                <mat-error *ngIf="espacios_especiales.invalid">Por favor ingrese espacios especiales</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="seleccionado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Dirección</mat-label>
+                <input matInput  
+                type="text" 
+                name="direccion"
+                required
+                ngModel
+                #direccion="ngModel">
+                <mat-error *ngIf="direccion.invalid">Por favor ingrese la dirección exacta</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="subcontratado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Contacto</mat-label>
+                <input matInput  
+                type="text" 
+                name="contacto"
+                required
+                ngModel
+                #contacto="ngModel">
+                <mat-error *ngIf="contacto.invalid">Por favor ingrese el contacto del parqueo</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="subcontratado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Identificador del contrato</mat-label>
+                <input matInput  
+                type="text" 
+                name="id_contrato"
+                required
+                ngModel
+                #id_contrato="ngModel">
+                <mat-error *ngIf="id_contrato.invalid">Por favor ingrese el identificador del contrato</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile rowspan="4" [style.visibility]="seleccionado ? 'visible' : 'hidden'">
+            <mat-card>
+                <h2>Horario</h2>
+                <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource" >
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="Dia" width="auto">
+                            <th mat-header-cell *matHeaderCellDef> Día </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dia}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Entrada" width="auto">
+                            <th mat-header-cell *matHeaderCellDef> Hora entrada </th>
+                            <td mat-cell *matCellDef="let element"> {{element.hora_entrada}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Salida" width="auto">
+                            <th mat-header-cell *matHeaderCellDef> Hora salida </th>
+                            <td mat-cell *matCellDef="let element"> {{element.hora_salida}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Eliminar" width="auto">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                            <td mat-cell *matCellDef="let i = index"> 
+                                <a icon color="primary" class="btn_eliminar_extracto" (click)="onEliminarExtracto(i)">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <mat-paginator 
+                        [pageSizeOptions]="[3]"
+                        showFirstLastButtons 
+                        [length]="horarioArray.length"
+                        aria-label="Seleccione la página de horarios">
+                    </mat-paginator>
+                </div>
+            </mat-card>
+        </mat-grid-tile>
+        <form (submit)="registrarHorario(horarioForm)" #horarioForm="ngForm">
+            <mat-grid-tile *ngIf="seleccionado">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Día de la semana</mat-label>
+                    <mat-select required name="dia_semana"
+                        required
+                        ngModel
+                        #dia_semana="ngModel">
+                        <mat-error *ngIf="dia_semana.invalid">Por favor ingrese una opción</mat-error>
+                            <mat-option value="0">Lunes</mat-option>
+                            <mat-option value="1">Martes</mat-option>
+                            <mat-option value="2">Miércoles</mat-option>
+                            <mat-option value="3">Jueves</mat-option>
+                            <mat-option value="4">Viernes</mat-option>
+                            <mat-option value="5">Sábado</mat-option>
+                        </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile *ngIf="seleccionado">
+                <p class="titulo_hora_entrada">Hora de entrada</p>
+                <ngb-timepicker [(ngModel)]="tiempo_entrada" [meridian]="meridian" name="hora_entrada"></ngb-timepicker>
+            </mat-grid-tile>
+            <mat-grid-tile *ngIf="seleccionado">
+                <p class="titulo_hora_salida">Hora de salida</p>
+                <ngb-timepicker [(ngModel)]="tiempo_salida" [meridian]="meridian" name="hora_salida"></ngb-timepicker>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-error *ngIf="error_horario">*Por favor ingrese una hora de salida superior a la hora de entrada</mat-error>
+                <mat-error *ngIf="error_horario_2">*Extracto de horario debe ser mínimo de 40 minutos</mat-error>
+            </mat-grid-tile>
+            <mat-grid-tile *ngIf="seleccionado">
+                <button 
+                mat-raised-button 
+                color="primary"
+                type="submit">Registrar horario</button>
+            </mat-grid-tile>
+        </form>
+        <mat-grid-tile *ngIf="seleccionado">
+            <button 
+            mat-raised-button 
+            color="primary"
+            type="submit" >Registrar parqueo</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>
+    

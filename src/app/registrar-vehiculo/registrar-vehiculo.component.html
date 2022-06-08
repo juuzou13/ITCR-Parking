@@ -1,0 +1,65 @@
+
+<h1 >Registro de vehículo </h1>
+<form (submit)="onRegistrarVehiculo(postForm)" #postForm="ngForm">
+    <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile>
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Placa de vehículo</mat-label>
+                    <input matInput  
+                    type="text" 
+                    name="placa"
+                    required
+                    ngModel
+                    #placa="ngModel">
+                    <mat-error *ngIf="placa.invalid">Por favor ingrese una placa</mat-error>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" class="btn_agregar_vehiculo" type="submit">
+                    <mat-icon>add</mat-icon>
+                </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile rowspan="4">
+            <mat-card>
+                <h2>Vehículos asociados</h2>
+                <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource" >
+                    
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="Vehículo" width="auto">
+                        <th mat-header-cell *matHeaderCellDef> Placa de vehículo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.codigo_placa}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Eliminar" width="auto">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                            <td mat-cell *matCellDef="let i = index"> 
+                                <a icon color="primary" class="btn_eliminar_extracto" (click)="onEliminarExtracto(i)">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </td>
+                        </ng-container>
+                    
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    
+                    <mat-paginator 
+                        [pageSizeOptions]="[3]"
+                        showFirstLastButtons 
+                        [length]="placas.length"
+                        aria-label="Seleccione la página de vehículos">
+                    </mat-paginator>
+                </div>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile>
+            <a 
+            mat-raised-button 
+            color="primary"
+            class="btn_finalizar_registro"
+            (click)="finalizarRegistro()" >Finalizar registro</a>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>
+    

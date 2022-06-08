@@ -1,0 +1,108 @@
+<h1 >Manejo de planilla </h1>
+<h2>Agregar funcionario a la planilla</h2>
+<h3>Lista de funcionarios disponibles para agregar</h3>
+<form  (submit)="onAgregarFuncionario()" #agregarForm="ngForm">
+  <mat-grid-list #grid [cols]="2" rowHeight="6:1" gutterSize="20px" >                
+    <mat-grid-tile colspan="2" [rowspan]="rows" style="margin-top:0cm">
+        <mat-card width="auto">
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource " class="mat-elevation-z8 demo-table" >
+          
+              <!-- Position Column -->
+              <ng-container  matColumnDef="nombre" width="auto">
+                <th mat-header-cell *matHeaderCellDef>Nombre completo</th>
+                <td mat-cell *matCellDef="let element"> {{element.nombre_completo}} </td>
+              </ng-container>
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="tipoFuncionario" width="auto">
+                <th mat-header-cell *matHeaderCellDef>Tipo de funcionario</th>
+                <td mat-cell *matCellDef="let element"> {{element.tipo_funcionario}} </td>
+              </ng-container>
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="correoInstitucional" width="auto">
+                <th mat-header-cell *matHeaderCellDef>Correo institucional</th>
+                <td mat-cell *matCellDef="let element"> {{element.correo_institucional}} </td>
+              </ng-container>
+          
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                mat-row
+                (click)="onClickRowTable1(row)"
+                [class.demo-row2-is-clicked]="row==clickedRowTable1"
+                *matRowDef="let row; columns: displayedColumns;"
+            ></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5]"
+                       showFirstLastButtons 
+                       #paginatorAgregar
+                       [length]="planillaArray.length" 
+                       aria-label="Seleccione la página de departamentos">
+        </mat-paginator>
+      </div>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="2">
+      <button 
+      mat-raised-button 
+      color="primary"
+      type="submit" >Agregar Funcionario  </button>
+  </mat-grid-tile>
+</mat-grid-list>
+</form>
+
+<h2>Eliminar funcionario a la planilla</h2>
+<h3>Lista de funcionarios de su planilla</h3>
+<form  (submit)="onEliminarFuncionario()" #eliminarForm="ngForm">
+  
+    <mat-grid-list #grid [cols]="2" rowHeight="6:1" gutterSize="20px" >                
+        <mat-grid-tile colspan="2" [rowspan]="rows">
+            <mat-card width="auto">
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSourceEliminables " class="mat-elevation-z8 demo-table" >
+              
+                  <!-- Position Column -->
+                  <ng-container  matColumnDef="nombre" width="auto">
+                    <th mat-header-cell *matHeaderCellDef>Nombre completo</th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombre_completo}} </td>
+                  </ng-container>
+
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="tipoFuncionario" width="auto">
+                    <th mat-header-cell *matHeaderCellDef>Tipo de funcionario</th>
+                    <td mat-cell *matCellDef="let element"> {{element.tipo_funcionario}} </td>
+                  </ng-container>
+
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="correoInstitucional" width="auto">
+                    <th mat-header-cell *matHeaderCellDef>Correo institucional</th>
+                    <td mat-cell *matCellDef="let element"> {{element.correo_institucional}} </td>
+                  </ng-container>
+              
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr
+                    mat-row
+                    (click)="onClickRowTable2(row)"
+                    [class.demo-row2-is-clicked]="row==clickedRowTable2"
+                    *matRowDef="let row; columns: displayedColumns;"
+                ></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5]"
+                           showFirstLastButtons 
+                           #paginatorEliminar
+                           [length]="eliminablesArray.length" 
+                           aria-label="Seleccione la página de departamentos">
+            </mat-paginator>
+              </div>
+            </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2">
+          <button 
+          mat-raised-button 
+          color="warn"
+          type="submit" >Eliminar Funcionario  </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+</form>

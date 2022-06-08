@@ -1,0 +1,36 @@
+<h1>Bienvenido (a) {{nombre_perfil}}</h1>
+<form (submit)="onMenuPrincipal(postForm)" #postForm="ngForm">
+    <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile>
+            <button (click)="registrarParqueo()" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">add_box</mat-icon>
+                Registrar parqueo
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/menu-principal-func" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">person</mat-icon>
+                Vista Funcionario
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/registrar-funcionario" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">person_add</mat-icon>
+                Registro de funcionario
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/informes" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">download</mat-icon>
+                Descarga de informes
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/estadisticasFH" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">donut_large</mat-icon>
+                Estadística franja horaria
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>
+    

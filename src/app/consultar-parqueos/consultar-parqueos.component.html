@@ -1,0 +1,320 @@
+
+<h1>Consultar parqueo</h1>
+<form (submit)="onEditarParqueo(postForm)" #postForm="ngForm">
+    <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width consultar_parqueo_nombre" appearance="fill" 
+                (click)="activarParqueo(0)">
+                <mat-label>Nombre parqueo</mat-label>
+                <mat-select required name="parqueo"
+                    required
+                    [(ngModel)]="parqueoSeleccionado">
+                    <mat-option *ngFor="let parqueo of parqueosRegistrados" 
+                        [value]="parqueo" (click)="consultarParqueo()">
+                        {{parqueo._id_parqueo}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <a mat-mini-fab color="primary" class="btn_habilitar_edicion"
+                (click)="habilitarEdicion()" [disabled]="!consulta_func"
+                [style.visibility]="admin == 1 ? 'visible' : 'hidden'">
+                <mat-icon>edit</mat-icon>
+            </a>
+            <a mat-mini-fab color="warn" class="btn_eliminar_parqueo"
+                (click)="consultaEnCurso && eliminarParqueo(postForm)" [disabled]="!consulta_func"
+                [style.visibility]="admin == 1 ? 'visible' : 'hidden'">
+                <mat-icon>delete</mat-icon>
+            </a>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_func">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Tipo de parqueo</mat-label>
+                <input matInput  
+                type="text" 
+                name="tipo"
+                required
+                ngModel
+                #tipo="ngModel"
+                disabled
+                [(ngModel)]="parqueoSeleccionado.tipo">
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_func">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Nombre</mat-label>
+                <input matInput  
+                type="text" 
+                name="_id_parqueo"
+                required
+                ngModel
+                #nombre="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado._id_parqueo">
+                <mat-error *ngIf="nombre.invalid">Por favor ingrese el nombre del parqueo</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_admin">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Capacidad total</mat-label>
+                <input matInput  
+                type="number" 
+                name="capacidad_total"
+                min="0"
+                required
+                ngModel
+                #capacidad_total="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.capacidad_total">
+                <mat-error *ngIf="capacidad_total.invalid">Por favor ingrese una capacidad total</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_func">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Capacidad actual</mat-label>
+                <input matInput  
+                type="number" 
+                name="capacidad_actual"
+                min="0"
+                required
+                ngModel
+                #capacidad_actual="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.capacidad_actual">
+                <mat-error *ngIf="capacidad_actual.invalid">Por favor ingrese una capacidad actual</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_func">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Campus</mat-label>
+                <mat-select 
+                    required 
+                    name="campus"
+                    ngModel
+                    #campus="ngModel"
+                    [disabled]="sin_edicion"
+                    [(ngModel)]="selected">
+                    <mat-error *ngIf="campus.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let campus of Campus" [value]="campus">
+                        {{campus}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>  
+        <mat-grid-tile *ngIf="consulta_admin">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Jefatura</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_jefatura"
+                min="0"
+                required
+                ngModel
+                #espacios_jefatura="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.espacios_jefatura">
+                <mat-error *ngIf="espacios_jefatura.invalid">Por favor ingrese espacios jefatura</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_admin">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Vehículos Oficiales</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_VOficiales"
+                min="0"
+                required
+                ngModel
+                #espacios_vOficiales="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.espacios_VOficiales">
+                <mat-error *ngIf="espacios_vOficiales.invalid">Por favor ingrese espacios vehículos oficiales</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>  
+        <mat-grid-tile *ngIf="consulta_admin">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Asignados TEC</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_asignados"
+                min="0"
+                required
+                ngModel
+                #espacios_asignados="ngModel"
+                [disabled]="true"
+                [(ngModel)]="parqueoSeleccionado.espacios_asignados">
+                <mat-error *ngIf="espacios_asignados.invalid">Por favor ingrese espacios asignados TEC</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_admin">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Visitantes</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_visitantes"
+                min="0"
+                required
+                ngModel
+                #espacios_visitantes="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.espacios_visitantes">
+                <mat-error *ngIf="espacios_visitantes.invalid">Por favor ingrese espacios visitantes</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_admin">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacios Especiales</mat-label>
+                <input matInput  
+                type="number" 
+                name="espacios_NEspeciales"
+                min="0"
+                required
+                ngModel
+                #espacios_especiales="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.espacios_NEspeciales">
+                <mat-error *ngIf="espacios_especiales.invalid">Por favor ingrese espacios especiales</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="consulta_func">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Dirección</mat-label>
+                <input matInput  
+                type="text" 
+                name="direccion"
+                required
+                ngModel
+                #direccion="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.direccion">
+                <mat-error *ngIf="direccion.invalid">Por favor ingrese la dirección exacta</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="subcontratado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Contacto</mat-label>
+                <input matInput  
+                type="text" 
+                name="contacto"
+                required
+                ngModel
+                #contacto="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.contacto">
+                <mat-error *ngIf="contacto.invalid">Por favor ingrese el contacto del parqueo</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="subcontratado">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Identificador del contacto</mat-label>
+                <input matInput  
+                type="text" 
+                name="id_contrato"
+                required
+                ngModel
+                #id_contrato="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="parqueoSeleccionado.id_contrato">
+                <mat-error *ngIf="id_contrato.invalid">Por favor ingrese el identificador del contrato</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile rowspan="4" [style.visibility]="consulta_func ? 'visible' : 'hidden'">
+            <mat-card>
+                <h2>Horario</h2>
+                <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource" >
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="Dia" width="auto">
+                            <th mat-header-cell *matHeaderCellDef> Día </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dia}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Entrada" width="auto">
+                            <th mat-header-cell *matHeaderCellDef> Hora entrada </th>
+                            <td mat-cell *matCellDef="let element"> {{element.hora_entrada}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Salida" width="auto">
+                            <th mat-header-cell *matHeaderCellDef> Hora salida </th>
+                            <td mat-cell *matCellDef="let element"> {{element.hora_salida}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Eliminar" width="auto">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                            <td mat-cell *matCellDef="let i = index" [style.visibility]="sin_edicion == false ? 'visible' : 'hidden'"> 
+                                <a icon color="primary" class="btn_eliminar_extracto" (click)="onEliminarExtracto(i)">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <mat-paginator 
+                        [pageSize]="3"
+                        showFirstLastButtons 
+                        #paginatorHorario
+                        [length]="cantParqueos"
+                        aria-label="Seleccione la página de horarios">
+                    </mat-paginator>
+                </div>
+            </mat-card>
+        </mat-grid-tile>
+        <form (submit)="registrarHorario(horarioForm)" #horarioForm="ngForm">
+            <mat-grid-tile rowspan="4" *ngIf="consulta_admin" [style.visibility]="sin_edicion == false ? 'visible' : 'hidden'">
+                <mat-card>
+                    <div class="registrarHorario">
+                        <h2 class="text_margin">Registrar nuevo horario</h2>
+                        <div class="grid_tile">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Día de la semana</mat-label>
+                                <mat-select required name="dia_semana"
+                                    required
+                                    ngModel
+                                    #dia_semana="ngModel"
+                                    [disabled]="sin_edicion">
+                                    <mat-error *ngIf="dia_semana.invalid">Por favor ingrese una opción</mat-error>
+                                        <mat-option value="0">Lunes</mat-option>
+                                        <mat-option value="1">Martes</mat-option>
+                                        <mat-option value="2">Miércoles</mat-option>
+                                        <mat-option value="3">Jueves</mat-option>
+                                        <mat-option value="4">Viernes</mat-option>
+                                        <mat-option value="5">Sábado</mat-option>
+                                    </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="grid_hori">
+                            <p class="titulo_hora_entrada">Hora de entrada</p>
+                            <ngb-timepicker [(ngModel)]="tiempo_entrada" [meridian]="meridian" name="hora_entrada"
+                            [disabled]="sin_edicion"></ngb-timepicker>
+                        </div>
+                        <div class="grid_hori">
+                            <p class="titulo_hora_salida">Hora de salida</p>
+                            <ngb-timepicker [(ngModel)]="tiempo_salida" [meridian]="meridian" name="hora_salida"
+                            [disabled]="sin_edicion"></ngb-timepicker>
+                        </div>
+                        <div class="grid_tile">
+                            <mat-error *ngIf="error_horario">*Por favor ingrese una hora de salida superior a la hora de entrada</mat-error>
+                            <mat-error *ngIf="error_horario_2">*Extracto de horario debe ser mínimo de 40 minutos</mat-error>
+                        </div>
+                        <div class="grid_tile">
+                            <button 
+                            mat-raised-button 
+                            color="primary"
+                            type="submit"
+                            [style.visibility]="sin_edicion == false ? 'visible' : 'hidden'"
+                            [disabled]="sin_edicion">Registrar horario</button>
+                        </div>
+                    </div>
+                </mat-card>
+            </mat-grid-tile>
+        </form>
+    </mat-grid-list>
+    <button
+        *ngIf="consulta_admin"
+        class="editarButton"
+        mat-raised-button 
+        color="primary"
+        type="submit"
+        [style.visibility]="sin_edicion == false ? 'visible' : 'hidden'"
+        [disabled]="sin_edicion">
+        Editar parqueo
+    </button>
+</form>
+    

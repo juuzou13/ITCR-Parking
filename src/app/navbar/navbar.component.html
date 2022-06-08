@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <a mat-button class="companyName" [routerLink]="admin == 1 ? '/menu-principal-admin' : '/menu-principal-func'">
+    <span>Estacionamientos TEC</span>
+  </a>
+  <span class="example-spacer"></span>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="loginService.logout()">Cerrar sesión</button>
+  </mat-menu>
+</mat-toolbar>
+<router-outlet></router-outlet>

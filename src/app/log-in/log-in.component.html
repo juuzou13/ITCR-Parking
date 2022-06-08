@@ -1,0 +1,43 @@
+<form (submit)="onIniciarSesion(postForm)" #postForm="ngForm">
+    <mat-grid-list rowHeight="6:1" #grid [cols]="cols" gutterSize="20px" style="margin-top:5cm">
+        <mat-grid-tile rowspan="4">
+            <img src="assets/img/tec_san_jose.jpg" width="90%">
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <h1> Inicio de sesión </h1>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Usuario</mat-label>
+                <input matInput  
+                type="text" 
+                name="usuario"
+                required
+                ngModel
+                #usuario="ngModel">
+                <mat-error *ngIf="usuario.invalid">Por favor ingrese un usuario</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Contraseña</mat-label>
+                <input matInput  
+                type="password"
+                [type]="hide ? 'password' : 'text'"
+                name="contrasenia"
+                required
+                ngModel
+                #contrasenia="ngModel">
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-error *ngIf="contrasenia.invalid">Por favor ingrese una contraseña</mat-error>
+            </mat-form-field>
+        </mat-grid-tile>
+        
+        <mat-grid-tile >
+            <button 
+            mat-raised-button 
+            color="primary"
+            type="submit" >Iniciar sesión</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>

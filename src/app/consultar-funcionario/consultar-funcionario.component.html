@@ -1,0 +1,274 @@
+<h1>{{editarFunc ? 'Editar perfil' : 'Consulta de funcionario'}}</h1>
+<form (submit)="onEditarFuncionario(postForm)" #postForm="ngForm">
+    <mat-grid-list #grid [cols]="cols" rowHeight="6:1" gutterSize="20px" >
+        <mat-grid-tile *ngIf="!editarFunc">
+                <mat-form-field class="example-full-width consultar_funcionario_id" appearance="fill" >
+                    <mat-label>Identificación</mat-label>
+                    <input matInput 
+                    type="text" 
+                    name="identificacion"
+                    required
+                    ngModel
+                    #identificacion="ngModel">
+                    <mat-error *ngIf="identificacion.invalid">Por favor ingrese una identificación</mat-error>
+                </mat-form-field>
+                <a mat-mini-fab color="primary" class="btn_habilitar_edicion" 
+                (click)="consultarFuncionario(identificacion)" type="submit">
+                <mat-icon>search</mat-icon>
+                </a>
+                <a mat-mini-fab color="primary" class="btn_habilitar_edicion"
+                [disabled]="!consultaEnCurso"
+                [style.visibility]="consulta_admin ? 'visible' : 'hidden'"
+                (click)="habilitarEdicion()">
+                    <mat-icon>edit</mat-icon>
+                </a>
+                <a mat-mini-fab color="warn" class="btn_eliminar_parqueo"
+                [disabled]="!consultaEnCurso"
+                [style.visibility]="consulta_admin ? 'visible' : 'hidden'"
+                (click)="eliminarFuncionario(postForm)">
+                    <mat-icon>delete</mat-icon>
+                </a>
+        </mat-grid-tile>
+        <mat-grid-tile >
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+                <mat-label>Tipo funcionario</mat-label>
+                <mat-select required name="tipoF"
+                    required
+                    ngModel
+                    #tipoF="ngModel"
+                    [disabled]="sin_edicion || editarFunc"
+                    [(ngModel)]="tipoFuncionarioSelected">
+                    <mat-error *ngIf="tipoF.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let tipo of tiposFuncionario" [value]="tipo">
+                        {{tipo}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>  
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+                <mat-label>Nombre completo</mat-label>
+                <input matInput  
+                type="text" 
+                name="nombre"
+                required
+                ngModel
+                #nombre="ngModel"
+                [disabled]="sin_edicion || editarFunc"
+                [(ngModel)]="funcionario.nombre_completo">
+                <mat-error *ngIf="nombre.invalid">Por favor ingrese el nombre del funcionario</mat-error>
+            </mat-form-field>  
+        </mat-grid-tile>
+        <mat-grid-tile >
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+                <mat-label>Incapacitado</mat-label>
+                <mat-select required name="incap"
+                    required
+                    ngModel
+                    #incap="ngModel"
+                    [disabled]="sin_edicion || editarFunc"
+                    [(ngModel)]="incapacitadoSelected">
+                    <mat-error *ngIf="incap.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let incapacitado of arrayIncapacitado" [value]="incapacitado.value">
+                        {{incapacitado.value}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile> 
+        <mat-grid-tile >
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'"
+            (click)="checkJefatura(-1)">
+                <mat-label>Jefatura</mat-label>
+                <mat-select required name="jefatura"
+                    ngModel
+                    #jefatura="ngModel"
+                    [disabled]="sin_edicion || editarFunc"
+                    [(ngModel)]="jefaturaSelected">
+                    <mat-error *ngIf="jefatura.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option (click)="checkJefatura(jefatura.value)"
+                    *ngFor="let jefatura of arrayJefatura" [value]="jefatura.value">
+                        {{jefatura.value}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>  
+        <mat-grid-tile *ngIf="editarFunc">
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+                <mat-label>Contraseña</mat-label>
+                <input matInput  
+                [type]="hide ? 'password' : 'text'"
+                name="contrasenna"
+                required
+                ngModel
+                #contrasenna="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="funcionario.contrasenna">
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-error *ngIf="contrasenna.invalid">Por favor ingrese una contraseña</mat-error>
+            </mat-form-field>  
+        </mat-grid-tile>
+        <mat-grid-tile >
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+                <mat-label>Departamento Jefatura</mat-label>
+                <mat-select required name="dptoJefatura"
+                    required
+                    ngModel
+                    [(ngModel)]="dptoSelected"
+                    #dptoJefatura="ngModel"
+                    [disabled]="(sin_edicion || sin_jefatura) || editarFunc">
+                    <mat-error *ngIf="dptoJefatura.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let dpto of departamentos_registrados" value="{{dpto.nombre_campus}}-{{dpto.departamento}}" >
+                        {{dpto.nombre_campus}}-{{dpto.departamento}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>  
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+                <mat-label>Número telefónico</mat-label>
+                <input matInput  
+                type="text" 
+                name="telefono"
+                required
+                ngModel
+                #telefono="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="funcionario.celular">
+                <mat-error *ngIf="telefono.invalid">Por favor ingrese el número telefónico</mat-error>
+            </mat-form-field>  
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+                <mat-label>Correo institucional</mat-label>
+                <input matInput  
+                type="text" 
+                name="correoI"
+                required
+                ngModel
+                #correoI="ngModel"
+                [disabled]="sin_edicion || editarFunc"
+                [(ngModel)]="funcionario.correo_institucional">
+                <mat-error *ngIf="correoI.invalid">Por favor ingrese el correo institucional</mat-error>
+            </mat-form-field>  
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill"
+            [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+                <mat-label>Correo personal</mat-label>
+                <input matInput  
+                type="text" 
+                name="correoP"
+                required
+                ngModel
+                #correoP="ngModel"
+                [disabled]="sin_edicion"
+                [(ngModel)]="funcionario.correo_personal">
+                <mat-error *ngIf="correoP.invalid">Por favor ingrese el correo personal</mat-error>
+            </mat-form-field>  
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div style="margin-top: 1cm"></div>
+    <div class="tableContainer" [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+        <div class="container">
+            <mat-card>
+            <h2>Horario</h2>
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="horarioSource">
+            
+                <!-- Position Column -->
+                <ng-container matColumnDef="dia" width="auto">
+                    <th mat-header-cell *matHeaderCellDef> Día </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dia}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="entrada" width="auto">
+                    <th mat-header-cell *matHeaderCellDef> Entrada </th>
+                    <td mat-cell *matCellDef="let element"> {{element.hora_entrada}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="salida" width="auto">
+                    <th mat-header-cell *matHeaderCellDef> Salida </th>
+                    <td mat-cell *matCellDef="let element"> {{element.hora_salida}} </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="horarioColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: horarioColumns;"></tr>
+                </table>
+                <mat-paginator #paginatorH [pageSizeOptions]="[5]"
+                hidePageSize="false" showFirstLastButtons="false"></mat-paginator>
+            </div>
+            </mat-card>
+        </div>
+        <div class="container">
+            <mat-card>
+                <h2>Departamentos</h2>
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" >
+            
+                <!-- Position Column -->
+                <ng-container matColumnDef="Departamento" width="auto">
+                    <th mat-header-cell *matHeaderCellDef>Departamento</th>
+                    <td mat-cell *matCellDef="let element"> {{element.departamento}} </td>
+                </ng-container>
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="Campus" width="auto">
+                    <th mat-header-cell *matHeaderCellDef>Campus</th>
+                    <td mat-cell *matCellDef="let element"> {{element.campus}} </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator #paginatorD [length]="departamentos.length" 
+            [pageSize]="5" [pageSizeOptions]="[5]">
+            </mat-paginator>
+            </div>
+            </mat-card>
+        </div>
+        <div class="container">
+            <mat-card>
+                <h2>Vehículos asociados</h2>
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="vehiculoSource" >
+                
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="vehiculo" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>Placas</th>
+                        <td mat-cell *matCellDef="let element"> {{element.codigo_placa}} </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="vehiculoColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: vehiculoColumns;"></tr>
+                    </table>
+                
+                    <mat-paginator #paginatorV [length]="vehiculos.length" 
+                    [pageSize]="5" [pageSizeOptions]="[5]">
+                    </mat-paginator>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    <div *ngIf="consulta_admin || editarFunc" [style.visibility]="consultaEnCurso ? 'visible' : 'hidden'">
+        <button 
+            mat-raised-button 
+            color="primary"
+            class="editarButton"
+            type="submit"
+            [style.visibility]="!sin_edicion ? 'visible' : 'hidden'"
+            [disabled]="sin_edicion">
+            {{editarFunc ? 'Editar Perfil' : 'Editar funcionario'}}
+        </button>
+    </div>
+    <div style="height: 1cm"></div>
+</form>
+    

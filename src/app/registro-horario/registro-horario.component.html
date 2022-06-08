@@ -1,0 +1,91 @@
+<h1 >Registro horario propio </h1>
+
+  <mat-grid-list #grid [cols]="cols" rowHeight="6:1" gutterSize="20px" >
+    <form  (submit)="registrarHorario(ngForm)" #ngForm="ngForm">
+    <mat-grid-tile>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Día de la semana</mat-label>
+            <mat-select required name="dia"
+            required
+            ngModel
+            #dia="ngModel">
+            <mat-error *ngIf="dia.invalid">Por favor ingrese una opción</mat-error>
+            <mat-option *ngFor="let dia of dias" [value]="dia.value">
+                {{dia.viewValue}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>  
+</mat-grid-tile>             
+    <mat-grid-tile rowspan="4">
+        <mat-card width="auto">
+            <h2>Horario</h2>
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource " >
+          
+              <!-- Position Column -->
+              <ng-container  matColumnDef="dia" width="auto">
+                <th mat-header-cell *matHeaderCellDef>Día</th>
+                <td mat-cell *matCellDef="let element"> {{element.dia}} </td>
+              </ng-container>
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="entrada" width="auto">
+                <th mat-header-cell *matHeaderCellDef>Hora entrada</th>
+                <td mat-cell *matCellDef="let element"> {{element.hora_entrada}} </td>
+              </ng-container>
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="salida" width="auto">
+                <th mat-header-cell *matHeaderCellDef>Hora salida</th>
+                <td mat-cell *matCellDef="let element"> {{element.hora_salida}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                <td mat-cell *matCellDef="let i = index"> 
+                  <button mat-icon-button class="removeCart" color="primary" (click)="removeHorario(i)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </td>
+            </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns;"
+            ></tr>
+        </table>
+        <mat-paginator 
+                        [pageSizeOptions]="[3]"
+                        showFirstLastButtons 
+                        aria-label="Seleccione la página de horario">
+                    </mat-paginator>
+      </div>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <p class="titulo_hora_entrada">Hora de entrada</p>
+        <ngb-timepicker [(ngModel)]="tiempo_entrada" [meridian]="meridian" name="hora_entrada"></ngb-timepicker>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <p class="titulo_hora_salida">Hora de salida</p>
+        <ngb-timepicker [(ngModel)]="tiempo_salida" [meridian]="meridian" name="hora_salida"></ngb-timepicker>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-error *ngIf="error_horario">*Por favor ingrese horario válido</mat-error>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button 
+        mat-raised-button 
+        color="primary"
+        type="submit" >Registrar horario</button>
+    </mat-grid-tile>
+    
+  </form>
+  <mat-grid-tile>
+    <button 
+    mat-raised-button 
+    color="primary"
+    type="submit" (click)="finRegistro()">Finalizar registro</button>
+</mat-grid-tile>
+</mat-grid-list> 

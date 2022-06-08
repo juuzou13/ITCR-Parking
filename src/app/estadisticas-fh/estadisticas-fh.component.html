@@ -1,0 +1,117 @@
+<div class="title">
+    <div class="flex2">
+        <h1 >Estadística franja horaria </h1>
+    </div>
+    <div class="flex1">
+        <mat-form-field style="width:80%; margin-left:10%; margin-top:2%" appearance="fill">
+            <mat-label>Campus</mat-label>
+            <mat-select 
+                name="campusSeleccionado"
+                required
+                ngModel
+                #campusSeleccionado="ngModel">
+                <mat-error *ngIf="campusSeleccionado.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option value="0">Cartago</mat-option>
+                    <mat-option value="1">San José</mat-option>
+                    <mat-option value="2">Alajuela</mat-option>
+                    <mat-option value="3">San Carlos</mat-option>
+                    <mat-option value="4">Limón</mat-option>
+                </mat-select>
+        </mat-form-field>  
+    </div>
+</div>
+
+<mat-button-toggle-group name="fontStyle"  [disabled]="campusSeleccionado.invalid" #group="matButtonToggleGroup"
+aria-label="Font Style" [style.flex-wrap]="pantalla_pequenia ? 'wrap' : 'nowrap'">
+    <mat-button-toggle value="adm" style="width:100%" (click)="onToggle(adm, campusSeleccionado)" #adm>Clasificar por administrativos</mat-button-toggle>
+    <mat-button-toggle value="doc" style="width:100%" (click)="onToggle(doc, campusSeleccionado)" #doc>Clasificar por docentes</mat-button-toggle>
+    <mat-button-toggle value="ambos" style="width:100%" (click)="onToggle(ambos, campusSeleccionado)" #ambos>Clasificar por ambos</mat-button-toggle>
+</mat-button-toggle-group>
+
+<div class="grid">
+    <div>
+        <mat-card class="boxes" *ngIf="onAdm || onDoc || onAmbos">
+            <h3>Lunes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoL"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onAdm || onDoc || onAmbos">
+            <h3>Martes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoK"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onAdm || onDoc || onAmbos">
+            <h3>Miércoles</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoM"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onAdm || onDoc || onAmbos">
+            <h3>Jueves</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoJ"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onAdm || onDoc || onAmbos">
+            <h3>Viernes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoV"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onAdm || onDoc || onAmbos">
+            <h3>Sábado</h3>
+        <div>
+            <canvas
+            baseChart
+            [data]="datosGraficoS"
+            [labels]="labelsGrafico"
+            [chartType]="doughnutChartType"
+            >
+            </canvas>
+        </div>
+    </mat-card>
+    </div>
+</div>
+<div style="height: 2cm"></div>
