@@ -32,6 +32,7 @@ export class VisualizarReservacionesComponent implements OnInit {
 
   onBuscar(form: NgForm){
     if(form.invalid){
+      this.busquedaOn = false;
       return;
     }
     if(form.value.diaInicio > form.value.diaFin){
@@ -41,6 +42,7 @@ export class VisualizarReservacionesComponent implements OnInit {
       })
       .afterClosed()
       .subscribe(() => {
+        this.busquedaOn = false;
       });
       return;
     }

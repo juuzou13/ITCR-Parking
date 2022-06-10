@@ -18,6 +18,7 @@ import { RegistrarFuncionarioComponent } from './registrar-funcionario/registrar
 import { RegistroHorarioComponent } from './registro-horario/registro-horario.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
+import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
 
 import { AuthGuard } from './auth.guard';
 
@@ -110,7 +111,8 @@ const routes: Routes = [
   },
   { path:"log-in", component:LogInComponent},
   {path:"", redirectTo: '/log-in', pathMatch: 'full'},
-  { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent}
+  { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent},
+  { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent}
 ]
 
 @NgModule({

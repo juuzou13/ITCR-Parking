@@ -39,8 +39,8 @@ export class ConsultarParqueosComponent implements OnInit {
   }
 
   espacios_parqueo = Array<any>();
-  horaEntradaNewHorario:String;
-  horaSalidaNewHorario:String;
+  horaEntradaNewHorario:String = "";
+  horaSalidaNewHorario:String = "";
 
   admin = parseInt(localStorage.getItem('admin') || "");
 
@@ -86,7 +86,7 @@ export class ConsultarParqueosComponent implements OnInit {
     this.selected = this.parqueoSeleccionado.campus;
   }
 
-  cols : number;
+  cols : number | undefined;
 
   gridByBreakpoint = {
     xl: 2,
@@ -154,7 +154,7 @@ export class ConsultarParqueosComponent implements OnInit {
   displayedColumns: string[] = ['Dia','Entrada','Salida','Eliminar'];
   dataSource : any;
 
-  @ViewChild(MatPaginator) paginatorHorario: MatPaginator;
+  @ViewChild(MatPaginator) paginatorHorario: MatPaginator | undefined;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginatorHorario;

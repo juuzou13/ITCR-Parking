@@ -47,6 +47,7 @@ import { AuthGuard } from './auth.guard';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     RegistroHorarioComponent,
     EstadisticasFHComponent,
     LogInComponent,
-    VisualizarReservacionesComponent
+    VisualizarReservacionesComponent,
+    DetalleEstacionamientoComponent
   ],
   imports: [
     BrowserModule,
