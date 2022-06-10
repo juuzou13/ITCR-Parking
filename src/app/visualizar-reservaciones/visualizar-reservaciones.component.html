@@ -1,0 +1,64 @@
+<h1 >Registro horario propio </h1>
+<form (submit)="onBuscar(postForm)" #postForm="ngForm">
+    <mat-grid-list  #grid [cols]="3" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill" >
+                <mat-label>Día de semana inicio</mat-label>
+                <mat-select required name="diaInicio"
+                    required ngModel
+                    #diaInicio="ngModel">
+                    <mat-option *ngFor="let dia of dias" 
+                        [value]="dia.id">
+                        {{dia.dia}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile >
+            <mat-form-field class="example-full-width" appearance="fill" >
+                <mat-label>Día de semana fin</mat-label>
+                <mat-select required name="diaFin"
+                    required ngModel
+                    #diaFin="ngModel">
+                    <mat-option *ngFor="let dia of dias" 
+                        [value]="dia.id">
+                        {{dia.dia}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button
+            mat-raised-button 
+            color="primary"
+            type="submit"
+            class="buscarButton">
+            Buscar
+        </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>
+<mat-grid-list cols="1" rowHeight="10:2" *ngIf="busquedaOn">
+    <mat-grid-tile *ngFor="let cartelera of reservas">
+        <mat-card>
+            <mat-card-title>
+                <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
+                    <div fxLayout="column">{{cartelera.dia}}</div>
+                    <div fxLayout="column">{{cartelera.hora_inicio}} - {{cartelera.hora_fin}}</div>
+                  </div>
+          </mat-card-title>
+            <mat-card-content>
+              <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
+                <div fxLayout="column">Tipo del parqueo: {{cartelera.tipo_parqueo}}</div>
+                <div fxLayout="column">Nombre del parqueo: {{cartelera.nombre}}</div>
+              </div>
+            </mat-card-content>
+            <mat-card-content>
+                <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
+                  <div fxLayout="column">Campus: {{cartelera.campus}}</div>
+                  <div fxLayout="column">Dirección: {{cartelera.direccion}}</div>
+                </div>
+              </mat-card-content>
+          </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>

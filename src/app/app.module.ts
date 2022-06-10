@@ -45,6 +45,8 @@ import { LogInComponent } from './log-in/log-in.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AuthGuard } from './auth.guard';
 import { TokenInterceptorService } from './services/token-interceptor.service';
+import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
     ManejoPlanillaComponent,
     RegistroHorarioComponent,
     EstadisticasFHComponent,
-    LogInComponent
+    LogInComponent,
+    VisualizarReservacionesComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +97,8 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
     MatTableModule,
     NgbModule,
     MatButtonToggleModule,
-    ChartsModule
+    ChartsModule,
+    FlexLayoutModule
   ],
   providers: [
     AuthGuard,
