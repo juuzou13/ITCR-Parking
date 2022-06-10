@@ -39,7 +39,9 @@ export class DetalleEstacionamientoComponent implements OnInit {
 
   horario: any = [
     {dia: "Lunes", hora_entrada: "5:00am", hora_salida:"5:00pm"},
-    {dia: "Martes", hora_entrada: "5:00am", hora_salida:"5:00pm"}
+    {dia: "Martes", hora_entrada: "5:00am", hora_salida:"5:00pm"},
+    {dia: "Miércoles", hora_entrada: "5:00am", hora_salida:"5:00pm"},
+    {dia: "Jueves", hora_entrada: "5:00am", hora_salida:"5:00pm"}
   ]
   
   @ViewChild(MatPaginator) paginatorHorario: MatPaginator | undefined;

@@ -74,6 +74,10 @@ export class LogInComponent implements OnInit {
             localStorage.setItem('id', res.identificacion);
             localStorage.setItem('token', res.token);
             localStorage.setItem('nombre_completo', res.nombre_completo);
+            if(res.jefatura){
+              localStorage.setItem('campus_jefatura', res.campus_departamento_jefatura.nombre_campus);
+              localStorage.setItem('dpto_jefatura', res.campus_departamento_jefatura.departamento);
+            }
             if(res.admin) {
               this.router.navigate(['/menu-principal-admin']).then(() => {
                 window.location.reload();

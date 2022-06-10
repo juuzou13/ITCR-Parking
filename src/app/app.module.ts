@@ -48,6 +48,7 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
 import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
+import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detal
     EstadisticasFHComponent,
     LogInComponent,
     VisualizarReservacionesComponent,
-    DetalleEstacionamientoComponent
+    DetalleEstacionamientoComponent,
+    EstadisticasPorDepartamentoComponent
   ],
   imports: [
     BrowserModule,

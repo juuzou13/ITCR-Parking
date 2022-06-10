@@ -11,7 +11,7 @@ import { EstadisticasFHService } from '../services/estadisticas-fh.service';
   styleUrls: ['./estadisticas-fh.component.css'],
 })
 export class EstadisticasFHComponent implements OnInit {
-  cols: number;
+  cols: number = 2;
 
   campusD = ["Cartago", "San José", "Alajuela", "San Carlos", "Limón"];
 
@@ -81,18 +81,18 @@ export class EstadisticasFHComponent implements OnInit {
   public doughnutChartType: ChartType = 'doughnut';
 
   public total: Number = 0;
-  public horarios: Array<any>;
+  public horarios: Array<any> = [];
 
-  public horariosLunes: Array<any>;
-  public horariosMartes: Array<any>;
-  public horariosMiercoles: Array<any>;
-  public horariosJueves: Array<any>;
-  public horariosViernes: Array<any>;
-  public horariosSabado: Array<any>;
+  public horariosLunes: Array<any> = [];
+  public horariosMartes: Array<any> = [];
+  public horariosMiercoles: Array<any> = [];
+  public horariosJueves: Array<any> = [];
+  public horariosViernes: Array<any> = [];
+  public horariosSabado: Array<any> = [];
 
-  public horariosToSort: Array<any>;
+  public horariosToSort: Array<any> = [];
 
-  campus: String;
+  campus: String = "";
   ngOnInit(): void {}
 
   determineDayTime(time: number): number {

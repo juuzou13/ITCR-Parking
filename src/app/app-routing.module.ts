@@ -19,6 +19,7 @@ import { RegistroHorarioComponent } from './registro-horario/registro-horario.co
 import { LogInComponent } from './log-in/log-in.component';
 import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
 import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
+import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
 
 import { AuthGuard } from './auth.guard';
 
@@ -110,9 +111,10 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path:"log-in", component:LogInComponent},
-  {path:"", redirectTo: '/log-in', pathMatch: 'full'},
+  { path:"", redirectTo: '/log-in', pathMatch: 'full'},
   { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent},
-  { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent}
+  { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent},
+  { path: "estadisticas-por-departamento", component: EstadisticasPorDepartamentoComponent}
 ]
 
 @NgModule({
