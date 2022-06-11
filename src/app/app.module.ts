@@ -47,6 +47,7 @@ import { AuthGuard } from './auth.guard';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionario/reserva-espacio-funcionario.component';
 import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/reserva-espacio-visitante.component';
+import { ReservaEspacioVoficialComponent } from './reserva-espacio-voficial/reserva-espacio-voficial.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/re
     EstadisticasFHComponent,
     LogInComponent,
     ReservaEspacioFuncionarioComponent,
-    ReservaEspacioVisitanteComponent
+    ReservaEspacioVisitanteComponent,
+    ReservaEspacioVoficialComponent
   ],
   imports: [
     BrowserModule,
