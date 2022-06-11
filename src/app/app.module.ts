@@ -48,6 +48,7 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
 import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionario/reserva-espacio-funcionario.component';
 import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/reserva-espacio-visitante.component';
 import { ReservaEspacioVoficialComponent } from './reserva-espacio-voficial/reserva-espacio-voficial.component';
+import { SimulacionLiberarEspaciosComponent } from './simulacion-liberar-espacios/simulacion-liberar-espacios.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { ReservaEspacioVoficialComponent } from './reserva-espacio-voficial/rese
     LogInComponent,
     ReservaEspacioFuncionarioComponent,
     ReservaEspacioVisitanteComponent,
-    ReservaEspacioVoficialComponent
+    ReservaEspacioVoficialComponent,
+    SimulacionLiberarEspaciosComponent
   ],
   imports: [
     BrowserModule,
