@@ -22,6 +22,7 @@ import { AuthGuard } from './auth.guard';
 import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionario/reserva-espacio-funcionario.component';
 import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/reserva-espacio-visitante.component';
 import { ReservaEspacioVoficialComponent } from './reserva-espacio-voficial/reserva-espacio-voficial.component';
+import { SimulacionLiberarEspaciosComponent } from './simulacion-liberar-espacios/simulacion-liberar-espacios.component';
 
 const routes: Routes = [
   // {path:"post-create", component: PostCreateComponent},
@@ -114,7 +115,8 @@ const routes: Routes = [
   {path:"", redirectTo: '/log-in', pathMatch: 'full'},
   {path:"reservar-espacio", component:ReservaEspacioFuncionarioComponent},
   {path:"reservar-espacio-visitante", component: ReservaEspacioVisitanteComponent},
-  {path:"reservar-espacio-voficial", component: ReservaEspacioVoficialComponent}
+  {path:"reservar-espacio-voficial", component: ReservaEspacioVoficialComponent},
+  {path:"simulacion", component: SimulacionLiberarEspaciosComponent}
 ]
 
 @NgModule({

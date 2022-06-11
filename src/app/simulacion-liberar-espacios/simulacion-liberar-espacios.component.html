@@ -1,1 +1,35 @@
-<p>simulacion-liberar-espacios works!</p>
+
+<h1>Simulación día y hora</h1>
+<form (submit)="onSimularDiaHora(postForm)" #postForm="ngForm">
+    <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile></mat-grid-tile>
+        <mat-grid-tile></mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Día de la semana</mat-label>
+                <mat-select required name="dia_semana"
+                    required
+                    ngModel
+                    #dia_semana="ngModel">
+                    <mat-error *ngIf="dia_semana.invalid">Por favor ingrese una opción</mat-error>
+                        <mat-option value="0">Lunes</mat-option>
+                        <mat-option value="1">Martes</mat-option>
+                        <mat-option value="2">Miércoles</mat-option>
+                        <mat-option value="3">Jueves</mat-option>
+                        <mat-option value="4">Viernes</mat-option>
+                        <mat-option value="5">Sábado</mat-option>
+                    </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <p class="titulo_hora_entrada">Hora del día</p>
+            <ngb-timepicker [(ngModel)]="tiempo_entrada" [meridian]="meridian" name="hora_entrada"></ngb-timepicker>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button 
+            mat-raised-button 
+            color="primary"
+            type="submit">Simular día y hora</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>
