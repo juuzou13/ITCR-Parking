@@ -19,6 +19,7 @@ import { RegistroHorarioComponent } from './registro-horario/registro-horario.co
 import { LogInComponent } from './log-in/log-in.component';
 
 import { AuthGuard } from './auth.guard';
+import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionario/reserva-espacio-funcionario.component';
 
 const routes: Routes = [
   // {path:"post-create", component: PostCreateComponent},
@@ -108,7 +109,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path:"log-in", component:LogInComponent},
-  {path:"", redirectTo: '/log-in', pathMatch: 'full'}
+  {path:"", redirectTo: '/log-in', pathMatch: 'full'},
+  {path:"reservar-espacio", component:ReservaEspacioFuncionarioComponent}
 ]
 
 @NgModule({
