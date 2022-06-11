@@ -47,7 +47,7 @@
                 </mat-select>
             </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile rowspan="4">
+        <mat-grid-tile rowspan="3">
             <mat-card>
                 <h2>Horarios reservados</h2>
                 <div class="mat-elevation-z8">
@@ -85,23 +85,33 @@
                 </div>
             </mat-card>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="funcionario_estandar">
             <p class="titulo_hora_entrada">Hora de entrada</p>
             <ngb-timepicker [(ngModel)]="tiempo_entrada" [meridian]="meridian" name="hora_entrada"></ngb-timepicker>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="funcionario_estandar">
             <p class="titulo_hora_salida">Hora de salida</p>
             <ngb-timepicker [(ngModel)]="tiempo_salida" [meridian]="meridian" name="hora_salida"></ngb-timepicker>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="funcionario_estandar">
             <mat-error *ngIf="error_horario">*Por favor ingrese una hora de salida superior a la hora de entrada</mat-error>
             <mat-error *ngIf="error_horario_2">*Extracto de horario debe ser mínimo de 40 minutos</mat-error>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="funcionario_estandar"></mat-grid-tile>
+        <mat-grid-tile *ngIf="funcionario_estandar">
             <button 
             mat-raised-button 
             color="primary"
             type="submit">Reservar espacio</button>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="!funcionario_estandar"></mat-grid-tile>
+        <mat-grid-tile *ngIf="!funcionario_estandar"></mat-grid-tile>
+        <mat-grid-tile *ngIf="!funcionario_estandar">
+            <a 
+            class="btn_confirmar"
+            mat-raised-button 
+            color="primary"
+            (click)="onReservarJefatura(postForm)">Reservar espacio</a>
         </mat-grid-tile>
         <mat-grid-tile>
             <a 

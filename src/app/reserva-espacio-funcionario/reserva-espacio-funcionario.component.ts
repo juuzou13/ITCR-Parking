@@ -35,6 +35,8 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
   parqueos_registrados = [{_id: "1", _id_parqueo: "Parqueo principal #1"}, {_id: "2", _id_parqueo: "Parqueo subcontratado #1"}];
   placas_asociadas = [{_id: "1", codigo_placa: "ABC-123"}, {_id: "2", codigo_placa: "DEF-456"}];
 
+  funcionario_estandar = localStorage.getItem("jefatura") == "0";
+
   toggleMeridian() {
     this.meridian = !this.meridian;
   }
@@ -143,7 +145,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       this.tiempo_salida = {hour: this.horas, minute: this.minutos};
     }
   }
-  
+
   refresh() {
     this.dataSource.data = this.dataSource.data;
   }
@@ -178,9 +180,24 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         form.resetForm();
         this.horarioArray = [];
         this.updateDataSource();
+        this.error_horario = false;
+        this.error_horario_2 = false;
         this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
         this.tiempo_salida = {hour: this.horas, minute: this.minutos};
       });
+  }
+
+  onReservarJefatura(form: NgForm) {
+    if(form.invalid) {
+      return;
+    }
+    this.dataSource.data.push({rangoHorario: {dia: this.dias_de_semana[form.controls['dia_semana'].value], hora_entrada: "5:00", 
+        hora_salida: "23:59"}, parqueo: form.value.parqueo, placa: form.value.placa, idPersona: localStorage.getItem("id"),
+        idReserva: "", idEspacio: "", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "", sitio: "", modelo: "", color: ""});
+    this.refresh();
+    form.resetForm();
+    this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
+    this.tiempo_salida = {hour: this.horas, minute: this.minutos};
   }
 
 }
