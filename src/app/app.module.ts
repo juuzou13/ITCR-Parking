@@ -46,6 +46,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AuthGuard } from './auth.guard';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionario/reserva-espacio-funcionario.component';
+import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/reserva-espacio-visitante.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionari
     RegistroHorarioComponent,
     EstadisticasFHComponent,
     LogInComponent,
-    ReservaEspacioFuncionarioComponent
+    ReservaEspacioFuncionarioComponent,
+    ReservaEspacioVisitanteComponent
   ],
   imports: [
     BrowserModule,
