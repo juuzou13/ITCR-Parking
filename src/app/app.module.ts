@@ -49,6 +49,8 @@ import { VisualizarReservacionesComponent } from './visualizar-reservaciones/vis
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
 import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
+import { EstadisticaEstacionamientoParticularComponent } from './estadistica-estacionamiento-particular/estadistica-estacionamiento-particular.component';
+import { OcupacionPorDepartamentoComponent } from './ocupacion-por-departamento/ocupacion-por-departamento.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +76,9 @@ import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departa
     LogInComponent,
     VisualizarReservacionesComponent,
     DetalleEstacionamientoComponent,
-    EstadisticasPorDepartamentoComponent
+    EstadisticasPorDepartamentoComponent,
+    EstadisticaEstacionamientoParticularComponent,
+    OcupacionPorDepartamentoComponent
   ],
   imports: [
     BrowserModule,

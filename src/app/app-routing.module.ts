@@ -20,6 +20,7 @@ import { LogInComponent } from './log-in/log-in.component';
 import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
 import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
 import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
+import { EstadisticaEstacionamientoParticularComponent } from './estadistica-estacionamiento-particular/estadistica-estacionamiento-particular.component';
 
 import { AuthGuard } from './auth.guard';
 
@@ -114,7 +115,8 @@ const routes: Routes = [
   { path:"", redirectTo: '/log-in', pathMatch: 'full'},
   { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent},
   { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent},
-  { path: "estadisticas-por-departamento", component: EstadisticasPorDepartamentoComponent}
+  { path: "estadisticas-por-departamento", component: EstadisticasPorDepartamentoComponent},
+  { path: "estadisticas-estacionamiento-particular", component: EstadisticaEstacionamientoParticularComponent}
 ]
 
 @NgModule({
