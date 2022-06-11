@@ -20,6 +20,7 @@ import { LogInComponent } from './log-in/log-in.component';
 
 import { AuthGuard } from './auth.guard';
 import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionario/reserva-espacio-funcionario.component';
+import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/reserva-espacio-visitante.component';
 
 const routes: Routes = [
   // {path:"post-create", component: PostCreateComponent},
@@ -110,7 +111,8 @@ const routes: Routes = [
   },
   { path:"log-in", component:LogInComponent},
   {path:"", redirectTo: '/log-in', pathMatch: 'full'},
-  {path:"reservar-espacio", component:ReservaEspacioFuncionarioComponent}
+  {path:"reservar-espacio", component:ReservaEspacioFuncionarioComponent},
+  {path:"reservar-espacio-visitante", component: ReservaEspacioVisitanteComponent}
 ]
 
 @NgModule({

@@ -163,7 +163,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     if(this.horarioArray.length == 0) {
       this.dialogo
       .open(DialogoInfoComponent, {
-        data: 'Error: No se ha ingresado una reserva a la lista.'
+        data: 'Error: No se ha agregado una reserva a la lista.'
       });
       return;
     }
