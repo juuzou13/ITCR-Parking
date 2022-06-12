@@ -21,6 +21,7 @@ import { VisualizarReservacionesComponent } from './visualizar-reservaciones/vis
 import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
 import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
 import { EstadisticaEstacionamientoParticularComponent } from './estadistica-estacionamiento-particular/estadistica-estacionamiento-particular.component';
+import { OcupacionPorDepartamentoComponent } from './ocupacion-por-departamento/ocupacion-por-departamento.component';
 
 import { AuthGuard } from './auth.guard';
 
@@ -116,7 +117,8 @@ const routes: Routes = [
   { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent},
   { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent},
   { path: "estadisticas-por-departamento", component: EstadisticasPorDepartamentoComponent},
-  { path: "estadisticas-estacionamiento-particular", component: EstadisticaEstacionamientoParticularComponent}
+  { path: "estadisticas-estacionamiento-particular", component: EstadisticaEstacionamientoParticularComponent},
+  { path: "ocupacion-por-departamento", component: OcupacionPorDepartamentoComponent}
 ]
 
 @NgModule({

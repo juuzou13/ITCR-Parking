@@ -4,12 +4,14 @@
     </div>
 </div>
 <div class="flex1">
-    <mat-form-field style="width:80%; margin-left:10%; margin-top:2%" appearance="fill"
+    <mat-form-field style="width:45%; margin-left:5%; margin-top:2%" appearance="fill"
     (click)="onParqueo()">
         <mat-label>Parqueo</mat-label>
         <mat-select required name="parqueo"
                     required
+                    #selectParqueo="ngModel"
                     [(ngModel)]="parqueoSeleccionado">
+                    <mat-error *ngIf="selectParqueo.invalid">Por favor ingrese una opción</mat-error>
                     <mat-option *ngFor="let parqueo of parqueos" 
                         [value]="parqueo">
                         {{parqueo._id_parqueo}}

@@ -182,5 +182,6 @@ export class EstadisticaEstacionamientoParticularComponent implements OnInit {
     this.parqueoEscogido = true;
     this.onDpto = false;
     this.onTipoEspacio = false;
+    
   }
 }

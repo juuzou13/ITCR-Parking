@@ -1,1 +1,60 @@
-<p>ocupacion-por-departamento works!</p>
+<div class="title">
+    <div class="flex2">
+        <h1 >Estadística ocupación por departamento </h1>
+    </div>
+</div>
+<form (submit)="onBuscar(postForm)" #postForm="ngForm">
+<mat-grid-list rowHeight="6:1" #grid [cols]="cols" gutterSize="20px" style="margin-top:5%">
+    <mat-grid-tile>
+        <mat-form-field class="example-full-width" appearance="fill"
+        style="width:90%; margin-left:5%; margin-top:2%">
+            <mat-label>Departamento</mat-label>
+            <mat-select required name="departamento"
+                    required
+                    ngModel
+                    #departamento="ngModel">
+                    <mat-error *ngIf="departamento.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let dpto of departamentos_registrados" [value]="dpto">
+                        {{dpto.nombre_campus}} - {{dpto.departamento}} 
+                    </mat-option>
+                    </mat-select>
+        </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-form-field class="example-full-width" appearance="fill"
+        style="width:90%; margin-left:5%; margin-top:2%">
+            <mat-label>Día de la semana</mat-label>
+            <mat-select required name="dia"
+            required
+            ngModel
+            #dia="ngModel">
+            <mat-error *ngIf="dia.invalid">Por favor ingrese una opción</mat-error>
+            <mat-option *ngFor="let dia of dias" [value]="dia.value">
+                {{dia.viewValue}}
+            </mat-option>
+            </mat-select>
+        </mat-form-field>  
+    </mat-grid-tile>   
+    <mat-grid-tile>
+        <button 
+        mat-raised-button 
+        color="primary"
+        type="submit" >Buscar</button>
+    </mat-grid-tile>
+</mat-grid-list>
+</form>
+
+<div style="margin-top:10%; margin-left:20%" *ngIf="onGrafico">
+	<div>
+		<div style="display:block; width: 80%; height: 80%;" >
+			<canvas baseChart 
+                [datasets]="barChartData"
+                [labels]="barChartLabels"
+                [options]="barChartOptions"
+                [colors]="barChartColors"
+                [legend]="barChartLegend"
+                [chartType]="barChartType">
+            </canvas>
+		</div>
+  </div>
+</div>
