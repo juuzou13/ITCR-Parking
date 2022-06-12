@@ -49,6 +49,7 @@ import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionari
 import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/reserva-espacio-visitante.component';
 import { ReservaEspacioVoficialComponent } from './reserva-espacio-voficial/reserva-espacio-voficial.component';
 import { SimulacionLiberarEspaciosComponent } from './simulacion-liberar-espacios/simulacion-liberar-espacios.component';
+import { LiberarEspaciosComponent } from './liberar-espacios/liberar-espacios.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { SimulacionLiberarEspaciosComponent } from './simulacion-liberar-espacio
     ReservaEspacioFuncionarioComponent,
     ReservaEspacioVisitanteComponent,
     ReservaEspacioVoficialComponent,
-    SimulacionLiberarEspaciosComponent
+    SimulacionLiberarEspaciosComponent,
+    LiberarEspaciosComponent
   ],
   imports: [
     BrowserModule,
