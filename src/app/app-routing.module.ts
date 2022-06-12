@@ -112,13 +112,43 @@ const routes: Routes = [
     }, 
     canActivate: [AuthGuard]
   },
-  { path:"log-in", component:LogInComponent},
-  {path:"", redirectTo: '/log-in', pathMatch: 'full'},
-  {path:"reservar-espacio", component:ReservaEspacioFuncionarioComponent},
-  {path:"reservar-espacio-visitante", component: ReservaEspacioVisitanteComponent},
-  {path:"reservar-espacio-voficial", component: ReservaEspacioVoficialComponent},
-  {path:"simulacion", component: SimulacionLiberarEspaciosComponent},
-  {path:"liberar-espacio", component: LiberarEspaciosComponent}
+  { path:"log-in", component:LogInComponent },
+  { path:"", redirectTo: '/log-in', pathMatch: 'full' },
+  { path:"reservar-espacio", 
+    component:ReservaEspacioFuncionarioComponent,
+    data: {
+      usuario: 'func'
+    }, 
+    canActivate: [AuthGuard]
+  },
+  { path:"reservar-espacio-visitante", 
+    component: ReservaEspacioVisitanteComponent,
+    data: {
+      usuario: 'admin-jefatura'
+    }, 
+    canActivate: [AuthGuard]
+  },
+  { path:"reservar-espacio-voficial", 
+    component: ReservaEspacioVoficialComponent,
+    data: {
+      usuario: 'operador'
+    }, 
+    canActivate: [AuthGuard]
+  },
+  { path:"simulacion", 
+    component: SimulacionLiberarEspaciosComponent,
+    data: {
+      usuario: 'admin'
+    }, 
+    canActivate: [AuthGuard] 
+  },
+  { path:"liberar-espacio", 
+    component: LiberarEspaciosComponent,
+    data: {
+      usuario: 'operador'
+    }, 
+    canActivate: [AuthGuard] 
+  }
 ]
 
 @NgModule({

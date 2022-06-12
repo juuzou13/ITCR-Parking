@@ -25,8 +25,10 @@ export class AuthGuard implements CanActivate {
 
   activatePermisos(route: ActivatedRouteSnapshot): boolean {
     if(this.loginService.loggedIn()) {
-      if(this.loginService.getJefatura() == "0" &&
-        route.data['usuario'] == 'jefatura') {
+      if((this.loginService.getJefatura() == "0" && route.data['usuario'] == 'jefatura')
+         || (this.loginService.getAdmin() == "0" && this.loginService.getJefatura() == "0"
+         && route.data['usuario'] == 'admin-jefatura') || (this.loginService.getOperador() == "0"
+         && route.data['usuario'] == 'operador')) {
         this.dialogo
         .open(DialogoInfoComponent, {
           data: 'Acceso único para usuario ' + route.data['usuario']
@@ -41,7 +43,8 @@ export class AuthGuard implements CanActivate {
         return true;
       if(this.loginService.getAdmin() == "0" &&
         (route.data['usuario'] == 'func' ||
-         route.data['usuario'] == 'jefatura'))
+         route.data['usuario'] == 'jefatura' ||
+         route.data['usuario'] == 'admin-jefatura'))
         return true;
     }
     this.dialogo

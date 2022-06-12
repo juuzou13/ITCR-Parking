@@ -44,4 +44,8 @@ export class LoginService {
     return localStorage.getItem('jefatura');
   }
 
+  getOperador() {
+    return localStorage.getItem('operador');
+  }
+
 }
