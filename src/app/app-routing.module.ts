@@ -114,11 +114,33 @@ const routes: Routes = [
   },
   { path:"log-in", component:LogInComponent},
   { path:"", redirectTo: '/log-in', pathMatch: 'full'},
-  { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent},
-  { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent},
-  { path: "estadisticas-por-departamento", component: EstadisticasPorDepartamentoComponent},
-  { path: "estadisticas-estacionamiento-particular", component: EstadisticaEstacionamientoParticularComponent},
-  { path: "ocupacion-por-departamento", component: OcupacionPorDepartamentoComponent}
+  { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent,
+    data: {
+      usuario: 'func'
+    }, 
+    canActivate: [AuthGuard]},
+  { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent,
+    data: {
+      usuario: 'operador'
+    }, 
+    canActivate: [AuthGuard]},
+  { path: "estadisticas-por-departamento", component: EstadisticasPorDepartamentoComponent,
+    data: {
+      usuario: 'jefatura'
+    }, 
+    canActivate: [AuthGuard]},
+  { path: "estadisticas-estacionamiento-particular", 
+    component: EstadisticaEstacionamientoParticularComponent,
+    data: {
+      usuario: 'admin'
+    }, 
+    canActivate: [AuthGuard]},
+  { path: "ocupacion-por-departamento", 
+    component: OcupacionPorDepartamentoComponent,
+    data: {
+      usuario: 'admin'
+    }, 
+    canActivate: [AuthGuard]}
 ]
 
 @NgModule({
