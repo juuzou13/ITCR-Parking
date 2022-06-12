@@ -1,1 +1,84 @@
-<p>liberar-espacios works!</p>
+
+<h1>Liberar espacio</h1>
+<form (submit)="onLiberarEspacio(postForm)" #postForm="ngForm">
+    <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill" (click)="clickListaParqueo(postForm)">
+                <mat-label>Parqueo</mat-label>
+                <mat-select required name="parqueo"
+                    required
+                    ngModel
+                    #parqueo="ngModel">
+                    <mat-error *ngIf="parqueo.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let parqueo of parqueos_registrados" [value]="parqueo._id" (click)="seleccionarParqueo()">
+                        {{parqueo._id_parqueo}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Espacio</mat-label>
+                <mat-select required name="espacio"
+                    [disabled]="!parqueo_seleccionado"
+                    required
+                    ngModel
+                    #espacio="ngModel">
+                    <mat-error *ngIf="espacio.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let reserva of reservas_parqueo" [value]="reserva.idEspacio" (click)="seleccionarEspacio()">
+                        {{reserva.idEspacio}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile [rowspan]="3">
+            <mat-card width="auto">
+                <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource " class="mat-elevation-z8 demo-table" >
+                
+                    <!-- Position Column -->
+                    <ng-container  matColumnDef="dia_semana" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>Día de la semana</th>
+                        <td mat-cell *matCellDef="let element"> {{element.rangoHorario.dia}} </td>
+                    </ng-container>
+        
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="hora_entrada" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>Hora entrada</th>
+                        <td mat-cell *matCellDef="let element"> {{element.rangoHorario.hora_entrada}} </td>
+                    </ng-container>
+        
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="hora_salida" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>Hora salida</th>
+                        <td mat-cell *matCellDef="let element"> {{element.rangoHorario.hora_salida}} </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                        mat-row
+                        (click)="onClickRowTable1(row)"
+                        [class.demo-row2-is-clicked]="row==clickedRowTable1"
+                        *matRowDef="let row; columns: displayedColumns;"
+                    ></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5]"
+                            showFirstLastButtons 
+                            #paginatorAgregar
+                            [length]="planillaArray.length" 
+                            aria-label="Seleccione la página de departamentos">
+                </mat-paginator>
+            </div>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile></mat-grid-tile>
+        <mat-grid-tile></mat-grid-tile>
+        <mat-grid-tile>
+            <button 
+            class="liberar-espacio"
+            mat-raised-button 
+            color="primary"
+            type="submit">Liberar espacio</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>

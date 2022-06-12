@@ -23,6 +23,7 @@ import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionari
 import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/reserva-espacio-visitante.component';
 import { ReservaEspacioVoficialComponent } from './reserva-espacio-voficial/reserva-espacio-voficial.component';
 import { SimulacionLiberarEspaciosComponent } from './simulacion-liberar-espacios/simulacion-liberar-espacios.component';
+import { LiberarEspaciosComponent } from './liberar-espacios/liberar-espacios.component';
 
 const routes: Routes = [
   // {path:"post-create", component: PostCreateComponent},
@@ -116,7 +117,8 @@ const routes: Routes = [
   {path:"reservar-espacio", component:ReservaEspacioFuncionarioComponent},
   {path:"reservar-espacio-visitante", component: ReservaEspacioVisitanteComponent},
   {path:"reservar-espacio-voficial", component: ReservaEspacioVoficialComponent},
-  {path:"simulacion", component: SimulacionLiberarEspaciosComponent}
+  {path:"simulacion", component: SimulacionLiberarEspaciosComponent},
+  {path:"liberar-espacio", component: LiberarEspaciosComponent}
 ]
 
 @NgModule({
