@@ -18,6 +18,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 // import { PostCreateComponent } from './posts/post-create/post-create.component';
 // import { HeaderComponent } from './header/header.component';
 // import { PostListComponent } from './posts/post-list/post-list.component';
@@ -81,6 +83,7 @@ import { RegistrarOperadorComponent } from './registrar-operador/registrar-opera
     RegistroHorarioComponent,
     EstadisticasFHComponent,
     LogInComponent,
+    
     ReservaEspacioFuncionarioComponent,
     ReservaEspacioVisitanteComponent,
     SimulacionLiberarEspaciosComponent,
@@ -116,6 +119,8 @@ import { RegistrarOperadorComponent } from './registrar-operador/registrar-opera
     ScrollingModule,
     MatPaginatorModule,
     MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NgbModule,
     MatButtonToggleModule,
     ChartsModule,

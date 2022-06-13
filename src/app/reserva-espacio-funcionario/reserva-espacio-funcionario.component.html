@@ -1,24 +1,22 @@
 
 <h1>Reservar espacio</h1>
+
 <form (submit)="onReservarEspacio(postForm)" #postForm="ngForm">
+    
     <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
         <mat-grid-tile>
-            <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label>Día de la semana</mat-label>
-                <mat-select required name="dia_semana"
-                    required
-                    ngModel
-                    #dia_semana="ngModel">
-                    <mat-error *ngIf="dia_semana.invalid">Por favor ingrese una opción</mat-error>
-                        <mat-option value="0">Lunes</mat-option>
-                        <mat-option value="1">Martes</mat-option>
-                        <mat-option value="2">Miércoles</mat-option>
-                        <mat-option value="3">Jueves</mat-option>
-                        <mat-option value="4">Viernes</mat-option>
-                        <mat-option value="5">Sábado</mat-option>
-                    </mat-select>
-            </mat-form-field>
+            <!--/*[style.width.%]="100"*/-->
+            <mat-form-field appearance="fill">
+               
+                    <mat-label>Escoja una fecha</mat-label>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="fechaS" [ngModelOptions]="{standalone: true}" [min]="minDate">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                
+              </mat-form-field>
         </mat-grid-tile>
+        
         <mat-grid-tile>
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Parqueo</mat-label>
@@ -47,15 +45,15 @@
                 </mat-select>
             </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile rowspan="3">
+        <mat-grid-tile rowspan="2">
             <mat-card>
                 <h2>Horarios reservados</h2>
                 <div class="mat-elevation-z8">
                     <table mat-table [dataSource]="dataSource" >
                         <!-- Position Column -->
                         <ng-container matColumnDef="Dia" width="auto">
-                            <th mat-header-cell *matHeaderCellDef> Día </th>
-                            <td mat-cell *matCellDef="let element"> {{element.rangoHorario.dia}} </td>
+                            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                            <td mat-cell *matCellDef="let element"> {{element.rangoHorario.dia + " " + element.rangoHorario.dia_mes + "/" + element.rangoHorario.mes + "/" + element.rangoHorario.anio}} </td>
                         </ng-container>
                         <ng-container matColumnDef="Entrada" width="auto">
                             <th mat-header-cell *matHeaderCellDef> Hora entrada </th>
