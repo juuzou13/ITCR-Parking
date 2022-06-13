@@ -51,7 +51,7 @@ import { ReservaEspacioVoficialComponent } from './reserva-espacio-voficial/rese
 import { SimulacionLiberarEspaciosComponent } from './simulacion-liberar-espacios/simulacion-liberar-espacios.component';
 import { LiberarEspaciosComponent } from './liberar-espacios/liberar-espacios.component';
 import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
-// import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
 import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
 import { EstadisticaEstacionamientoParticularComponent } from './estadistica-estacionamiento-particular/estadistica-estacionamiento-particular.component';
@@ -90,7 +90,9 @@ import { RegistrarOperadorComponent } from './registrar-operador/registrar-opera
     EstadisticaEstacionamientoParticularComponent,
     OcupacionPorDepartamentoComponent,
     MenuPrincipalOperadorComponent,
-    RegistrarOperadorComponent
+    RegistrarOperadorComponent,
+    ReservaEspacioVoficialComponent,
+    EstadisticasPorDepartamentoComponent
   ],
   imports: [
     AppRoutingModule,
@@ -116,7 +118,8 @@ import { RegistrarOperadorComponent } from './registrar-operador/registrar-opera
     MatTableModule,
     NgbModule,
     MatButtonToggleModule,
-    ChartsModule
+    ChartsModule,
+    FlexLayoutModule
   ],
   providers: [
     AuthGuard,
