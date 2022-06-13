@@ -51,6 +51,8 @@ import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detal
 import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
 import { EstadisticaEstacionamientoParticularComponent } from './estadistica-estacionamiento-particular/estadistica-estacionamiento-particular.component';
 import { OcupacionPorDepartamentoComponent } from './ocupacion-por-departamento/ocupacion-por-departamento.component';
+import { MenuPrincipalOperadorComponent } from './menu-principal-operador/menu-principal-operador.component';
+import { RegistrarOperadorComponent } from './registrar-operador/registrar-operador.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,9 @@ import { OcupacionPorDepartamentoComponent } from './ocupacion-por-departamento/
     DetalleEstacionamientoComponent,
     EstadisticasPorDepartamentoComponent,
     EstadisticaEstacionamientoParticularComponent,
-    OcupacionPorDepartamentoComponent
+    OcupacionPorDepartamentoComponent,
+    MenuPrincipalOperadorComponent,
+    RegistrarOperadorComponent
   ],
   imports: [
     BrowserModule,

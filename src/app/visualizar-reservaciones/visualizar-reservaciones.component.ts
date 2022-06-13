@@ -18,11 +18,11 @@ export class VisualizarReservacionesComponent implements OnInit {
           {dia:'Viernes', id:5}, {dia:'Sábado', id:6}];
   reservas = [
     {dia: 'Lunes', hora_inicio:'7:00am', hora_fin:'10:00am', tipo_parqueo:'Principal', 
-    nombre:'Parqueo CTLSJ', campus:'SJ', direccion: 'Barrio Amón'},
+    nombre:'Parqueo CTLSJ', campus:'SJ', direccion: 'Barrio Amón', id_espacio:"2"},
     {dia: 'Martes', hora_inicio:'9:00am', hora_fin:'3:00pm', tipo_parqueo:'Subcontratado', 
-    nombre:'Parqueo OASIS', campus:'SJ', direccion: 'Barrio Amón, frente al TEC'},
+    nombre:'Parqueo OASIS', campus:'SJ', direccion: 'Barrio Amón, frente al TEC', id_espacio:"3"},
     {dia: 'Jueves', hora_inicio:'9:00am', hora_fin:'3:00pm', tipo_parqueo:'Subcontratado', 
-    nombre:'Parqueo OASIS', campus:'SJ', direccion: 'Barrio Amón, frente al TEC'},
+    nombre:'Parqueo OASIS', campus:'SJ', direccion: 'Barrio Amón, frente al TEC', id_espacio:"4"},
   ]
 
   constructor( public dialogo: MatDialog ) { }

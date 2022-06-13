@@ -7,16 +7,14 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router } from '@angular/router'; 
 
 @Component({
-  selector: 'app-menu-principal-admin',
-  templateUrl: './menu-principal-admin.component.html',
-  styleUrls: ['./menu-principal-admin.component.css']
+  selector: 'app-menu-principal-operador',
+  templateUrl: './menu-principal-operador.component.html',
+  styleUrls: ['./menu-principal-operador.component.css']
 })
-export class MenuPrincipalAdminComponent implements OnInit {
+export class MenuPrincipalOperadorComponent implements OnInit {
 
-  items = Array.from({length: 10}).map((_, i) => `Item #${i}`);
-
-  cols : number = 0;
   nombre_perfil = "";
+  cols : number = 0;
 
   gridByBreakpoint = {
     xl: 2,
@@ -25,7 +23,7 @@ export class MenuPrincipalAdminComponent implements OnInit {
     sm: 2,
     xs: 1
   }
-  
+
   constructor(private breakpointObserver: BreakpointObserver, private router: Router) {
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -54,29 +52,8 @@ export class MenuPrincipalAdminComponent implements OnInit {
     });
   }
 
-  displayedColumns: string[] = ['Departamento'];
-  dataSource = new MatTableDataSource<String>(this.items);
-
-  @ViewChild(MatPaginator) paginator: MatPaginator ;
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
   ngOnInit(): void {
-    
     this.nombre_perfil = localStorage['nombre_completo'];
   }
-
-  onMenuPrincipal(form: NgForm){
-    if(form.invalid){
-        return;
-    }
-  }
-
-  registrarParqueo() {
-    this.router.navigate(['/registrar-parqueo']);
-  }
-
 
 }

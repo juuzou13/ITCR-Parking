@@ -1,0 +1,89 @@
+<h1 >Registro de operador </h1>
+<form (submit)="onRegistrarOperador(postForm)" #postForm="ngForm">
+    <mat-grid-list rowHeight="6:1" #grid [cols]="cols" gutterSize="20px" >
+        <mat-grid-tile>
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Identificación</mat-label>
+                    <input matInput  
+                    type="text" 
+                    name="identificacion"
+                    required
+                    ngModel
+                    #identificacion="ngModel">
+                    <mat-error *ngIf="identificacion.invalid">Por favor ingrese una identificación</mat-error>
+                </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Nombre completo</mat-label>
+                    <input matInput  
+                    type="text" 
+                    name="nombre"
+                    required
+                    ngModel
+                    #nombre="ngModel">
+                    <mat-error *ngIf="nombre.invalid">Por favor ingrese un nombre</mat-error>
+                </mat-form-field>  
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Número telefónico</mat-label>
+                <input matInput  
+                type="text" 
+                name="numeroTelefono"
+                required
+                ngModel
+                #numeroTelefono="ngModel">
+                <mat-error *ngIf="numeroTelefono.invalid">Por favor ingrese un número de teléfono</mat-error>
+            </mat-form-field> 
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Correo</mat-label>
+            <input matInput  
+            type="email" 
+            name="correoInstitucional"
+            required
+            ngModel
+            #correoInstitucional="ngModel">
+            <mat-error *ngIf="correoInstitucional.invalid">Por favor ingrese un correo</mat-error>
+        </mat-form-field>  
+    </mat-grid-tile>
+        <mat-grid-tile>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Contraseña</mat-label>
+            <input matInput  
+            type="password" 
+            [type]="hide ? 'password' : 'text'"
+            name="contrasenia"
+            required
+            ngModel
+            #contrasenia="ngModel">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="contrasenia.invalid">Por favor ingrese una contraseña</mat-error>
+        </mat-form-field>   
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Estacionamiento a cargo</mat-label>
+            <mat-select required name="parqueo"
+                required
+                ngModel
+                #parqueo="ngModel">
+                <mat-error *ngIf="parqueo.invalid">Por favor ingrese una opción</mat-error>
+                <mat-option *ngFor="let parqueo of parqueos_registrados" [value]="parqueo">
+                    {{parqueo._id_parqueo}} 
+                </mat-option>
+                </mat-select>
+        </mat-form-field>  
+    </mat-grid-tile>   
+       
+    <mat-grid-tile [colspan]="cols">
+        <button 
+        mat-raised-button 
+        color="primary"
+        type="submit" >Registrar operador</button>
+    </mat-grid-tile>
+    </mat-grid-list>
+</form>
+    

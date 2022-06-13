@@ -22,6 +22,8 @@ import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detal
 import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
 import { EstadisticaEstacionamientoParticularComponent } from './estadistica-estacionamiento-particular/estadistica-estacionamiento-particular.component';
 import { OcupacionPorDepartamentoComponent } from './ocupacion-por-departamento/ocupacion-por-departamento.component';
+import { MenuPrincipalOperadorComponent } from './menu-principal-operador/menu-principal-operador.component';
+import { RegistrarOperadorComponent } from './registrar-operador/registrar-operador.component';
 
 import { AuthGuard } from './auth.guard';
 
@@ -118,7 +120,7 @@ const routes: Routes = [
     data: {
       usuario: 'func'
     }, 
-    canActivate: [AuthGuard]},
+  canActivate: [AuthGuard]},
   { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent,
     data: {
       usuario: 'operador'
@@ -140,7 +142,19 @@ const routes: Routes = [
     data: {
       usuario: 'admin'
     }, 
-    canActivate: [AuthGuard]}
+    canActivate: [AuthGuard]},
+    { path: "menu-principal-operador",
+      component: MenuPrincipalOperadorComponent,
+      data: {
+        usuario: 'operador'
+      }, 
+      canActivate: [AuthGuard]},
+    { path: "registrar-operador",
+      component: RegistrarOperadorComponent,
+      data: {
+        usuario: 'admin'
+      }, 
+      canActivate: [AuthGuard]}
 ]
 
 @NgModule({
