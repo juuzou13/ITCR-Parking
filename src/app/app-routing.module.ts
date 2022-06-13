@@ -155,7 +155,7 @@ const routes: Routes = [
       usuario: 'operador'
     }, 
     canActivate: [AuthGuard] 
-  }
+  },
   { path:"log-in", component:LogInComponent},
   { path:"", redirectTo: '/log-in', pathMatch: 'full'},
   { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent,
