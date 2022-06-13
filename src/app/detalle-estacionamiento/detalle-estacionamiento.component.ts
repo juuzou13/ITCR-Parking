@@ -7,6 +7,7 @@ import { Breakpoints } from '@angular/cdk/layout';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Parqueo } from '../modelos/parqueo.model';
+import { ConsultarParqueosService } from '../services/consultar-parqueos.service';
 
 @Component({
   selector: 'app-detalle-estacionamiento',
@@ -15,35 +16,30 @@ import { Parqueo } from '../modelos/parqueo.model';
 })
 export class DetalleEstacionamientoComponent implements OnInit {
 
-  miParqueo: any = {
-    _id: '',
-    _id_parqueo: '',
-    tipo: 'Subcontratado',
-    capacidad_total: 50,
-    capacidad_actual: 40,
-    campus: 'SJ',
-    espacios_jefatura: 5,
-    espacios_VOficiales: 5,
-    espacios_asignados: 5,
-    espacios_visitantes: 5,
-    espacios_NEspeciales: 5,
-    direccion: 'Frente al TEC, Barrio Amón',
-    contacto: '89228252',
-    id_contrato: 'A-098',
-    nombre:"OASIS"
-  }
+  miParqueo: any = [];
+
+  // miParqueo: any = {
+  //   _id: '',
+  //   _id_parqueo: '',
+  //   tipo: 'Subcontratado',
+  //   capacidad_total: 50,
+  //   capacidad_actual: 40,
+  //   campus: 'SJ',
+  //   espacios_jefatura: 5,
+  //   espacios_VOficiales: 5,
+  //   espacios_asignados: 5,
+  //   espacios_visitantes: 5,
+  //   espacios_NEspeciales: 5,
+  //   direccion: 'Frente al TEC, Barrio Amón',
+  //   contacto: '89228252',
+  //   id_contrato: 'A-098',
+  //   nombre:"OASIS"
+  // }
 
   displayedColumns: string[] = ['dia','entrada','salida'];
   dataSource: any;
   cols : number = 2;
 
-  horario: any = [
-    {dia: "Lunes", hora_entrada: "5:00am", hora_salida:"5:00pm"},
-    {dia: "Martes", hora_entrada: "5:00am", hora_salida:"5:00pm"},
-    {dia: "Miércoles", hora_entrada: "5:00am", hora_salida:"5:00pm"},
-    {dia: "Jueves", hora_entrada: "5:00am", hora_salida:"5:00pm"}
-  ]
-  
   @ViewChild(MatPaginator) paginatorHorario: MatPaginator | undefined;
 
   ngAfterViewInit() {
@@ -59,7 +55,7 @@ export class DetalleEstacionamientoComponent implements OnInit {
   }
 
   constructor(private breakpointObserver: BreakpointObserver,
-    public dialogo: MatDialog) {
+    private servicio_parqueos: ConsultarParqueosService, public dialogo: MatDialog) {
       this.breakpointObserver.observe([
         Breakpoints.XSmall,
         Breakpoints.Small,
@@ -88,8 +84,23 @@ export class DetalleEstacionamientoComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<any>(this.horario);
-    this.dataSource.paginator = this.paginatorHorario;
+    const id = localStorage.getItem('idParqueoOperador') || '';
+    this.servicio_parqueos.findByID(id).subscribe({
+      complete: () => {},
+      error: (err: any) => { 
+       this.dialogo
+       .open(DialogoInfoComponent, {
+         data: 'Error: '+ err.error
+       });
+     },
+     next: (res: any) => {
+        this.miParqueo = res;
+        this.dataSource = new MatTableDataSource<any>(this.miParqueo.horario);
+        this.dataSource.paginator = this.paginatorHorario;
+     }
+    });
+
+   
   }
 
 }

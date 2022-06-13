@@ -13,5 +13,6 @@ export interface Funcionario {
     jefatura:number,
     correo_personal:string,
     campus_departamento_jefatura:{nombre_campus:string, departamento:string},
-    incapacitado:number
+    incapacitado:number,
+    idParqueoOperador:string
 }

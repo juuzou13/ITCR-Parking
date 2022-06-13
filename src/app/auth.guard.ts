@@ -44,7 +44,8 @@ export class AuthGuard implements CanActivate {
       if(this.loginService.getAdmin() == "0" &&
         (route.data['usuario'] == 'func' ||
          route.data['usuario'] == 'jefatura' ||
-         route.data['usuario'] == 'admin-jefatura'))
+         route.data['usuario'] == 'admin-jefatura' ||
+         route.data['usuario'] == 'operador'))
         return true;
     }
     this.dialogo

@@ -40,6 +40,7 @@ export class RegistrarFuncionarioComponent implements OnInit, AfterViewInit {
     correo_personal: '',
     campus_departamento_jefatura: { campus: '', departamento: '' },
     incapacitado: 0,
+    idParqueoOperador: "",
   };
 
 
