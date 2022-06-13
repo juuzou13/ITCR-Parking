@@ -69,19 +69,25 @@ export class LogInComponent implements OnInit {
             });
           },
           next: (res: any) => { 
+            console.log("res", res);
             localStorage.setItem('admin', res.admin);
             localStorage.setItem('jefatura', res.jefatura);
             localStorage.setItem('id', res.identificacion);
             localStorage.setItem('token', res.token);
             localStorage.setItem('nombre_completo', res.nombre_completo);
             if(res.jefatura){
-              localStorage.setItem('campus_jefatura', res.campus_departamento_jefatura.nombre_campus);
+              localStorage.setItem('campus_jefatura', res.campus_departamento_jefatura.campus);
               localStorage.setItem('dpto_jefatura', res.campus_departamento_jefatura.departamento);
             }
             if(res.admin) {
               this.router.navigate(['/menu-principal-admin']).then(() => {
                 window.location.reload();
-            });
+              });
+            }
+            if(res.tipo_funcionario == 'Operador') {
+              this.router.navigate(['/menu-principal-operador']).then(() => {
+                window.location.reload();
+              });
             } else {
               this.router.navigate(['/menu-principal-func']).then(() => {
                 window.location.reload();
