@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <a mat-button class="companyName" [routerLink]="admin == 1 ? '/menu-principal-admin' : '/menu-principal-func'">
+  <a mat-button class="companyName" [routerLink]="admin == 1 ? '/menu-principal-admin' : (operador == 1 ? '/menu-principal-operador' : '/menu-principal-func')">
     <span>Estacionamientos TEC</span>
   </a>
   <span class="example-spacer"></span>

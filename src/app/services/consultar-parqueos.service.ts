@@ -21,8 +21,8 @@ export class ConsultarParqueosService {
     return this.http.get<any>(this.API + '/get-all/combo-box');
   }
 
-  findByID(form: NgForm) {
-    return this.http.get<any>(this.API + `/findByID/${form.value._id}`);
+  findByID(id: String) {
+    return this.http.get<any>(this.API + `/findByID/${id}`);
   }
 
   getEspaciosFrom(form: NgForm) {

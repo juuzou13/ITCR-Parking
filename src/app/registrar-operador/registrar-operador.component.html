@@ -68,13 +68,12 @@
             <mat-label>Estacionamiento a cargo</mat-label>
             <mat-select required name="parqueo"
                 required
-                ngModel
-                #parqueo="ngModel">
-                <mat-error *ngIf="parqueo.invalid">Por favor ingrese una opción</mat-error>
+                [(ngModel)]="parqueoSeleccionado">
                 <mat-option *ngFor="let parqueo of parqueos_registrados" [value]="parqueo">
+                    <mat-error *ngIf="parqueo.invalid">Por favor ingrese una opción</mat-error>
                     {{parqueo._id_parqueo}} 
                 </mat-option>
-                </mat-select>
+            </mat-select>
         </mat-form-field>  
     </mat-grid-tile>   
        

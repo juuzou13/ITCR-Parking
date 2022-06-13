@@ -23,4 +23,5 @@ export class NavbarComponent {
     public loginService: LoginService) {}
 
   admin = parseInt(localStorage.getItem('admin') || "");
+  operador = parseInt(localStorage.getItem('operador') || "");
 }

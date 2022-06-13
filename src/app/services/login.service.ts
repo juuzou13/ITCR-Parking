@@ -21,10 +21,19 @@ export class LoginService {
   }
 
   logout() {
+    if(localStorage.getItem('jefatura') == "1"){
+      localStorage.removeItem('campus_jefatura');
+      localStorage.removeItem('dpto_jefatura');
+    }
+    if(localStorage.getItem('operador') == "1"){
+      localStorage.removeItem('idParqueoOperador');
+    }
+    localStorage.removeItem('nombre_completo');
     localStorage.removeItem('token');
     localStorage.removeItem('jefatura');
     localStorage.removeItem('id');
     localStorage.removeItem('admin');
+    localStorage.removeItem('operador');
     this.router.navigate(['/log-in']);
   }
 
