@@ -1,0 +1,120 @@
+<div class="title">
+    <div class="flex2">
+        <h1 >Estadística estacionamiento particular </h1>
+    </div>
+</div>
+<div class="flex1">
+    <mat-form-field style="width:45%; margin-left:5%; margin-top:2%" appearance="fill"
+    (click)="onParqueo()">
+        <mat-label>Parqueo</mat-label>
+        <mat-select required name="parqueo"
+                    required
+                    #selectParqueo="ngModel"
+                    [(ngModel)]="parqueoSeleccionado">
+                    <mat-error *ngIf="selectParqueo.invalid">Por favor ingrese una opción</mat-error>
+                    <mat-option *ngFor="let parqueo of parqueos" 
+                        [value]="parqueo">
+                        {{parqueo._id_parqueo}}
+                    </mat-option>
+                </mat-select>
+    </mat-form-field>  
+</div>
+<mat-button-toggle-group name="fontStyle"  [disabled]="!parqueoEscogido" #group="matButtonToggleGroup"
+aria-label="Font Style" [style.flex-wrap]="pantalla_pequenia ? 'wrap' : 'nowrap'">
+    <mat-button-toggle value="dpto" style="width:100%" (click)="onToggle(dpto, parqueoSeleccionado)" #dpto>Clasificar por departamento</mat-button-toggle>
+    <mat-button-toggle value="tipo_espacio" style="width:100%" (click)="onToggle(tipo_espacio, parqueoSeleccionado)" #tipo_espacio>Clasificar por tipo espacio</mat-button-toggle>
+</mat-button-toggle-group>
+
+<div class="grid">
+    <div>
+        <mat-card class="boxes" *ngIf="onDpto || onTipoEspacio">
+            <h3>Lunes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoL"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                [colors]="chartColors"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onDpto || onTipoEspacio">
+            <h3>Martes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoK"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                [colors]="chartColors"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onDpto || onTipoEspacio">
+            <h3>Miércoles</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoM"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                [colors]="chartColors"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onDpto || onTipoEspacio">
+            <h3>Jueves</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoJ"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                [colors]="chartColors"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onDpto || onTipoEspacio">
+            <h3>Viernes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoV"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                [colors]="chartColors"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes" *ngIf="onDpto || onTipoEspacio">
+            <h3>Sábado</h3>
+        <div>
+            <canvas
+            baseChart
+            [data]="datosGraficoS"
+            [labels]="labelsGrafico"
+            [chartType]="doughnutChartType"
+            [colors]="chartColors"
+            >
+            </canvas>
+        </div>
+    </mat-card>
+    </div>
+</div>
+<div style="height: 2cm"></div>

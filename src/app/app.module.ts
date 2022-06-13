@@ -50,6 +50,14 @@ import { ReservaEspacioVisitanteComponent } from './reserva-espacio-visitante/re
 import { ReservaEspacioVoficialComponent } from './reserva-espacio-voficial/reserva-espacio-voficial.component';
 import { SimulacionLiberarEspaciosComponent } from './simulacion-liberar-espacios/simulacion-liberar-espacios.component';
 import { LiberarEspaciosComponent } from './liberar-espacios/liberar-espacios.component';
+import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
+import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
+import { EstadisticaEstacionamientoParticularComponent } from './estadistica-estacionamiento-particular/estadistica-estacionamiento-particular.component';
+import { OcupacionPorDepartamentoComponent } from './ocupacion-por-departamento/ocupacion-por-departamento.component';
+import { MenuPrincipalOperadorComponent } from './menu-principal-operador/menu-principal-operador.component';
+import { RegistrarOperadorComponent } from './registrar-operador/registrar-operador.component';
 
 @NgModule({
   declarations: [
@@ -75,12 +83,16 @@ import { LiberarEspaciosComponent } from './liberar-espacios/liberar-espacios.co
     LogInComponent,
     ReservaEspacioFuncionarioComponent,
     ReservaEspacioVisitanteComponent,
-    ReservaEspacioVoficialComponent,
     SimulacionLiberarEspaciosComponent,
-    LiberarEspaciosComponent
+    LiberarEspaciosComponent,
+    VisualizarReservacionesComponent,
+    DetalleEstacionamientoComponent,
+    EstadisticaEstacionamientoParticularComponent,
+    OcupacionPorDepartamentoComponent,
+    MenuPrincipalOperadorComponent,
+    RegistrarOperadorComponent
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -104,7 +116,8 @@ import { LiberarEspaciosComponent } from './liberar-espacios/liberar-espacios.co
     MatTableModule,
     NgbModule,
     MatButtonToggleModule,
-    ChartsModule
+    ChartsModule,
+    FlexLayoutModule
   ],
   providers: [
     AuthGuard,

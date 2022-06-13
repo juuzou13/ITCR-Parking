@@ -17,6 +17,13 @@ import { ManejoPlanillaComponent } from './manejo-planilla/manejo-planilla.compo
 import { RegistrarFuncionarioComponent } from './registrar-funcionario/registrar-funcionario.component';
 import { RegistroHorarioComponent } from './registro-horario/registro-horario.component';
 import { LogInComponent } from './log-in/log-in.component';
+import { VisualizarReservacionesComponent } from './visualizar-reservaciones/visualizar-reservaciones.component';
+import { DetalleEstacionamientoComponent } from './detalle-estacionamiento/detalle-estacionamiento.component';
+import { EstadisticasPorDepartamentoComponent } from './estadisticas-por-departamento/estadisticas-por-departamento.component';
+import { EstadisticaEstacionamientoParticularComponent } from './estadistica-estacionamiento-particular/estadistica-estacionamiento-particular.component';
+import { OcupacionPorDepartamentoComponent } from './ocupacion-por-departamento/ocupacion-por-departamento.component';
+import { MenuPrincipalOperadorComponent } from './menu-principal-operador/menu-principal-operador.component';
+import { RegistrarOperadorComponent } from './registrar-operador/registrar-operador.component';
 
 import { AuthGuard } from './auth.guard';
 import { ReservaEspacioFuncionarioComponent } from './reserva-espacio-funcionario/reserva-espacio-funcionario.component';
@@ -149,6 +156,47 @@ const routes: Routes = [
     }, 
     canActivate: [AuthGuard] 
   }
+  { path:"log-in", component:LogInComponent},
+  { path:"", redirectTo: '/log-in', pathMatch: 'full'},
+  { path: "visualizar-reservaciones", component: VisualizarReservacionesComponent,
+    data: {
+      usuario: 'func'
+    }, 
+  canActivate: [AuthGuard]},
+  { path: "detalle-estacionamiento", component: DetalleEstacionamientoComponent,
+    data: {
+      usuario: 'operador'
+    }, 
+    canActivate: [AuthGuard]},
+  { path: "estadisticas-por-departamento", component: EstadisticasPorDepartamentoComponent,
+    data: {
+      usuario: 'jefatura'
+    }, 
+    canActivate: [AuthGuard]},
+  { path: "estadisticas-estacionamiento-particular", 
+    component: EstadisticaEstacionamientoParticularComponent,
+    data: {
+      usuario: 'admin'
+    }, 
+    canActivate: [AuthGuard]},
+  { path: "ocupacion-por-departamento", 
+    component: OcupacionPorDepartamentoComponent,
+    data: {
+      usuario: 'admin'
+    }, 
+    canActivate: [AuthGuard]},
+    { path: "menu-principal-operador",
+      component: MenuPrincipalOperadorComponent,
+      data: {
+        usuario: 'operador'
+      }, 
+      canActivate: [AuthGuard]},
+    { path: "registrar-operador",
+      component: RegistrarOperadorComponent,
+      data: {
+        usuario: 'admin'
+      }, 
+      canActivate: [AuthGuard]}
 ]
 
 @NgModule({

@@ -1,0 +1,93 @@
+<div class="title">
+    <div class="flex2">
+        <h1 >Estadística franja horaria de su departamento </h1>
+    </div>
+</div>
+
+<div class="grid">
+    <div>
+        <mat-card class="boxes">
+            <h3>Lunes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoL"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes">
+            <h3>Martes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoK"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes">
+            <h3>Miércoles</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoM"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes">
+            <h3>Jueves</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoJ"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes">
+            <h3>Viernes</h3>
+            <div>
+                <canvas
+                baseChart
+                [data]="datosGraficoV"
+                [labels]="labelsGrafico"
+                [chartType]="doughnutChartType"
+                >
+                </canvas>
+            </div>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="boxes">
+            <h3>Sábado</h3>
+        <div>
+            <canvas
+            baseChart
+            [data]="datosGraficoS"
+            [labels]="labelsGrafico"
+            [chartType]="doughnutChartType"
+            >
+            </canvas>
+        </div>
+    </mat-card>
+    </div>
+</div>
+<div style="height: 2cm"></div>

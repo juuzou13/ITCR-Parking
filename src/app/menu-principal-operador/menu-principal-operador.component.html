@@ -1,0 +1,24 @@
+<h1>Bienvenido (a) {{nombre_perfil}}</h1>
+<form #postForm="ngForm">
+    <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
+        <mat-grid-tile>
+            <button mat-button color="primary">
+                <mat-icon class="icono-boton-menu">search</mat-icon>
+                Detalle estacionamiento a cargo
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/menu-principal-func" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">add_box</mat-icon>
+                Reservar espacios de vehículos oficiales
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/registrar-funcionario" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">clear</mat-icon>
+                Liberar espacios
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>
+    
