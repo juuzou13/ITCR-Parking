@@ -33,7 +33,7 @@ export class ConsultarParqueosService {
     const headers = { 'content-type': 'application/json'}  
     const body =JSON.stringify(parqueo);
     console.log(body)
-    return this.http.put(this.API + `/updateByID/${parqueo._id}`, body, {'headers':headers});
+    return this.http.put<any>(this.API + `/updateByID/${parqueo._id}`, body, {'headers':headers});
   }
 
   deleteByID(_id: String) {

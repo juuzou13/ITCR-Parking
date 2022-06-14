@@ -34,7 +34,6 @@ export class ReservarEspacioFuncionarioService {
   API2 = 'https://morning-ocean-45997.herokuapp.com/consulta-funcionario'
 
   getFuncionarioData(identificacion: string){ 
-    console.log(identificacion)
     return this.http.get<any>(this.API2 + `/findByID/${identificacion}`);
   }
 
@@ -46,5 +45,13 @@ export class ReservarEspacioFuncionarioService {
 
   getAllParqueos() {
     return this.http.get<any>(this.API3 + '/get-all');
+  }
+
+  ocuparCampo(mongoIdParqueo: any){
+    const headers = { 'content-type': 'application/json'}  
+    const body=JSON.stringify(mongoIdParqueo);
+    console.log("body parqueo:", body)
+    
+    return this.http.put(this.API3 + `/updateByID/${mongoIdParqueo._id}`, body,{'headers':headers})
   }
 }
