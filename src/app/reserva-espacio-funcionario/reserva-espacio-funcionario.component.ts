@@ -67,7 +67,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     'Diciembre',
   ];
 
-  
+  tipo_espacio_buscar = "";
 
   parqueos_registrados: Array<any> = [];
   placas_asociadas: Array<any> = [];
@@ -151,6 +151,13 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           console.log(func_id);
           console.log('res ', res);
           this.funcionario_data = res;
+          if(this.funcionario_data.incapacitado){
+            this.tipo_espacio_buscar = "ESPECIAL";
+          }else if(this.funcionario_data.jefatura){
+            this.tipo_espacio_buscar = "JEFATURA";
+          }else {
+            this.tipo_espacio_buscar = "COMUN";
+          }
           this.placas_asociadas = res.placas_asociadas;
         },
       });
@@ -264,10 +271,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     this.dataSource.data = this.horarioArray;
   }
 
-
-
-  
-
   async onConfirmarReserva(form: NgForm) {
     if (this.horarioArray.length == 0) {
       this.dialogo.open(DialogoInfoComponent, {
@@ -275,12 +278,17 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       });
       return;
     }
+    console.log("Data func: ", this.tipo_espacio_buscar);
+
+    
 
     let currentReservation: any = {};
     
     let parqueoReservado: any = {};
 
     let reservasActivasEnRango: Array<any> = [];
+
+    let espaciosDeParqueo: Array<any> = [];
 
     let horariosDeParqueo: Array<any> = [];
     let horariosDeParqueoEnRango: Array<any> = [];
@@ -296,7 +304,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
     let currentReservationes_fallidas: Array<any> = [];
 
-    
 
     for (let i = 0; i < this.dataSource.data.length; i++) {
 
@@ -384,6 +391,10 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
               console.log(reservasActivasEnRango);
 
               if(reservasActivasEnRango.length == 0){
+                currentReservation.rangoHorario.dia_mes = parseInt(currentReservation.rangoHorario.dia_mes);
+                currentReservation.rangoHorario.mes = parseInt(currentReservation.rangoHorario.mes);
+                currentReservation.rangoHorario.anio = parseInt(currentReservation.rangoHorario.anio);
+
                 this.reservarEspacioService.registrarReserva(currentReservation).subscribe();
                 console.log("Reserva Permitida")
               } else {
