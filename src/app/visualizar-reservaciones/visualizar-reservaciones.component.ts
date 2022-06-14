@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from "@angular/material/dialog";
 import { DialogoInfoComponent } from '../compartido/dialogo-info/dialogo-info.component';
 import { DialogoConfirmacionComponent } from '../compartido/dialogo-confirmacion/dialogo-confirmacion.component';
@@ -11,6 +11,14 @@ import { DialogoConfirmacionComponent } from '../compartido/dialogo-confirmacion
   styleUrls: ['./visualizar-reservaciones.component.css']
 })
 export class VisualizarReservacionesComponent implements OnInit {
+
+  fechaS = new Date();
+  cols : number | undefined;
+
+  range = new FormGroup({
+    start: new FormControl(new Date()),
+    end: new FormControl(new Date()),
+  });
 
   busquedaOn = false;
   dias = [{dia:'Lunes', id:1}, {dia:'Martes', id:2}, 
