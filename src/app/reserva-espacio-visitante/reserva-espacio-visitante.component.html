@@ -93,44 +93,6 @@
                 <mat-error *ngIf="sitio.invalid">Por favor ingrese el sitio del TEC al que se dirige</mat-error>
             </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile rowspan="3">
-            <mat-card>
-                <h2>Horarios reservados</h2>
-                <div class="mat-elevation-z8">
-                    <table mat-table [dataSource]="dataSource" >
-                        <!-- Position Column -->
-                        <ng-container matColumnDef="Dia" width="auto">
-                            <th mat-header-cell *matHeaderCellDef> Día </th>
-                            <td mat-cell *matCellDef="let element"> {{element.rangoHorario.dia}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="Entrada" width="auto">
-                            <th mat-header-cell *matHeaderCellDef> Hora entrada </th>
-                            <td mat-cell *matCellDef="let element"> {{element.rangoHorario.hora_entrada}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="Salida" width="auto">
-                            <th mat-header-cell *matHeaderCellDef> Hora salida </th>
-                            <td mat-cell *matCellDef="let element"> {{element.rangoHorario.hora_salida}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="Eliminar" width="auto">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-                            <td mat-cell *matCellDef="let i = index"> 
-                                <a icon color="primary" class="btn_eliminar_extracto" (click)="onEliminarExtracto(i)">
-                                    <mat-icon>close</mat-icon>
-                                </a>
-                            </td>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
-                    <mat-paginator 
-                        [pageSizeOptions]="[3]"
-                        showFirstLastButtons 
-                        [length]="horarioArray.length"
-                        aria-label="Seleccione la página de horarios">
-                    </mat-paginator>
-                </div>
-            </mat-card>
-        </mat-grid-tile>
         <mat-grid-tile>
             <p class="titulo_hora_entrada">Hora de entrada</p>
             <ngb-timepicker [(ngModel)]="tiempo_entrada" [meridian]="meridian" name="hora_entrada"></ngb-timepicker>
@@ -149,13 +111,6 @@
             mat-raised-button 
             color="primary"
             type="submit">Reservar espacio</button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <a 
-            class="btn_confirmar"
-            mat-raised-button 
-            color="primary"
-            (click)="onConfirmarReserva(postForm)">Confirmar reserva</a>
         </mat-grid-tile>
     </mat-grid-list>
 </form>
