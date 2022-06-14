@@ -8,6 +8,7 @@ import { NgbTimepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogoInfoComponent } from '../compartido/dialogo-info/dialogo-info.component';
 import { ReservarEspacioFuncionarioService } from '../services/reservar-espacio-funcionario.service';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-reserva-espacio-funcionario',
@@ -71,6 +72,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
   parqueos_registrados: Array<any> = [];
   placas_asociadas: Array<any> = [];
   funcionario_data: any = [];
+  reservasActivas: any = [];
 
   funcionario_estandar = localStorage.getItem('jefatura') == '0';
 
@@ -97,7 +99,8 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     config: NgbTimepickerConfig,
     public dialogo: MatDialog,
-    private reservarEspacioService: ReservarEspacioFuncionarioService
+    private reservarEspacioService: ReservarEspacioFuncionarioService,
+    private http: HttpClient
   ) {
     this.breakpointObserver
       .observe([
@@ -152,6 +155,12 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         },
       });
     }
+    this.reservarEspacioService.findReservas().subscribe({
+      next: (res: any) => {
+        console.log('Reservas ', res);
+        this.reservasActivas = res;
+      },
+    });
   }
 
   compararTiempos() {
@@ -255,7 +264,11 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     this.dataSource.data = this.horarioArray;
   }
 
-  onConfirmarReserva(form: NgForm) {
+
+
+  
+
+  async onConfirmarReserva(form: NgForm) {
     if (this.horarioArray.length == 0) {
       this.dialogo.open(DialogoInfoComponent, {
         data: 'Error: No se ha agregado una reserva a la lista.',
@@ -266,22 +279,14 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     let currentReservation: any = {};
     
     let parqueoReservado: any = {};
+
+    let reservasActivasEnRango: Array<any> = [];
+
     let horariosDeParqueo: Array<any> = [];
     let horariosDeParqueoEnRango: Array<any> = [];
 
     let horariosDeFuncEnDiaDeSemana: Array<any> = [];
-    
-    
-
-    let hora_entrada_currentReservation: number;
-    let minuto_entrada_currentReservation: number;
-    let hora_salida_currentReservation: number;
-    let minuto_salida_currentReservation: number;
-
-    let hora_entrada_parqueo: number;
-    let minuto_entrada_parqueo: number;
-    let hora_salida_parqueo: number;
-    let minuto_salida_parqueo: number;
+    let horariosDeFuncEnRango: Array<any> = [];
 
     let reservationDateStart: Date;
     let reservationDateEnd: Date;
@@ -289,9 +294,9 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     let temporalDateStart: Date;
     let temporalDateEnd: Date;
 
-    let testDate2: Date;
-
     let currentReservationes_fallidas: Array<any> = [];
+
+    
 
     for (let i = 0; i < this.dataSource.data.length; i++) {
 
@@ -305,11 +310,16 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       parqueoReservado = this.parqueos_registrados.filter((parqueo) => {
         return parqueo._id === currentReservation.idParqueo;
       });
-      console.log(parqueoReservado);
+      
+      
       horariosDeParqueo = parqueoReservado[0].horario.filter((horario: any) => {
         return horario.dia === currentReservation.rangoHorario.dia;
       });
 
+      horariosDeFuncEnDiaDeSemana = this.funcionario_data.horario.filter((horario: any) => {
+        return horario.dia === currentReservation.rangoHorario.dia;
+      });
+/*
       console.log(currentReservation);
       console.log(parqueoReservado);
       console.log(horariosDeParqueo);
@@ -317,7 +327,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
       console.log(reservationDateStart);
       console.log(reservationDateEnd);
-
+*/
       
       if(horariosDeParqueo.length > 0){
 
@@ -334,55 +344,64 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         console.log(horariosDeParqueoEnRango)
 
         if(horariosDeParqueoEnRango.length > 0){
+
+          horariosDeFuncEnRango = horariosDeFuncEnDiaDeSemana.filter((horario: any) => {
+            temporalDateStart = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, horario.hora_entrada.split(':')[0], horario.hora_entrada.split(':')[1]);
+            temporalDateEnd = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, horario.hora_salida.split(':')[0], horario.hora_salida.split(':')[1]);
+            
+            console.log(temporalDateStart)
+            console.log(temporalDateEnd)
+
+            
+            return (temporalDateStart <= reservationDateStart && reservationDateEnd <= temporalDateEnd);
+          }
+          )
+          console.log(horariosDeFuncEnRango)
+
+          if(horariosDeFuncEnRango.length > 0){
+              console.log("Res activas")
+              console.log(this.reservasActivas);
+
+              let reservasEnMismoDia = this.reservasActivas.filter((reserva: any) => {
+                return (reserva.rangoHorario.dia_mes == currentReservation.rangoHorario.dia_mes && reserva.rangoHorario.mes == currentReservation.rangoHorario.mes && reserva.rangoHorario.anio == currentReservation.rangoHorario.anio);
+              })
+
+              console.log("Res mismo dia")
+              console.log(reservasEnMismoDia)
+              
+              reservasActivasEnRango = reservasEnMismoDia.filter((reserva: any) => {
+
+                temporalDateStart = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, reserva.rangoHorario.hora_entrada.split(':')[0], reserva.rangoHorario.hora_entrada.split(':')[1]);
+                temporalDateEnd = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, reserva.rangoHorario.hora_salida.split(':')[0], reserva.rangoHorario.hora_salida.split(':')[1]);
+                
+                console.log(temporalDateStart)
+                console.log(temporalDateEnd)
+                
+                return !(reservationDateEnd <= temporalDateStart ||  temporalDateEnd <= reservationDateStart);
+              
+              });
+
+              console.log(reservasActivasEnRango);
+
+              if(reservasActivasEnRango.length == 0){
+                this.reservarEspacioService.registrarReserva(currentReservation).subscribe();
+                console.log("Reserva Permitida")
+              } else {
+                console.log("Hay reservas activas en el rango de horario")
+              }
+            
+          }else{
+            console.log("No existen horarios de funcionario en el rango de la reserva")
+          }
+
           
+
         }else{
           console.log("No hay horarios en este parqueo que admitan esta reserva");
         }
       }else{
         console.log("No hay horarios de parqueo para el dia de la semana");
       }
-
-      //return (reservationDateEnd < temporalDateStart) || (temporalDateEnd < reservationDateStart);
-      
-
-    /*
-
-      //Tod.os los horarios de un funcionario en un dia de la semana especifico
-      horariosDeFuncEnDiaDeSemana = this.funcionario_data.horario.filter((horario: any) => {
-        return horario.dia === currentReservation.rangoHorario.dia;
-      });
-
-
-      
-
-
-      hora_entrada_parqueo = parseInt(horariosDeParqueo[0].hora_entrada.split(':')[0]);
-      minuto_entrada_parqueo = parseInt(horariosDeParqueo[0].hora_entrada.split(':')[1]);
-
-      hora_salida_parqueo = parseInt(horariosDeParqueo[0].hora_salida.split(':')[0]);
-      minuto_salida_parqueo = parseInt(horariosDeParqueo[0].hora_salida.split(':')[1]);
-
-      //Validaciones
-
-      
-
-      if(horariosDeFuncEnDiaDeSemana.length == 0){
-        console.log("No hay horarios de funcionario para el dia de la semana");
-      }
-
-
-
-      for(let j = 0; j < horariosDeFuncEnDiaDeSemana.length; j++) {
-        if(hora_entrada_currentReservation >= hora_entrada_parqueo && hora_entrada_currentReservation <= hora_salida_parqueo) {
-          if(minuto_entrada_currentReservation >= minuto_entrada_parqueo && minuto_entrada_currentReservation <= minuto_salida_parqueo) {
-            currentReservationes_fallidas.push(currentReservation);
-          }
-        }
-      }
-
-
-      console.log("Parameters for validations: ", currentReservation, parqueoReservado, horariosDeFuncEnDiaDeSemana);
-          */
     }
   }
 

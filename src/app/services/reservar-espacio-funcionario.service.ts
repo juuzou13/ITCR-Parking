@@ -18,8 +18,17 @@ export class ReservarEspacioFuncionarioService {
     const headers = { 'content-type': 'application/json'}  
     const body=JSON.stringify(form);
     console.log(body)
-    //return this.http.post(this.API, body,{'headers':headers, responseType: 'text'})
+    return this.http.post(this.APIaddReserva, body,{'headers':headers, responseType: 'text'})
+  }
 
+  findReservaByDiaParqueo(idParqueo: any, dia:any){
+    const headers = { 'content-type': 'application/json'}  
+    return this.http.get<any>(this.API + `/getByParqueoDia/${idParqueo}/${dia}`);
+  }
+
+  findReservas(){
+    const headers = { 'content-type': 'application/json'}  
+    return this.http.get<any>(this.API + `/getAllReservasActivas`);
   }
 
   API2 = 'https://morning-ocean-45997.herokuapp.com/consulta-funcionario'
