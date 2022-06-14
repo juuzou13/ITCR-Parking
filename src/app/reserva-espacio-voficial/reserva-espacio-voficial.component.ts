@@ -30,21 +30,30 @@ export class ReservaEspacioVoficialComponent implements OnInit {
   tiempo_salida = {hour: this.horas, minute: this.minutos};
   meridian = true;
   tiempo_minimo = 40;
-  horarioArray = [];
   dias_de_semana = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"];
   parqueos_registrados = [{_id: "1", _id_parqueo: "Parqueo principal #1"}, {_id: "2", _id_parqueo: "Parqueo subcontratado #1"}];
   placas_asociadas = [{_id: "1", codigo_placa: "ABC-123"}, {_id: "2", codigo_placa: "DEF-456"}];
+
+  newReserva: any = {
+    rangoHorario: { dia: "", hora_entrada: "", hora_salida: "" }, 
+    parqueo: "", 
+    placa: "", 
+    idPersona: "",
+    idReserva: "", 
+    idEspacio: "", 
+    nombreVisitante: "", 
+    nombreJefaturaAdmin: "",
+    motivo: "", 
+    sitio: "", 
+    modelo: "", 
+    color: ""
+  }
 
   toggleMeridian() {
     this.meridian = !this.meridian;
   }
 
   cols : number = 0;
-
-  displayedColumns: string[] = ['Dia','Entrada','Salida','Eliminar'];
-  dataSource = new MatTableDataSource<any>(this.horarioArray);
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   gridByBreakpoint = {
     xl: 2,
@@ -84,9 +93,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
     config.spinners = false;
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator!;
-  }
+  ngAfterViewInit() {}
 
   ngOnInit(): void {
   }
@@ -133,55 +140,26 @@ export class ReservaEspacioVoficialComponent implements OnInit {
         this.horaSalidaNewHorario = form.controls['hora_salida'].value.hour + ':' + form.controls['hora_salida'].value.minute;
       }
       
-      this.dataSource.data.push({rangoHorario: {dia: this.dias_de_semana[form.controls['dia_semana'].value], hora_entrada: this.horaEntradaNewHorario, 
-        hora_salida: this.horaSalidaNewHorario}, parqueo: form.value.parqueo, placa: form.value.placa, idPersona: form.value.identificacion,
-        idReserva: "", idEspacio: "", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "", sitio: "", modelo: form.value.modelo, color: form.value.color});
+      this.newReserva.rangoHorario = {dia: this.dias_de_semana[form.controls['dia_semana'].value], hora_entrada: this.horaEntradaNewHorario, hora_salida: this.horaSalidaNewHorario};
+      this.newReserva.parqueo = form.value.parqueo;
+      this.newReserva.placa = form.value.placa;
+      this.newReserva.idPersona = form.value.identificacion;
+      this.newReserva.modelo = form.value.modelo;
+      this.newReserva.color = form.value.color;
       
-      this.refresh();
-      form.resetForm();
-      this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
-      this.tiempo_salida = {hour: this.horas, minute: this.minutos};
-    }
-  }
-
-  refresh() {
-    this.dataSource.data = this.dataSource.data;
-  }
-
-  onEliminarExtracto(index: number) {
-    this.horarioArray.splice(index, 1);
-    this.updateDataSource();
-  }
-
-  updateDataSource() {
-    this.dataSource.data = this.horarioArray;
-  }
-
-  onConfirmarReserva(form: NgForm) {
-    if(this.horarioArray.length == 0) {
       this.dialogo
-      .open(DialogoInfoComponent, {
-        data: 'Error: No se ha agregado una reserva a la lista.'
-      });
-      return;
-    }
-
-    /* Recorrer este array y guardar en la base cada reserva de la lista. */
-    console.log(this.horarioArray);
-    
-    this.dialogo
       .open(DialogoInfoComponent, {
         data: 'La reserva se ha registrado exitosamente.'
       })
       .afterClosed()
       .subscribe(() => {
+        console.log(this.newReserva);
         form.resetForm();
-        this.horarioArray = [];
-        this.updateDataSource();
         this.error_horario = false;
         this.error_horario_2 = false;
         this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
         this.tiempo_salida = {hour: this.horas, minute: this.minutos};
       });
+    }
   }
 }
