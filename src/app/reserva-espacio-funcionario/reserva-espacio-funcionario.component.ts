@@ -234,6 +234,20 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         color: '',
       };
     } else if (!this.error_horario && !this.error_horario_2) {
+
+      let hora_actual = new Date();
+      let hora_ingresada = new Date();
+      hora_ingresada.setDate(this.fechaS.getDate());
+      hora_ingresada.setMonth(this.fechaS.getMonth());
+      hora_ingresada.setFullYear(this.fechaS.getFullYear());
+      hora_ingresada.setHours(form.controls['hora_entrada'].value.hour);
+      hora_ingresada.setMinutes(form.controls['hora_entrada'].value.minute);
+
+      if(hora_ingresada < hora_actual) {
+        console.log("La hora ingresada es menor a la hora actual");
+        return;
+      }
+
       if (form.controls['hora_entrada'].value.minute < 10) {
         this.horaEntradaNewHorario =
           form.controls['hora_entrada'].value.hour +
