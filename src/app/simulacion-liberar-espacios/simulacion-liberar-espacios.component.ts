@@ -5,6 +5,7 @@ import { NgbTimepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from "@angular/material/dialog";
 import { DialogoInfoComponent } from '../compartido/dialogo-info/dialogo-info.component';
 import { RegistrarParqueoService } from '../services/registrar-parqueo.service';
+import { ReservarEspacioFuncionarioService } from '../services/reservar-espacio-funcionario.service';
 
 @Component({
   selector: 'app-simulacion-liberar-espacios',
@@ -74,7 +75,9 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
   }
 
   constructor(private breakpointObserver: BreakpointObserver, 
-    config: NgbTimepickerConfig, public dialogo: MatDialog, private registrarParqueoService: RegistrarParqueoService) {
+    config: NgbTimepickerConfig, public dialogo: MatDialog, 
+    private registrarParqueoService: RegistrarParqueoService,
+    private reservarEspacioService: ReservarEspacioFuncionarioService) {
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,
@@ -111,6 +114,19 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     if(form.invalid){
       return;
     }
+
+    let hora_actual = new Date();
+    let hora_ingresada = new Date();
+    hora_ingresada.setDate(this.fechaS.getDate());
+    hora_ingresada.setMonth(this.fechaS.getMonth());
+    hora_ingresada.setFullYear(this.fechaS.getFullYear());
+    hora_ingresada.setHours(form.controls['hora_entrada'].value.hour);
+    hora_ingresada.setMinutes(form.controls['hora_entrada'].value.minute);
+
+    if(hora_ingresada < hora_actual) {
+      console.log("La hora ingresada es menor a la hora actual");
+      return;
+    }
     
     if(form.controls['hora_entrada'].value.minute < 10){
       this.horaEntradaNewHorario = form.controls['hora_entrada'].value.hour + ':0' + form.controls['hora_entrada'].value.minute;
@@ -118,7 +134,34 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
       this.horaEntradaNewHorario = form.controls['hora_entrada'].value.hour + ':' + form.controls['hora_entrada'].value.minute;
     }
 
-    console.log("Simulando el día "+this.dias_de_semana[form.controls['dia_semana'].value]+" y la hora "+this.horaEntradaNewHorario);
+    this.reservarEspacioService.findReservas().subscribe({
+      next: (res: any) => {
+        let fecha_reserva_entrada = new Date();
+        let fecha_reserva_salida = new Date();
+        for(var i = 0; i < res.length; i++) {
+          fecha_reserva_entrada.setDate(res[i].rangoHorario.dia_mes);
+          fecha_reserva_entrada.setMonth(res[i].rangoHorario.mes-1);
+          fecha_reserva_entrada.setFullYear(res[i].rangoHorario.anio);
+          fecha_reserva_entrada.setHours(res[i].rangoHorario.hora_entrada.split(":")[0]);
+          fecha_reserva_entrada.setMinutes(res[i].rangoHorario.hora_entrada.split(":")[1]);
+
+          fecha_reserva_salida.setDate(res[i].rangoHorario.dia_mes);
+          fecha_reserva_salida.setMonth(res[i].rangoHorario.mes-1);
+          fecha_reserva_salida.setFullYear(res[i].rangoHorario.anio);
+          fecha_reserva_salida.setHours(res[i].rangoHorario.hora_salida.split(":")[0]);
+          fecha_reserva_salida.setMinutes(res[i].rangoHorario.hora_salida.split(":")[1]);
+
+          if(fecha_reserva_entrada <= hora_ingresada && hora_ingresada <= fecha_reserva_salida) {
+            
+            console.log("Debe setear el campo ocupado a 1");
+          } else if(fecha_reserva_salida <= hora_ingresada) {
+            console.log("Debe guardar reserva en colección de historial, eliminar la activa y setear el campo ocupado a 0.");
+          }
+        }
+        
+      },
+    });
+
   }
 
 }
