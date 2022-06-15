@@ -29,7 +29,38 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
   tiempo_salida = {hour: this.horas, minute: this.minutos};
   meridian = true;
   tiempo_minimo = 40;
-  dias_de_semana = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"];
+  dias_de_semana = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado',
+  ];
+  week_days = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado',
+  ];
+  months = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ];
   parqueos_registrados = [{_id: "1", _id_parqueo: "Parqueo principal #1"}, {_id: "2", _id_parqueo: "Parqueo subcontratado #1"}];
   placas_asociadas = [{_id: "1", codigo_placa: "ABC-123"}, {_id: "2", codigo_placa: "DEF-456"}];
 

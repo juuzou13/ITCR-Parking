@@ -15,6 +15,8 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
 
   horaEntradaNewHorario:string = "";
 
+  fechaS = new Date();
+  minDate = new Date();
   fecha = new Date();
   horas = this.fecha.getHours();
   minutos = this.fecha.getMinutes();
@@ -24,7 +26,38 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
 
   tiempo_entrada = {hour: this.horas, minute: this.minutos};
   meridian = true;
-  dias_de_semana = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"];
+  dias_de_semana = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado',
+  ];
+  week_days = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado',
+  ];
+  months = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ];
 
   toggleMeridian() {
     this.meridian = !this.meridian;
