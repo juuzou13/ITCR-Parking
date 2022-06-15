@@ -176,11 +176,14 @@ export class ConsultarParqueosComponent implements OnInit {
      })
   }
 
-  onEditarParqueo(form: NgForm){
+  async onEditarParqueo(form: NgForm){
     const capacidad_adicional = form.value.espacios_jefatura + 
     form.value.espacios_VOficiales + form.value.espacios_visitantes +
     form.value.espacios_NEspeciales;
     const asignados_tec = form.value.capacidad_total - capacidad_adicional;
+
+    console.log("capacidad_adicional", capacidad_adicional);
+    console.log("asignados_tec", asignados_tec);
     if(form.invalid){
         return;
     } else if(this.dataSource.data.length == 0) {
@@ -224,13 +227,13 @@ export class ConsultarParqueosComponent implements OnInit {
     for (let index = 0; index < asignados_tec; index++) {
       this.espacios_parqueo.push({_id: "", tipo: "COMUN", ocupado: "0", departamentoFuncionario: ""});
     }
-    for (let index = 0; index < form.value.espacios_especiales; index++) {
+    for (let index = 0; index < form.value.espacios_NEspeciales; index++) {
       this.espacios_parqueo.push({_id: "", tipo: "ESPECIAL", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_jefatura; index++) {
       this.espacios_parqueo.push({_id: "", tipo: "JEFATURA", ocupado: "0", departamentoFuncionario: ""});
     }
-    for (let index = 0; index < form.value.espacios_vOficiales; index++) {
+    for (let index = 0; index < form.value.espacios_VOficiales; index++) {
       this.espacios_parqueo.push({_id: "", tipo: "OFICIAL", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_visitantes; index++) {
@@ -262,6 +265,7 @@ export class ConsultarParqueosComponent implements OnInit {
       .subscribe(() => {
         this.ngOnInit();
         this.desactivarParqueo();
+        this.espacios_parqueo = [];
         form.reset();
       });
   }

@@ -232,6 +232,7 @@ export class RegistrarParqueoComponent implements OnInit {
           this.seleccionado = false;
           this.subcontratado = false;
           this.horarioArray = [];
+          this.espacios_parqueo = [];
           this.updateDataSource();
         });
       }
