@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { NgForm } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgbTimepickerConfig } from '@ng-bootstrap/ng-bootstrap';
@@ -34,7 +31,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
   tiempo_salida = { hour: this.horas, minute: this.minutos };
   meridian = true;
   tiempo_minimo = 40;
-  horarioArray = [];
   dias_de_semana = [
     'domingo',
     'lunes',
@@ -77,16 +73,13 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
   funcionario_estandar = localStorage.getItem('jefatura') == '0';
 
+  newReserva: any;
+
   toggleMeridian() {
     this.meridian = !this.meridian;
   }
 
   cols: number = 0;
-
-  displayedColumns: string[] = ['Dia', 'Entrada', 'Salida', 'Eliminar'];
-  dataSource = new MatTableDataSource<any>(this.horarioArray);
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   gridByBreakpoint = {
     xl: 2,
@@ -133,17 +126,9 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     config.spinners = false;
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator!;
-  }
+  ngAfterViewInit() {}
 
   ngOnInit(): void {
-    this.reservarEspacioService.getAllParqueos().subscribe({
-      next: (res: any) => {
-        console.log('res ', res);
-        this.parqueos_registrados = res;
-      },
-    });
     let func_id: any = localStorage.getItem('id');
     if (func_id) {
       this.reservarEspacioService.getFuncionarioData(func_id).subscribe({
@@ -151,9 +136,9 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           //console.log(func_id);
           //console.log('res ', res);
           this.funcionario_data = res;
-          if (this.funcionario_data.incapacitado) {
+          if (this.funcionario_data.incapacitado == "1") {
             this.tipo_espacio_buscar = "ESPECIAL";
-          } else if (this.funcionario_data.jefatura) {
+          } else if (!this.funcionario_estandar) {
             this.tipo_espacio_buscar = "JEFATURA";
           } else {
             this.tipo_espacio_buscar = "COMUN";
@@ -162,6 +147,32 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         },
       });
     }
+
+    this.reservarEspacioService.getAllParqueos().subscribe({
+      next: (res: any) => {
+        console.log('res ', res);
+        switch (this.tipo_espacio_buscar) {
+          case "ESPECIAL":
+            this.parqueos_registrados = res.filter((parqueo: any) => {
+              return parseInt(parqueo.espacios_NEspeciales) >= 1;
+            });
+            break;
+          case "JEFATURA":
+            this.parqueos_registrados = res.filter((parqueo: any) => {
+              return parseInt(parqueo.espacios_jefatura) >= 1;
+            });
+            break;
+          case "COMUN":
+            this.parqueos_registrados = res.filter((parqueo: any) => {
+              return parseInt(parqueo.espacios_asignados) >= 1;
+            });
+            break;
+          default:
+            break;
+        }
+      },
+    });
+
     this.reservarEspacioService.findReservas().subscribe({
       next: (res: any) => {
         //console.log('Reservas ', res);
@@ -202,9 +213,61 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
 
   onReservarEspacio(form: NgForm) {
-    if (form.invalid || this.compararTiempos()!) {
+    this.compararTiempos();
+    if(form.invalid) {
       return;
+    }
+    if(!this.funcionario_estandar) {
+
+      let parqueoReservado = this.parqueos_registrados.filter((parqueo) => {
+        return parqueo._id === form.value.parqueo;
+      });
+
+      let horariosDeParqueo = parqueoReservado[0].horario.filter((horario: any) => {
+        return horario.dia === this.week_days[this.fechaS.getDay()];
+      });
+
+      if(horariosDeParqueo.length == 0) {
+        console.log("No hay horarios ese día en el parqueo")
+        return;
+      }
+
+      this.newReserva = {
+        idReserva: 'X',
+        idPersona: localStorage.getItem('id'),
+        idEspacio: 'N/A',
+        idParqueo: form.value.parqueo,
+        placa: form.value.placa,
+        rangoHorario: {
+          dia: this.week_days[this.fechaS.getDay()],
+          dia_mes: this.fechaS.getDate().toString(),
+          mes: (this.fechaS.getMonth() + 1).toString(),
+          anio: this.fechaS.getFullYear().toString(),
+          hora_entrada: horariosDeParqueo[0].hora_entrada,
+          hora_salida: horariosDeParqueo[0].hora_salida,
+        },
+        nombreVisitante: '',
+        nombreJefaturaAdmin: '',
+        motivo: '',
+        sitio: '',
+        modelo: '',
+        color: '',
+      };
     } else if (!this.error_horario && !this.error_horario_2) {
+
+      let hora_actual = new Date();
+      let hora_ingresada = new Date();
+      hora_ingresada.setDate(this.fechaS.getDate());
+      hora_ingresada.setMonth(this.fechaS.getMonth());
+      hora_ingresada.setFullYear(this.fechaS.getFullYear());
+      hora_ingresada.setHours(form.controls['hora_entrada'].value.hour);
+      hora_ingresada.setMinutes(form.controls['hora_entrada'].value.minute);
+
+      if(hora_ingresada < hora_actual) {
+        console.log("La hora ingresada es menor a la hora actual");
+        return;
+      }
+
       if (form.controls['hora_entrada'].value.minute < 10) {
         this.horaEntradaNewHorario =
           form.controls['hora_entrada'].value.hour +
@@ -228,8 +291,8 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           ':' +
           form.controls['hora_salida'].value.minute;
       }
-
-      this.dataSource.data.push({
+      
+      this.newReserva = {
         idReserva: 'X',
         idPersona: localStorage.getItem('id'),
         idEspacio: 'N/A',
@@ -241,7 +304,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           mes: (this.fechaS.getMonth() + 1).toString(),
           anio: this.fechaS.getFullYear().toString(),
           hora_entrada: this.horaEntradaNewHorario,
-          hora_salida: this.funcionario_estandar ? this.horaSalidaNewHorario : "23:59",
+          hora_salida: this.horaSalidaNewHorario,
         },
         nombreVisitante: '',
         nombreJefaturaAdmin: '',
@@ -249,29 +312,26 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         sitio: '',
         modelo: '',
         color: '',
-      });
-
-      console.log(this.dataSource.data);
-      this.refresh();
-      form.resetForm();
-      this.tiempo_entrada = { hour: this.horas, minute: this.minutos };
-      this.tiempo_salida = { hour: this.horas, minute: this.minutos };
+      };
     }
-  }
 
-  refresh() {
-    this.dataSource.data = this.dataSource.data;
-  }
+    this.onConfirmarReserva(form);
+    //guardar new reserva
 
-  onEliminarExtracto(index: number) {
-    this.horarioArray.splice(index, 1);
-    this.updateDataSource();
+    this.dialogo
+    .open(DialogoInfoComponent, {
+      data: 'La reserva se ha registrado exitosamente.'
+    })
+    .afterClosed()
+    .subscribe(() => {
+      console.log(this.newReserva);
+      form.resetForm();
+      this.error_horario = false;
+      this.error_horario_2 = false;
+      this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
+      this.tiempo_salida = {hour: this.horas, minute: this.minutos};
+    });
   }
-
-  updateDataSource() {
-    this.dataSource.data = this.horarioArray;
-  }
-
 
   ocuparCampo(listaEspacios: Array<any>, parqueoReservado: any, idDeEspacioAOcupar: any): any {
     // idParqueo = parqueoReservado[0].espacios
@@ -317,12 +377,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
   }
 
   onConfirmarReserva(form: NgForm) {
-    if (this.horarioArray.length == 0) {
-      this.dialogo.open(DialogoInfoComponent, {
-        data: 'Error: No se ha agregado una reserva a la lista.',
-      });
-      return;
-    }
     console.log("Data func: ", this.tipo_espacio_buscar);
 
     let currentReservation: any = {};
@@ -348,9 +402,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     let currentReservationes_fallidas: Array<any> = [];
 
 
-    for (let i = 0; i < this.dataSource.data.length; i++) {
-
-      currentReservation = this.dataSource.data[i];
+      currentReservation = this.newReserva;
 
       reservationDateStart = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, currentReservation.rangoHorario.hora_entrada.split(':')[0], currentReservation.rangoHorario.hora_entrada.split(':')[1]);
       reservationDateEnd = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, currentReservation.rangoHorario.hora_salida.split(':')[0], currentReservation.rangoHorario.hora_salida.split(':')[1]);
@@ -361,13 +413,25 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         return parqueo._id === currentReservation.idParqueo;
       });
 
+      console.log("Parqueo reservado: ", parqueoReservado);
+
       horariosDeParqueo = parqueoReservado[0].horario.filter((horario: any) => {
         return horario.dia === currentReservation.rangoHorario.dia;
       });
 
+      console.log("Horarios parqueo: ", horariosDeParqueo);
+
+      console.log("Horarios func", this.funcionario_data.horario)
+
       horariosDeFuncEnDiaDeSemana = this.funcionario_data.horario.filter((horario: any) => {
         return horario.dia === currentReservation.rangoHorario.dia;
       });
+
+      for (let index = 0; index < horariosDeFuncEnDiaDeSemana.length; index++) {
+        const element = horariosDeFuncEnDiaDeSemana[index];
+        console.log("Horario funcionario en dia semana: ", element);
+        
+      }
 
       if (horariosDeParqueo.length > 0) {
 
@@ -395,20 +459,25 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
             return (temporalDateStart <= reservationDateStart && reservationDateEnd <= temporalDateEnd);
           }
           )
-          console.log(horariosDeFuncEnRango)
 
-          if (horariosDeFuncEnRango.length > 0) {
+          for (let index = 0; index < horariosDeFuncEnRango.length; index++) {
+            const element = horariosDeFuncEnRango[index];
+            console.log("Horario funcionario en dia semana y rango: ", element);
+            
+          }
+
+          if (!this.funcionario_estandar || horariosDeFuncEnRango.length > 0) {
             console.log("Res activas")
             console.log(this.reservasActivas);
 
-            let reservasEnMismoDia = this.reservasActivas.filter((reserva: any) => {
-              return (reserva.rangoHorario.dia_mes == currentReservation.rangoHorario.dia_mes && reserva.rangoHorario.mes == currentReservation.rangoHorario.mes && reserva.rangoHorario.anio == currentReservation.rangoHorario.anio);
+            let reservasEnMismoDiayMismoParqueo = this.reservasActivas.filter((reserva: any) => {
+              return (currentReservation.idParqueo == reserva.idParqueo && reserva.rangoHorario.dia_mes == currentReservation.rangoHorario.dia_mes && reserva.rangoHorario.mes == currentReservation.rangoHorario.mes && reserva.rangoHorario.anio == currentReservation.rangoHorario.anio);
             })
 
-            console.log("Res mismo dia")
-            console.log(reservasEnMismoDia)
+            console.log("Res mismo dia y parqueo")
+            console.log(reservasEnMismoDiayMismoParqueo)
 
-            reservasActivasEnRango = reservasEnMismoDia.filter((reserva: any) => {
+            reservasActivasEnRango = reservasEnMismoDiayMismoParqueo.filter((reserva: any) => {
 
               temporalDateStart = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, reserva.rangoHorario.hora_entrada.split(':')[0], reserva.rangoHorario.hora_entrada.split(':')[1]);
               temporalDateEnd = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, reserva.rangoHorario.hora_salida.split(':')[0], reserva.rangoHorario.hora_salida.split(':')[1]);
@@ -425,6 +494,8 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
             let listaEspacios = parqueoReservado[0].espacios.filter((espacio: any) => {
               return espacio.tipo == this.tipo_espacio_buscar;
             })
+
+            console.log("este es el parqueo "+ parqueoReservado[0])
 
             if (reservasActivasEnRango.length > 0) {
 
@@ -487,35 +558,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       } else {
         console.log("No hay horarios de parqueo para el dia de la semana");
       }
-    }
-    this.ngOnInit();
-  }
-
-  onReservarJefatura(form: NgForm) {
-    if (form.invalid) {
-      return;
-    }
-    this.dataSource.data.push({
-      rangoHorario: {
-        dia: this.dias_de_semana[form.controls['dia_semana'].value],
-        hora_entrada: '5:00',
-        hora_salida: '23:59',
-      },
-      parqueo: form.value.parqueo,
-      placa: form.value.placa,
-      idPersona: localStorage.getItem('id'),
-      idReserva: '',
-      idEspacio: '',
-      nombreVisitante: '',
-      nombreJefaturaAdmin: '',
-      motivo: '',
-      sitio: '',
-      modelo: '',
-      color: '',
-    });
-    this.refresh();
-    form.resetForm();
-    this.tiempo_entrada = { hour: this.horas, minute: this.minutos };
-    this.tiempo_salida = { hour: this.horas, minute: this.minutos };
+      this.ngOnInit();
   }
 }
