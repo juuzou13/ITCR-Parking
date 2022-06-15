@@ -129,12 +129,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
   ngAfterViewInit() {}
 
   ngOnInit(): void {
-    this.reservarEspacioService.getAllParqueos().subscribe({
-      next: (res: any) => {
-        console.log('res ', res);
-        this.parqueos_registrados = res;
-      },
-    });
     let func_id: any = localStorage.getItem('id');
     if (func_id) {
       this.reservarEspacioService.getFuncionarioData(func_id).subscribe({
@@ -153,6 +147,32 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         },
       });
     }
+
+    this.reservarEspacioService.getAllParqueos().subscribe({
+      next: (res: any) => {
+        console.log('res ', res);
+        switch (this.tipo_espacio_buscar) {
+          case "ESPECIAL":
+            this.parqueos_registrados = res.filter((parqueo: any) => {
+              return parseInt(parqueo.espacios_NEspeciales) >= 1;
+            });
+            break;
+          case "JEFATURA":
+            this.parqueos_registrados = res.filter((parqueo: any) => {
+              return parseInt(parqueo.espacios_jefatura) >= 1;
+            });
+            break;
+          case "COMUN":
+            this.parqueos_registrados = res.filter((parqueo: any) => {
+              return parseInt(parqueo.espacios_asignados) >= 1;
+            });
+            break;
+          default:
+            break;
+        }
+      },
+    });
+
     this.reservarEspacioService.findReservas().subscribe({
       next: (res: any) => {
         //console.log('Reservas ', res);
