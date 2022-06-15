@@ -152,11 +152,11 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           //console.log('res ', res);
           this.funcionario_data = res;
           if (this.funcionario_data.incapacitado) {
-            this.tipo_espacio_buscar = "E";
+            this.tipo_espacio_buscar = "ESPECIAL";
           } else if (this.funcionario_data.jefatura) {
-            this.tipo_espacio_buscar = "J";
+            this.tipo_espacio_buscar = "JEFATURA";
           } else {
-            this.tipo_espacio_buscar = "A";
+            this.tipo_espacio_buscar = "COMUN";
           }
           this.placas_asociadas = res.placas_asociadas;
         },
@@ -232,7 +232,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       this.dataSource.data.push({
         idReserva: 'X',
         idPersona: localStorage.getItem('id'),
-        idEspacio: 'Espacio X',
+        idEspacio: 'N/A',
         idParqueo: form.value.parqueo,
         placa: form.value.placa,
         rangoHorario: {
@@ -241,7 +241,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           mes: (this.fechaS.getMonth() + 1).toString(),
           anio: this.fechaS.getFullYear().toString(),
           hora_entrada: this.horaEntradaNewHorario,
-          hora_salida: this.horaSalidaNewHorario,
+          hora_salida: this.funcionario_estandar ? this.horaSalidaNewHorario : "23:59",
         },
         nombreVisitante: '',
         nombreJefaturaAdmin: '',
@@ -273,7 +273,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
   }
 
 
-  ocuparCampo(listaEspacios: Array<any>, parqueoReservado: any): any {
+  ocuparCampo(listaEspacios: Array<any>, parqueoReservado: any, idDeEspacioAOcupar: any): any {
     // idParqueo = parqueoReservado[0].espacios
 
     let espaciosDeParqueoNoOcupables = listaEspacios.filter((espacio: any) => {
@@ -368,15 +368,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       horariosDeFuncEnDiaDeSemana = this.funcionario_data.horario.filter((horario: any) => {
         return horario.dia === currentReservation.rangoHorario.dia;
       });
-      /*
-            console.log(currentReservation);
-            console.log(parqueoReservado);
-            console.log(horariosDeParqueo);
-            console.log(horariosDeParqueoEnRango);
-      
-            console.log(reservationDateStart);
-            console.log(reservationDateEnd);
-      */
 
       if (horariosDeParqueo.length > 0) {
 
@@ -397,11 +388,10 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           horariosDeFuncEnRango = horariosDeFuncEnDiaDeSemana.filter((horario: any) => {
             temporalDateStart = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, horario.hora_entrada.split(':')[0], horario.hora_entrada.split(':')[1]);
             temporalDateEnd = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, horario.hora_salida.split(':')[0], horario.hora_salida.split(':')[1]);
-
-            console.log(temporalDateStart)
-            console.log(temporalDateEnd)
-
-
+            /*
+                        console.log(temporalDateStart)
+                        console.log(temporalDateEnd)
+            */
             return (temporalDateStart <= reservationDateStart && reservationDateEnd <= temporalDateEnd);
           }
           )
@@ -422,10 +412,10 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
               temporalDateStart = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, reserva.rangoHorario.hora_entrada.split(':')[0], reserva.rangoHorario.hora_entrada.split(':')[1]);
               temporalDateEnd = new Date(currentReservation.rangoHorario.anio, currentReservation.rangoHorario.mes - 1, currentReservation.rangoHorario.dia_mes, reserva.rangoHorario.hora_salida.split(':')[0], reserva.rangoHorario.hora_salida.split(':')[1]);
-
-              console.log(temporalDateStart)
-              console.log(temporalDateEnd)
-
+              /*
+                            console.log(temporalDateStart)
+                            console.log(temporalDateEnd)
+              */
               return !(reservationDateEnd <= temporalDateStart || temporalDateEnd <= reservationDateStart);
 
             });
@@ -447,6 +437,8 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
               }
 
+              console.log(espaciosOcupadosPorAlgunaResEnRango)
+
               let espaciosDeParqueoOcupables = listaEspacios.filter((espacio: any) => {
                 return !espaciosOcupadosPorAlgunaResEnRango.includes(espacio._id);
               })
@@ -456,17 +448,10 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
                 currentReservation.rangoHorario.mes = parseInt(currentReservation.rangoHorario.mes);
                 currentReservation.rangoHorario.anio = parseInt(currentReservation.rangoHorario.anio);
 
-                /*
-                console.log("parqueoReservado[0]", parqueoReservado[0]);
-                console.log("parqueoReservado[0].espacios", parqueoReservado[0].espacios)
-                */
-
-                //let espacioAsignado = this.ocuparCampo(parqueoReservado[0].espacios, parqueoReservado[0]);
-
-                let espacioAsignado = espaciosDeParqueoOcupables[0];
+                let espacioAsignado = espaciosDeParqueoOcupables[0]._id;
 
                 currentReservation.idEspacio = espacioAsignado;
-                //console.log(espacioAsignado);
+                console.log(espacioAsignado);
                 this.reservarEspacioService.registrarReserva(currentReservation).subscribe();
 
                 console.log("Reserva Permitida");
@@ -477,7 +462,11 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
             } else {
 
-              let espacioAsignado = listaEspacios[0];
+              currentReservation.rangoHorario.dia_mes = parseInt(currentReservation.rangoHorario.dia_mes);
+              currentReservation.rangoHorario.mes = parseInt(currentReservation.rangoHorario.mes);
+              currentReservation.rangoHorario.anio = parseInt(currentReservation.rangoHorario.anio);
+
+              let espacioAsignado = listaEspacios[0]._id;
 
               currentReservation.idEspacio = espacioAsignado;
               //console.log(espacioAsignado);
@@ -494,6 +483,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         } else {
           console.log("No hay horarios en este parqueo que admitan esta reserva");
         }
+
       } else {
         console.log("No hay horarios de parqueo para el dia de la semana");
       }
