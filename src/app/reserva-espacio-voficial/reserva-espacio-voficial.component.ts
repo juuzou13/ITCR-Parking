@@ -19,7 +19,9 @@ export class ReservaEspacioVoficialComponent implements OnInit {
   horaEntradaNewHorario:string = "";
   horaSalidaNewHorario:string = "";
 
+  fechaS = new Date();
   fecha = new Date();
+  minDate = new Date();
   horas = this.fecha.getHours();
   minutos = this.fecha.getMinutes();
   error_horario = false;
