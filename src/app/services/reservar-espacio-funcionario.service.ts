@@ -47,4 +47,15 @@ export class ReservarEspacioFuncionarioService {
   getAllParqueos() {
     return this.http.get<any>(this.API3 + '/get-all');
   }
+
+  getAllComboBox() {
+    return this.http.get<any>(this.API3 + '/get-all/combo-box');
+  }
+
+  getBetweenDates(fechas: any) {
+    const headers = { 'content-type': 'application/json'}  
+    const body=JSON.stringify(fechas);
+    console.log('fechas', body);
+    return this.http.post(this.API + `/getBetweenDates`, body, {'headers':headers, responseType: 'text'})
+  }
 }
