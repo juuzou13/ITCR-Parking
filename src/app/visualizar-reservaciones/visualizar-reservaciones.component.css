@@ -103,7 +103,7 @@ mat-error {
 } */
 
 .width-button {
-  margin-bottom: 50px;
+  margin-top: 1cm;
   width: 3.2cm;
 }
 
@@ -117,6 +117,7 @@ mat-error {
     width: 70%;
     margin: auto;
     margin-top: 0.8cm;
+    margin-bottom: 1cm;
   }
   .width-input {
     width: 85%;

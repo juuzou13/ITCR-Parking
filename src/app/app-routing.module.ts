@@ -115,7 +115,7 @@ const routes: Routes = [
   { path:"estadisticasFH", 
     component:EstadisticasFHComponent, 
     data: {
-      usuario: 'admin'
+      usuario: 'admin-jefatura'
     }, 
     canActivate: [AuthGuard]
   },
@@ -176,13 +176,13 @@ const routes: Routes = [
   { path: "estadisticas-estacionamiento-particular", 
     component: EstadisticaEstacionamientoParticularComponent,
     data: {
-      usuario: 'admin'
+      usuario: 'admin-jefatura'
     }, 
     canActivate: [AuthGuard]},
   { path: "ocupacion-por-departamento", 
     component: OcupacionPorDepartamentoComponent,
     data: {
-      usuario: 'admin'
+      usuario: 'admin-jefatura'
     }, 
     canActivate: [AuthGuard]},
     { path: "menu-principal-operador",

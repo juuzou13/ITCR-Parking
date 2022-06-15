@@ -69,7 +69,8 @@ export class LogInComponent implements OnInit {
             });
           },
           next: (res: any) => { 
-            console.log("res", res);
+            console.log("resLogin", res);
+            console.log("resLoginAdmin", res.admin);
             localStorage.setItem('admin', res.admin);
             localStorage.setItem('jefatura', res.jefatura);
             localStorage.setItem('operador', res.operador);
@@ -84,8 +85,7 @@ export class LogInComponent implements OnInit {
               this.router.navigate(['/menu-principal-admin']).then(() => {
                 window.location.reload();
               });
-            }
-            if(res.operador) {
+            } else if(res.operador) {
               localStorage.setItem('idParqueoOperador', res.idParqueoOperador);
               this.router.navigate(['/menu-principal-operador']).then(() => {
                 window.location.reload();

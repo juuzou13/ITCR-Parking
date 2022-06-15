@@ -1,60 +1,37 @@
+<h1> Estadística ocupación por departamento </h1>
 <div class="title">
-    <div class="flex2">
-        <h1 >Estadística ocupación por departamento </h1>
-    </div>
-</div>
-<form (submit)="onBuscar(postForm)" #postForm="ngForm">
-<mat-grid-list rowHeight="6:1" #grid [cols]="cols" gutterSize="20px" style="margin-top:5%">
-    <mat-grid-tile>
-        <mat-form-field class="example-full-width" appearance="fill"
-        style="width:90%; margin-left:5%; margin-top:2%">
-            <mat-label>Departamento</mat-label>
-            <mat-select required name="departamento"
-                    required
-                    ngModel
-                    #departamento="ngModel">
-                    <mat-error *ngIf="departamento.invalid">Por favor ingrese una opción</mat-error>
-                    <mat-option *ngFor="let dpto of departamentos_registrados" [value]="dpto">
-                        {{dpto.nombre_campus}} - {{dpto.departamento}} 
-                    </mat-option>
-                    </mat-select>
-        </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <mat-form-field class="example-full-width" appearance="fill"
-        style="width:90%; margin-left:5%; margin-top:2%">
-            <mat-label>Día de la semana</mat-label>
-            <mat-select required name="dia"
+    <mat-form-field appearance="fill" class="width-input">
+        <mat-label>Departamento</mat-label>
+        <mat-select required name="departamento"
             required
-            ngModel
-            #dia="ngModel">
-            <mat-error *ngIf="dia.invalid">Por favor ingrese una opción</mat-error>
-            <mat-option *ngFor="let dia of dias" [value]="dia.value">
-                {{dia.viewValue}}
+            #selectDepartamento="ngModel"
+            [(ngModel)]="departamentoSeleccionado">
+            <mat-error *ngIf="selectDepartamento.invalid">Por favor ingrese una opción</mat-error>
+            <mat-option *ngFor="let departamento of departamentos" 
+                [value]="departamento">
+                {{departamento}}
             </mat-option>
-            </mat-select>
-        </mat-form-field>  
-    </mat-grid-tile>   
-    <mat-grid-tile>
-        <button 
-        mat-raised-button 
-        color="primary"
-        type="submit" >Buscar</button>
-    </mat-grid-tile>
-</mat-grid-list>
-</form>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="buscarButton width-button" (click)="onBuscar()">Buscar</button>
+</div>
 
-<div style="margin-top:10%; margin-left:20%" *ngIf="onGrafico">
-	<div>
-		<div style="display:block; width: 80%; height: 80%;" >
-			<canvas baseChart 
-                [datasets]="barChartData"
-                [labels]="barChartLabels"
-                [options]="barChartOptions"
-                [colors]="barChartColors"
-                [legend]="barChartLegend"
-                [chartType]="barChartType">
-            </canvas>
-		</div>
-  </div>
+<div class="grid">
+    <div *ngIf="busquedaOn">
+        <mat-card class="boxes">
+            <h3>Porcentaje de Ocupación del Departamento {{titleDepartamento}}</h3>
+            <div class="chartBox">
+                <apx-chart
+                    [series]="ChartOptions.series"
+                    [chart]="apexChart"
+                    [dataLabels]="ChartOptions.dataLabels"
+                    [plotOptions]="ChartOptions.plotOptions"
+                    [xaxis]="ChartOptions.xaxis"
+                    [yaxis]="ChartOptions.yaxis"
+                    [legend]="ChartOptions.legend"
+                    [tooltip]="ChartOptions.tooltip"
+                ></apx-chart>
+            </div>
+        </mat-card>
+    </div>
 </div>
