@@ -40,4 +40,10 @@ export class ConsultarParqueosService {
     return this.http.delete<any>(this.API + `/deleteByID/${_id}`);
   }
 
+  API2 = 'https://morning-ocean-45997.herokuapp.com/campus-departamentos'
+
+  getAllDepartamentos() {
+    return this.http.get<any>(this.API2 + '/getAllDepartamentos');
+  }
+
 }

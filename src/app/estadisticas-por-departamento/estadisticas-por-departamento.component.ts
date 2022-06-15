@@ -26,6 +26,9 @@ export class EstadisticasPorDepartamentoComponent implements OnInit {
   campus_jefatura: string | null = localStorage.getItem('campus_jefatura');
   departamento_jefatura: string | null = localStorage.getItem('dpto_jefatura');
 
+  departamentos = [];
+  departamentoSeleccionado = '';
+
   public labelsGrafico: Label[] = ['Mañana', 'Tarde', 'Noche'];
 
   public datosGraficoL: MultiDataSet = [[0, 0, 0]];
@@ -93,6 +96,11 @@ export class EstadisticasPorDepartamentoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+  }
+
+  onParqueo(){
+    this.resetGraphics();
   }
 
 }

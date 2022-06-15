@@ -1,6 +1,21 @@
 <div class="title">
     <div class="flex2">
-        <h1 >Estadística franja horaria de su departamento </h1>
+        <h1>Estadística ocupación por departamento</h1>
+    </div>
+    <div class="flex1">
+        <mat-form-field style="width:80%; margin-left:10%; margin-top:2%" appearance="fill" (click)="onParqueo()">
+            <mat-label>Parqueo</mat-label>
+            <mat-select required name="parqueo"
+                required
+                #selectParqueo="ngModel"
+                [(ngModel)]="departamentoSeleccionado">
+                <mat-error *ngIf="selectParqueo.invalid">Por favor ingrese una opción</mat-error>
+                <mat-option *ngFor="let departamento of departamentos" 
+                    [value]="departamento">
+                    {{departamento}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>  
     </div>
 </div>
 

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChartType } from 'chart.js';
 import { MultiDataSet, Label } from 'ng2-charts';
-import { EstadisticasFHService } from '../services/estadisticas-fh.service';
+import { ConsultarParqueosService } from '../services/consultar-parqueos.service';
 
 
 @Component({
@@ -16,24 +16,29 @@ export class EstadisticaEstacionamientoParticularComponent implements OnInit {
 
   cols: number = 2;
   parqueoEscogido = false;
+  totalCount = 10;
   chartColors: any[] = [
     { 
       backgroundColor:["#2741B9", "#FBF11D", "#4C1C6D", "#18A18A", "#248E11"] 
     }];
 
-
-  parqueoSeleccionado : any = [];
-
   // En esta variable se almacenará la información de todos los parqueos de la BD
-  parqueos: any = [
-    {_id_parqueo: "OASIS"},
-    {_id_parqueo: "TEC Principal"},
-    {_id_parqueo: "Barrio Amón Parqueo"}
-  ]
-
+  parqueos: any = [];
+  parqueoSeleccionado : any = [];
 
   button_toggle_active = false;
   show_chart = false;
+  chartOptions = {
+    responsive: true,
+    tooltips: {
+      enabled: true,
+      callbacks: {
+        label: function (tooltipItems: any, data: any) {
+          return data.labels[tooltipItems.index] + ': ' + data.datasets[0].data[tooltipItems.index] + '%';
+        }
+      }
+    },
+  };
 
   info: any;
   onDpto = false;
@@ -49,7 +54,8 @@ export class EstadisticaEstacionamientoParticularComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    public router: Router
+    public router: Router,
+    private servicio_parqueos: ConsultarParqueosService
   ) { 
     this.breakpointObserver
       .observe([
@@ -88,46 +94,30 @@ export class EstadisticaEstacionamientoParticularComponent implements OnInit {
   // Se tienen labels y MultiDataSets diferentes dependiendo de la clasificación escogida
 
   public labelsGrafico: Label[] = [];
-  public labelsGraficoTipo: Label[] = ['Jefatura', 'Discapacidad', 'Visitantes', 'V. Oficiales'];
-  public labelsGraficoDpto: Label[] = ['Física', 'Computación', 'Arquitectura', 'Matemática', 'Cultura y Deporte'];
+  public labelsGraficoTipo: Label[] = ['Jefatura', 'Ne. Especiales', 'Visitantes', 'V. Oficiales'];
+  countTipo = Array(this.labelsGraficoTipo.length).fill(0);
+  public labelsGraficoDpto: Label[] = [];
+  countDepartamento: number[] = [];
 
-  public datosGraficoL: MultiDataSet = [[1, 2, 3, 4]];
-  public datosGraficoK: MultiDataSet = [[0, 0, 3, 0]];
-  public datosGraficoM: MultiDataSet = [[0, 0, 2, 0]];
-  public datosGraficoJ: MultiDataSet = [[0, 2, 0, 0]];
-  public datosGraficoV: MultiDataSet = [[0, 2, 0, 0]];
-  public datosGraficoS: MultiDataSet = [[0, 2, 0, 6]];
-
-  public datosGraficoLTipo: MultiDataSet = [[1, 2, 3, 4]];
-  public datosGraficoKTipo: MultiDataSet = [[0, 0, 3, 0]];
-  public datosGraficoMTipo: MultiDataSet = [[0, 0, 2, 0]];
-  public datosGraficoJTipo: MultiDataSet = [[0, 2, 0, 0]];
-  public datosGraficoVTipo: MultiDataSet = [[0, 2, 0, 0]];
-  public datosGraficoSTipo: MultiDataSet = [[0, 2, 0, 6]];
-
-  public datosGraficoLDpto: MultiDataSet = [[1, 2, 3, 4, 2]];
-  public datosGraficoKDpto: MultiDataSet = [[0, 0, 3, 0, 1]];
-  public datosGraficoMDpto: MultiDataSet = [[0, 0, 2, 0, 4]];
-  public datosGraficoJDpto: MultiDataSet = [[0, 2, 0, 0, 4]];
-  public datosGraficoVDpto: MultiDataSet = [[0, 2, 0, 0, 5]];
-  public datosGraficoSDpto: MultiDataSet = [[0, 2, 0, 6, 5]];
+  public datosGrafico: MultiDataSet = [[1, 2, 3, 4]];
 
   public doughnutChartType: ChartType = 'doughnut';
 
   public total: Number = 0;
   public horarios: Array<any> = [];
 
-  public horariosLunes: Array<any> = [];
-  public horariosMartes: Array<any> = [];
-  public horariosMiercoles: Array<any> = [];
-  public horariosJueves: Array<any> = [];
-  public horariosViernes: Array<any> = [];
-  public horariosSabado: Array<any> = [];
-
-  public horariosToSort: Array<any> = [];
-
   campus: String = "";
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.servicio_parqueos.getAllComboBox().subscribe({
+      complete: () => {},
+      error: (err: any) => { 
+        console.log(err);
+     },
+     next: (res: any) => {
+       this.parqueos = res;
+     }
+    })
+  }
 
   activateButtons(group:any){
     this.button_toggle_active = true;
@@ -138,45 +128,87 @@ export class EstadisticaEstacionamientoParticularComponent implements OnInit {
   }
 
   resetGraphics(){
-    
-    this.datosGraficoL= [[0, 0, 0]];
-    this.datosGraficoK= [[0, 0, 0]];
-    this.datosGraficoM= [[0, 0, 0]];
-    this.datosGraficoJ= [[0, 0, 0]];
-    this.datosGraficoV= [[0, 0, 0]];
-    this.datosGraficoS= [[0, 0, 0]];
+    this.datosGrafico= [[0, 0, 0]];
+    this.countTipo = [0, 0, 0, 0];
+    this.countDepartamento = [];
   }
 
   onToggle(toggleButton: any, parqueo:any) {
     this.show_chart = true;
     this.resetGraphics();
     this.labelsGrafico = [];
-    if (toggleButton.value ==  'dpto'){
-      this.onDpto = true;
-      this.labelsGrafico = this.labelsGraficoDpto;
-      this.onTipoEspacio = false;
-      this.datosGraficoL = this.datosGraficoLDpto;
-      this.datosGraficoK = this.datosGraficoKDpto;
-      this.datosGraficoM = this.datosGraficoMDpto;
-      this.datosGraficoJ = this.datosGraficoJDpto;
-      this.datosGraficoV = this.datosGraficoVDpto;
-      this.datosGraficoS = this.datosGraficoSDpto;
 
-    } else if (toggleButton.value == 'tipo_espacio'){
-      this.onDpto = false;
-      this.onTipoEspacio = true;
-      this.labelsGrafico = this.labelsGraficoTipo;
+    this.servicio_parqueos.findByID(this.parqueoSeleccionado._id).subscribe({
+      complete: () => {},
+      error: (err: any) => {
+        console.log(err);
+      },
+      next: (parqueo: any) => {
+        console.log('espacios', parqueo.espacios);
+        if (toggleButton.value ==  'dpto'){
+          this.servicio_parqueos.getAllDepartamentos().subscribe({
+            complete: () => {},
+            error: (err: any) => {
+              console.log(err);
+            },
+            next: (departamentos: any) => {
+              this.countDepartamento = Array(departamentos.length).fill(0);
+              this.labelsGraficoDpto = departamentos;
 
-      this.datosGraficoL = this.datosGraficoLTipo;
-      this.datosGraficoK = this.datosGraficoKTipo;
-      this.datosGraficoM = this.datosGraficoMTipo;
-      this.datosGraficoJ = this.datosGraficoJTipo;
-      this.datosGraficoV = this.datosGraficoVTipo;
-      this.datosGraficoS = this.datosGraficoSTipo;
-    }
+              parqueo.espacios.forEach((espacio: any) => {
+                for (let i = 0; i < departamentos.length; i++) {
+                  if (espacio.departamentoFuncionario == departamentos[i] && espacio.ocupado == '1') {
+                    this.countDepartamento[i]++;
+                    break;
+                  }
+                }
+              })
+
+              const total = this.countDepartamento.reduce((partialSum, a) => partialSum + a, 0);
+              console.log('total', total);
+              for (let i = 0; i < this.countDepartamento.length; i++) {
+                this.countDepartamento[i] = parseFloat(((this.countDepartamento[i] / total) * 100).toFixed(1));
+              }
+
+              this.onDpto = true;
+              this.labelsGrafico = this.labelsGraficoDpto;
+              this.onTipoEspacio = false;
+
+              this.datosGrafico = [this.countDepartamento];
+            }
+          });
+        } else if (toggleButton.value == 'tipo_espacio'){
+          parqueo.espacios.forEach((espacio: any) => {
+            if(espacio.tipo == 'JEFATURA' && espacio.ocupado == '1'){
+              this.countTipo[1]++;
+            } else if (espacio.tipo == 'ESPECIAL' && espacio.ocupado == '1'){
+              this.countTipo[0]++;
+            } else if (espacio.tipo == 'VISITANTE' && espacio.ocupado == '1'){
+              this.countTipo[2]++;
+            } else if (espacio.tipo == 'OFICIAL' && espacio.ocupado == '1'){
+              this.countTipo[3]++;
+            }
+          })
+
+          const total = this.countTipo.reduce((partialSum, a) => partialSum + a, 0);
+          console.log('total', total);
+          for (let i = 0; i < this.countTipo.length; i++) {
+            this.countTipo[i] = parseFloat(((this.countTipo[i] / total) * 100).toFixed(1));
+          }
+
+          this.onDpto = false;
+          this.onTipoEspacio = true;
+          this.labelsGrafico = this.labelsGraficoTipo;
+
+          this.datosGrafico = [this.countTipo];
+        }
+      }
+    })
+
     console.log(toggleButton.value);
     console.log(parqueo._id_parqueo);
   }
+
   onParqueo(){
     this.resetGraphics();
     this.parqueoEscogido = true;
