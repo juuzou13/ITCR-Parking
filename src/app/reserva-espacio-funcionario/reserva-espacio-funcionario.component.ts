@@ -31,7 +31,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
   tiempo_salida = { hour: this.horas, minute: this.minutos };
   meridian = true;
   tiempo_minimo = 40;
-  horarioArray = [];
   dias_de_semana = [
     'domingo',
     'lunes',
@@ -74,20 +73,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
   funcionario_estandar = localStorage.getItem('jefatura') == '0';
 
-  newReserva: any = {
-    rangoHorario: { dia: "", hora_entrada: "", hora_salida: "" }, 
-    parqueo: "", 
-    placa: "", 
-    idPersona: "",
-    idReserva: "", 
-    idEspacio: "", 
-    nombreVisitante: "", 
-    nombreJefaturaAdmin: "",
-    motivo: "", 
-    sitio: "", 
-    modelo: "", 
-    color: ""
-  }
+  newReserva: any;
 
   toggleMeridian() {
     this.meridian = !this.meridian;
@@ -207,8 +193,32 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
 
 
   onReservarEspacio(form: NgForm) {
-    if (form.invalid || this.compararTiempos()!) {
+    this.compararTiempos();
+    if(form.invalid) {
       return;
+    }
+    if(!this.funcionario_estandar) {
+      this.newReserva = {
+        idReserva: 'X',
+        idPersona: localStorage.getItem('id'),
+        idEspacio: 'N/A',
+        idParqueo: form.value.parqueo,
+        placa: form.value.placa,
+        rangoHorario: {
+          dia: this.week_days[this.fechaS.getDay()],
+          dia_mes: this.fechaS.getDate().toString(),
+          mes: (this.fechaS.getMonth() + 1).toString(),
+          anio: this.fechaS.getFullYear().toString(),
+          hora_entrada: "00:00",
+          hora_salida: "23:59",
+        },
+        nombreVisitante: '',
+        nombreJefaturaAdmin: '',
+        motivo: '',
+        sitio: '',
+        modelo: '',
+        color: '',
+      };
     } else if (!this.error_horario && !this.error_horario_2) {
       if (form.controls['hora_entrada'].value.minute < 10) {
         this.horaEntradaNewHorario =
@@ -234,12 +244,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           form.controls['hora_salida'].value.minute;
       }
       
-      this.newReserva.rangoHorario = {dia: this.dias_de_semana[form.controls['dia_semana'].value], hora_entrada: this.horaEntradaNewHorario, hora_salida: this.horaSalidaNewHorario};
-      this.newReserva.parqueo = form.value.parqueo;
-      this.newReserva.placa = form.value.placa;
-      this.newReserva.idPersona = localStorage.getItem("id");
-
-      /*this.dataSource.data.push({
+      this.newReserva = {
         idReserva: 'X',
         idPersona: localStorage.getItem('id'),
         idEspacio: 'N/A',
@@ -251,7 +256,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           mes: (this.fechaS.getMonth() + 1).toString(),
           anio: this.fechaS.getFullYear().toString(),
           hora_entrada: this.horaEntradaNewHorario,
-          hora_salida: this.funcionario_estandar ? this.horaSalidaNewHorario : "23:59",
+          hora_salida: this.horaSalidaNewHorario,
         },
         nombreVisitante: '',
         nombreJefaturaAdmin: '',
@@ -259,19 +264,26 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
         sitio: '',
         modelo: '',
         color: '',
-      });
-
-      console.log(this.dataSource.data);
-      this.refresh();
-      form.resetForm();
-      this.tiempo_entrada = { hour: this.horas, minute: this.minutos };
-      this.tiempo_salida = { hour: this.horas, minute: this.minutos };
+      };
     }
-  }*/
 
-      //service con newReserva
+    this.onConfirmarReserva(form);
+    //guardar new reserva
+
+    this.dialogo
+    .open(DialogoInfoComponent, {
+      data: 'La reserva se ha registrado exitosamente.'
+    })
+    .afterClosed()
+    .subscribe(() => {
+      console.log(this.newReserva);
+      form.resetForm();
+      this.error_horario = false;
+      this.error_horario_2 = false;
+      this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
+      this.tiempo_salida = {hour: this.horas, minute: this.minutos};
+    });
   }
-}
 
   ocuparCampo(listaEspacios: Array<any>, parqueoReservado: any, idDeEspacioAOcupar: any): any {
     // idParqueo = parqueoReservado[0].espacios
@@ -317,12 +329,6 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
   }
 
   onConfirmarReserva(form: NgForm) {
-    if (this.horarioArray.length == 0) {
-      this.dialogo.open(DialogoInfoComponent, {
-        data: 'Error: No se ha agregado una reserva a la lista.',
-      });
-      return;
-    }
     console.log("Data func: ", this.tipo_espacio_buscar);
 
     let currentReservation: any = {};
@@ -424,6 +430,9 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
               return espacio.tipo == this.tipo_espacio_buscar;
             })
 
+            console.log("Estos son los espacios "+listaEspacios);
+            console.log("Este es el parqueo "+parqueoReservado[0]);
+
             if (reservasActivasEnRango.length > 0) {
 
               let espaciosOcupadosPorAlgunaResEnRango: Array<any> = [];
@@ -488,53 +497,4 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
     this.ngOnInit();
   }
 
-  onReservarJefatura(form: NgForm) {
-    if (form.invalid) {
-      return;
-    }
-    
-    this.newReserva.rangoHorario = {dia: this.dias_de_semana[form.controls['dia_semana'].value], hora_entrada: "5:00", hora_salida: "23:59"};
-      this.newReserva.parqueo = form.value.parqueo;
-      this.newReserva.placa = form.value.placa;
-      this.newReserva.idPersona = localStorage.getItem("id");
-
-      //service con newReserva
-
-      this.dialogo
-      .open(DialogoInfoComponent, {
-        data: 'La reserva se ha registrado exitosamente.'
-      })
-      .afterClosed()
-      .subscribe(() => {
-        console.log(this.newReserva);
-        form.resetForm();
-        this.error_horario = false;
-        this.error_horario_2 = false;
-        this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
-        this.tiempo_salida = {hour: this.horas, minute: this.minutos};
-      });
-
-    /*this.dataSource.data.push({
-      rangoHorario: {
-        dia: this.dias_de_semana[form.controls['dia_semana'].value],
-        hora_entrada: '5:00',
-        hora_salida: '23:59',
-      },
-      parqueo: form.value.parqueo,
-      placa: form.value.placa,
-      idPersona: localStorage.getItem('id'),
-      idReserva: '',
-      idEspacio: '',
-      nombreVisitante: '',
-      nombreJefaturaAdmin: '',
-      motivo: '',
-      sitio: '',
-      modelo: '',
-      color: '',
-    });
-    this.refresh();
-    form.resetForm();
-    this.tiempo_entrada = { hour: this.horas, minute: this.minutos };
-    this.tiempo_salida = { hour: this.horas, minute: this.minutos };*/
-  }
 }

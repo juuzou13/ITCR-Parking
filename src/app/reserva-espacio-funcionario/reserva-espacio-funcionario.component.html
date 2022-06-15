@@ -58,20 +58,13 @@
             <mat-error *ngIf="error_horario_2">*Extracto de horario debe ser mínimo de 40 minutos</mat-error>
         </mat-grid-tile>
         <mat-grid-tile *ngIf="funcionario_estandar"></mat-grid-tile>
-        <mat-grid-tile *ngIf="funcionario_estandar">
+        <mat-grid-tile *ngIf="!funcionario_estandar"></mat-grid-tile>
+        <mat-grid-tile *ngIf="!funcionario_estandar"></mat-grid-tile>
+        <mat-grid-tile>
             <button 
             mat-raised-button 
             color="primary"
             type="submit">Reservar espacio</button>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="!funcionario_estandar"></mat-grid-tile>
-        <mat-grid-tile *ngIf="!funcionario_estandar"></mat-grid-tile>
-        <mat-grid-tile *ngIf="!funcionario_estandar">
-            <a 
-            class="btn_confirmar"
-            mat-raised-button 
-            color="primary"
-            (click)="onConfirmarReserva(postForm)">Reservar espacio</a>
         </mat-grid-tile>
     </mat-grid-list>
 </form>
