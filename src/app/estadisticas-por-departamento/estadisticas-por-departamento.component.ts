@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChartType } from 'chart.js';
 import { MultiDataSet, Label } from 'ng2-charts';
+import { ConsultarParqueosService } from '../services/consultar-parqueos.service';
 
 @Component({
   selector: 'app-estadisticas-por-departamento',
@@ -54,7 +55,8 @@ export class EstadisticasPorDepartamentoComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    public router: Router
+    public router: Router,
+    private servicio_parqueos: ConsultarParqueosService
   ) { 
     this.breakpointObserver
       .observe([
@@ -96,7 +98,15 @@ export class EstadisticasPorDepartamentoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.servicio_parqueos.getAllDepartamentos().subscribe({
+      complete: () => {},
+      error: (err: any) => {
+        console.log(err);
+      },
+      next: (departamentos: any) => {
+        this.departamentos = departamentos;
+      }
+    });
   }
 
   onParqueo(){

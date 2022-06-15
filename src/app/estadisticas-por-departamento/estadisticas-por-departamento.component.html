@@ -5,11 +5,11 @@
     <div class="flex1">
         <mat-form-field style="width:80%; margin-left:10%; margin-top:2%" appearance="fill" (click)="onParqueo()">
             <mat-label>Parqueo</mat-label>
-            <mat-select required name="parqueo"
+            <mat-select required name="departamento"
                 required
-                #selectParqueo="ngModel"
+                #selectDepartamento="ngModel"
                 [(ngModel)]="departamentoSeleccionado">
-                <mat-error *ngIf="selectParqueo.invalid">Por favor ingrese una opción</mat-error>
+                <mat-error *ngIf="selectDepartamento.invalid">Por favor ingrese una opción</mat-error>
                 <mat-option *ngFor="let departamento of departamentos" 
                     [value]="departamento">
                     {{departamento}}
