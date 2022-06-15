@@ -222,19 +222,19 @@ export class ConsultarParqueosComponent implements OnInit {
     }
 
     for (let index = 0; index < asignados_tec; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "A", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "COMUN", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_especiales; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "E", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "ESPECIAL", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_jefatura; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "J", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "JEFATURA", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_vOficiales; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "O", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "OFICIAL", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_visitantes; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "V", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "VISITANTE", ocupado: "0", departamentoFuncionario: ""});
     }
 
     var indice = 0;
@@ -244,6 +244,7 @@ export class ConsultarParqueosComponent implements OnInit {
     }
 
     this.newParqueo.espacios = this.espacios_parqueo;
+    // this.newParqueo.espacios = this.parqueoSeleccionado.espacios;
 
     console.log("newParqueo", this.newParqueo);
 

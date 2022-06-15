@@ -191,19 +191,19 @@ export class RegistrarParqueoComponent implements OnInit {
     }
 
     for (let index = 0; index < asignados_tec; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "COMUN", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "COMUN", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_especiales; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "ESPECIAL", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "ESPECIAL", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_jefatura; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "JEFATURA", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "JEFATURA", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_vOficiales; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "OFICIAL", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "OFICIAL", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_visitantes; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "VISITANTE", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "VISITANTE", ocupado: "0", departamentoFuncionario: ""});
     }
 
     var indice = 0;
