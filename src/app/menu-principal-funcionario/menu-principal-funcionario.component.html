@@ -7,12 +7,6 @@
         </button>
     </mat-grid-tile>
     <mat-grid-tile>
-        <button [routerLink]="['/consultar-funcionario',{editarFunc: true}]" mat-button color="primary">
-            <mat-icon class="icono-boton-menu">edit</mat-icon>
-            Editar perfil
-        </button>
-    </mat-grid-tile>
-    <mat-grid-tile>
         <button (click)="registrarHorario()" routerLink="/consultar-parqueo" mat-button color="primary">
             <mat-icon class="icono-boton-menu">add_box</mat-icon>
             Registrar horario propio
@@ -31,31 +25,37 @@
         </button>
     </mat-grid-tile>
     <mat-grid-tile>
+        <button routerLink="/reservar-espacio" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">add_box</mat-icon>
+            Reservar espacio
+        </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button  routerLink="/reservar-espacio-visitante" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">add_box</mat-icon>
+            Reservar espacio visitante
+        </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button [routerLink]="['/consultar-funcionario',{editarFunc: true}]" mat-button color="primary">
+            <mat-icon class="icono-boton-menu">edit</mat-icon>
+            Editar perfil
+        </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
         <button (click)="manejarPlanilla()" mat-button color="primary">
             <mat-icon class="icono-boton-menu">engineering</mat-icon>
             Manejar planilla
         </button>
     </mat-grid-tile>
     <mat-grid-tile>
-        <button  mat-button color="primary">
-            <mat-icon class="icono-boton-menu">add_box</mat-icon>
-            Reservar espacio
-        </button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button mat-button color="primary">
-            <mat-icon class="icono-boton-menu">add_box</mat-icon>
-            Reservar espacio visitante
-        </button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <button  mat-button color="primary">
+        <button routerLink="/visualizar-reservaciones" mat-button color="primary">
             <mat-icon class="icono-boton-menu">ballot</mat-icon>
             Visualizar reservaciones
         </button>
     </mat-grid-tile>
     <mat-grid-tile>
-        <button mat-button color="primary">
+        <button routerLink="/estadisticas-por-departamento" mat-button color="primary">
             <mat-icon class="icono-boton-menu">donut_large</mat-icon>
             Estadísticas por departamento
         </button>

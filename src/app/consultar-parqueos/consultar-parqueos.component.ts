@@ -58,7 +58,7 @@ export class ConsultarParqueosComponent implements OnInit {
   consultaEnCurso = false;
   Campus = ["Cartago", "San José", "San Carlos", "Alajuela", "Limón"];
   selected = "";
-  dias_de_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+  dias_de_semana = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
   tiempo_entrada = {hour: this.horas, minute: this.minutos};
   tiempo_salida = {hour: this.horas, minute: this.minutos};
   meridian = true;
@@ -196,23 +196,6 @@ export class ConsultarParqueosComponent implements OnInit {
       });
       return
     }
-
-    // this.parqueoEmpty._id = this.parqueoSeleccionado._id
-    // this.parqueoEmpty._id_parqueo = form.value._id_parqueo
-    // this.parqueoEmpty.tipo = this.parqueoSeleccionado.tipo
-    // this.parqueoEmpty.capacidad_total = form.value.capacidad_total
-    // this.parqueoEmpty.capacidad_actual = form.value.capacidad_actual
-    // this.parqueoEmpty.campus = this.selected;
-    // this.parqueoEmpty.espacios_jefatura = form.value.espacios_jefatura
-    // this.parqueoEmpty.espacios_VOficiales = form.value.espacios_VOficiales
-    // this.parqueoEmpty.espacios_asignados = form.value.espacios_asignados
-    // this.parqueoEmpty.espacios_visitantes = form.value.espacios_visitantes
-    // this.parqueoEmpty.espacios_NEspeciales = form.value.espacios_NEspeciales
-    // this.parqueoEmpty.direccion = form.value.direccion
-    // this.parqueoEmpty.contacto = form.value.contacto
-    // this.parqueoEmpty.id_contrato = form.value.id_contrato
-    // this.parqueoEmpty.horario = this.dataSource.data
-    // this.parqueoEmpty.espacios = this.parqueoSeleccionado.espacios
 
     console.log("form", form);
 

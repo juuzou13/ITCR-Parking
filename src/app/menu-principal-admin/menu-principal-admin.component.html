@@ -2,27 +2,45 @@
 <form (submit)="onMenuPrincipal(postForm)" #postForm="ngForm">
     <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
         <mat-grid-tile>
-            <button (click)="registrarParqueo()" mat-button color="primary">
-                <mat-icon class="icono-boton-menu">add_box</mat-icon>
-                Registrar parqueo
-            </button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <button routerLink="/menu-principal-func" mat-button color="primary">
-                <mat-icon class="icono-boton-menu">person</mat-icon>
-                Vista Funcionario
-            </button>
-        </mat-grid-tile>
-        <mat-grid-tile>
             <button routerLink="/registrar-funcionario" mat-button color="primary">
                 <mat-icon class="icono-boton-menu">person_add</mat-icon>
                 Registro de funcionario
             </button>
         </mat-grid-tile>
         <mat-grid-tile>
-            <button mat-button color="primary">
+            <button routerLink="/registrar-operador" mat-button color="primary">
                 <mat-icon class="icono-boton-menu">person_add</mat-icon>
                 Registro de operador
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button (click)="registrarParqueo()" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">add_box</mat-icon>
+                Registrar parqueo
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/reservar-espacio-visitante" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">add_box</mat-icon>
+                Reservar espacio visitante
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/estadisticasFH" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">donut_large</mat-icon>
+                Estadística franja horaria
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/estadisticas-estacionamiento-particular" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">donut_large</mat-icon>
+                Estadística de estacionamiento particular
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button routerLink="/estadisticas-por-departamento" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">bar_chart</mat-icon>
+                Estadística ocupación por departamento
             </button>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -32,31 +50,13 @@
             </button>
         </mat-grid-tile>
         <mat-grid-tile>
-            <button mat-button color="primary">
-                <mat-icon class="icono-boton-menu">add_box</mat-icon>
-                Reservar espacio visitante
+            <button routerLink="/menu-principal-func" mat-button color="primary">
+                <mat-icon class="icono-boton-menu">person</mat-icon>
+                Vista Funcionario
             </button>
         </mat-grid-tile>
         <mat-grid-tile>
-            <button mat-button color="primary">
-                <mat-icon class="icono-boton-menu">donut_large</mat-icon>
-                Estadística franja horaria
-            </button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <button mat-button color="primary">
-                <mat-icon class="icono-boton-menu">donut_large</mat-icon>
-                Estadística de estacionamiento particular
-            </button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <button  mat-button color="primary">
-                <mat-icon class="icono-boton-menu">bar_chart</mat-icon>
-                Estadística ocupación por departamento
-            </button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <button mat-button color="primary">
+            <button routerLink="/simulacion" mat-button color="primary">
                 <mat-icon class="icono-boton-menu">clear</mat-icon>
                 Simulación de liberar espacios
             </button>

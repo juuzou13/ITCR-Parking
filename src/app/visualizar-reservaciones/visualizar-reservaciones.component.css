@@ -9,7 +9,6 @@ h1{
 }
 
 button {
-    margin-left: 1cm;
     margin-right: 1cm;
     width: 90%;
 }
@@ -79,16 +78,52 @@ mat-error{
 .buscarButton {
     margin-top: 1cm;
     margin-bottom: 1cm;
-    margin-right: 5vw;
-    margin-left: 5vw;
 }
 
 .bloque {
     margin-top: 5%;
 }
 
+.date_container {        
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+}
+
 mat-card {
     width: 80%;
+}
+
+.width-button {
+    width: 3.2cm;
+}
+
+.width-input {
+    width: 40%;
+    max-width: 15cm;
+}
+
+@media screen and (max-width: 600px) {
+    .width-button {
+        width: 70%;
+    }
+    .width-input {
+        width: 85%;
+    }
+
+    .title {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 p {
@@ -108,4 +143,4 @@ p {
     background-color: yellow;
     padding: 10px;
   }
-  
+

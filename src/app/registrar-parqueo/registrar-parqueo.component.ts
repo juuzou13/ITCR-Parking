@@ -34,7 +34,7 @@ export class RegistrarParqueoComponent implements OnInit {
   tiempo_salida = {hour: this.horas, minute: this.minutos};
   meridian = true;
   tiempo_minimo = 40;
-  dias_de_semana = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"];
+  dias_de_semana = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
   tipo_parqueo = ["Principal", "Subcontratado"];
   tipo_parqueo_seleccionado = "";
   espacios_parqueo = Array<any>();
