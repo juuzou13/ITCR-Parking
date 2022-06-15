@@ -142,9 +142,9 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           //console.log(func_id);
           //console.log('res ', res);
           this.funcionario_data = res;
-          if (this.funcionario_data.incapacitado) {
+          if (this.funcionario_data.incapacitado == "1") {
             this.tipo_espacio_buscar = "ESPECIAL";
-          } else if (this.funcionario_data.jefatura) {
+          } else if (!this.funcionario_estandar) {
             this.tipo_espacio_buscar = "JEFATURA";
           } else {
             this.tipo_espacio_buscar = "COMUN";
@@ -198,6 +198,20 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       return;
     }
     if(!this.funcionario_estandar) {
+
+      let parqueoReservado = this.parqueos_registrados.filter((parqueo) => {
+        return parqueo._id === form.value.parqueo;
+      });
+
+      let horariosDeParqueo = parqueoReservado[0].horario.filter((horario: any) => {
+        return horario.dia === this.week_days[this.fechaS.getDay()];
+      });
+
+      if(horariosDeParqueo.length == 0) {
+        console.log("No hay horarios ese día en el parqueo")
+        return;
+      }
+
       this.newReserva = {
         idReserva: 'X',
         idPersona: localStorage.getItem('id'),
@@ -209,8 +223,8 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
           dia_mes: this.fechaS.getDate().toString(),
           mes: (this.fechaS.getMonth() + 1).toString(),
           anio: this.fechaS.getFullYear().toString(),
-          hora_entrada: "00:00",
-          hora_salida: "23:59",
+          hora_entrada: horariosDeParqueo[0].hora_entrada,
+          hora_salida: horariosDeParqueo[0].hora_salida,
         },
         nombreVisitante: '',
         nombreJefaturaAdmin: '',
@@ -418,7 +432,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
             
           }
 
-          if (horariosDeFuncEnRango.length > 0) {
+          if (!this.funcionario_estandar || horariosDeFuncEnRango.length > 0) {
             console.log("Res activas")
             console.log(this.reservasActivas);
 
