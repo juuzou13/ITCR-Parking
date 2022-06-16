@@ -24,6 +24,7 @@ export class OcupacionPorDepartamentoComponent implements OnInit {
   // Datos del departamento del que es jefatura el funcionario
   // para buscar los datos de los funcionarios
   busquedaOn = false;
+  jefaturaMode = false;
   parqueoNombres: any = [];
   parqueoCounts: any = [];
 
@@ -138,16 +139,23 @@ export class OcupacionPorDepartamentoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.servicio_parqueos.getAllDepartamentos().subscribe({
-      complete: () => {},
-      error: (err: any) => {
-        console.log(err);
-      },
-      next: (departamentos: any) => {
-        this.departamentos = departamentos;
-      }
-    });
+    if (localStorage.getItem('admin') == "0" && localStorage.getItem('jefatura') == "1") {
+      this.jefaturaMode = true;
+      this.busquedaOn = true;
 
+      this.departamentoSeleccionado = localStorage.getItem('dpto_jefatura')||'';
+      this.onBuscar();
+    } else {
+      this.servicio_parqueos.getAllDepartamentos().subscribe({
+        complete: () => {},
+        error: (err: any) => {
+          console.log(err);
+        },
+        next: (departamentos: any) => {
+          this.departamentos = departamentos;
+        }
+      });
+    }
   }
 
   onBuscar(){

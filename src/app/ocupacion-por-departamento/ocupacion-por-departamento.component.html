@@ -1,5 +1,5 @@
 <h1> Estadística ocupación por departamento </h1>
-<div class="title">
+<div class="title" *ngIf="!jefaturaMode">
     <mat-form-field appearance="fill" class="width-input">
         <mat-label>Departamento</mat-label>
         <mat-select required name="departamento"
@@ -17,6 +17,7 @@
 </div>
 
 <div class="grid">
+    <div style="height: 2cm;" *ngIf="jefaturaMode"></div>
     <div *ngIf="busquedaOn">
         <mat-card class="boxes">
             <h3>Porcentaje de Ocupación del Departamento {{titleDepartamento}}</h3>
