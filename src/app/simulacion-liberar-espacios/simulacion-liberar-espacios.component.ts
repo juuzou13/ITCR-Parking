@@ -177,32 +177,32 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
       fecha_reserva_salida.setMinutes(this.reservasActivas[i].rangoHorario.hora_salida.split(":")[1]);
 
       if(fecha_reserva_entrada <= hora_ingresada && hora_ingresada <= fecha_reserva_salida) {
-        if(lista_parqueos_reservas.SearchFor[reserva_actual._id] == null) {
+        if(lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo] == null) {
           console.log("El objeto no existe en el diccionario");
           this.lista_parqueos_ids.push(reserva_actual._id);
           this.consultarParqueoService.findByID(this.reservasActivas[i].idParqueo).subscribe({
             next: (res: any) => {
               res.espacios[reserva_actual.idEspacio].ocupado = "1";
-              lista_parqueos_reservas.SearchFor[reserva_actual._id] = res;
+              lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo] = res;
             },
             error: (err: any) => {}
           });
         } else {
-          lista_parqueos_reservas.SearchFor[reserva_actual._id].espacios[reserva_actual.idEspacio].ocupado = "1";
+          lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].ocupado = "1";
         }
       } else if(fecha_reserva_salida <= hora_ingresada) {
-        if(lista_parqueos_reservas.SearchFor[reserva_actual._id] == null) {
+        if(lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo] == null) {
           console.log("El objeto no existe en el diccionario");
-          this.lista_parqueos_ids.push(reserva_actual._id);
+          this.lista_parqueos_ids.push(reserva_actual.idParqueo);
           this.consultarParqueoService.findByID(this.reservasActivas[i].idParqueo).subscribe({
             next: (res: any) => {
               res.espacios[reserva_actual.idEspacio].ocupado = "0";
-              lista_parqueos_reservas.SearchFor[reserva_actual._id] = res;
+              lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo] = res;
             },
             error: (err: any) => {}
           });
         } else {
-          lista_parqueos_reservas.SearchFor[reserva_actual._id].espacios[reserva_actual.idEspacio].ocupado = "0";
+          lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].ocupado = "0";
         }
         this.reservarEspacioService.deleteReservaActiva(reserva_actual._id).subscribe({
           next: (res: any) => {
