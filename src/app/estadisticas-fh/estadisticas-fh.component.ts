@@ -14,14 +14,16 @@ export class EstadisticasFHComponent implements OnInit {
   cols: number = 2;
 
   campusD = ["Cartago", "San José", "Alajuela", "San Carlos", "Limón"];
+  selectCampus = 0;
   
   button_toggle_active = false;
   show_chart = false;
+  showToggle = false;
 
   admin = localStorage.getItem('admin') == '1';
   funcionario_estandar = localStorage.getItem('jefatura') == '0';
-  campus_jefatura = localStorage.getItem('campus_jefatura');
-  dpto_jefatura = localStorage.getItem('dpto_jefatura');
+  campus_jefatura = localStorage.getItem('campus_jefatura')||'';
+  dpto_jefatura = localStorage.getItem('dpto_jefatura')||'';
 
   info: any;
   onAdm = false;
@@ -103,10 +105,16 @@ export class EstadisticasFHComponent implements OnInit {
       if (!this.funcionario_estandar) {
         this.onAdm = true;
       }
+      this.showToggle = true;
+      this.selectCampus = this.campusD.indexOf(this.campus_jefatura);
     }else{
       this.funcionario_estandar = true;
     }
   }
+
+  onBuscar(){
+    this.showToggle = true;
+  };
 
   determineDayTime(time: number): number {
     // 0 es mañana
@@ -230,12 +238,13 @@ export class EstadisticasFHComponent implements OnInit {
   }
 
   onToggle(toggleButton: any, campus:any) {
+    console.log('selectCampus', this.selectCampus);
     this.show_chart = true;
-    let campusS = this.campusD[campus.control.value];
+    let campusS = this.campusD[this.selectCampus];
     console.log("Campus: ", campusS);
     console.log(toggleButton.value);
 
-    this.campus = this.campusD[campus.control.value];
+    this.campus = this.campusD[this.selectCampus];
     this.horariosLunes = [];
     this.horariosMartes = [];
     this.horariosMiercoles = [];

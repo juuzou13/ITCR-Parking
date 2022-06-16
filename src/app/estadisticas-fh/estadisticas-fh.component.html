@@ -1,14 +1,15 @@
 <div class="title">
     <div class="flex2">
-        <h1 > {{admin ? 'Estadística franja horaria' : 'Estadística franja horaria ('+ dpto_jefatura + ')'}}  </h1>
+        <h1 > {{admin ? 'Estadística franja horaria' : 'Estadística franja horaria ('+ dpto_jefatura + ', ' + campus_jefatura + ')'}}  </h1>
     </div>
-    <div class="flex1" >
-        <mat-form-field style="width:80%; margin-left:10%; margin-top:2%" appearance="fill">
+    <div class="flex1" *ngIf="admin">
+        <mat-form-field style="width:80%; margin-left:10%; margin-top:2%" appearance="fill" (click)="onBuscar()">
             <mat-label>Campus</mat-label>
             <mat-select 
                 name="campusSeleccionado"
                 required
                 ngModel
+                [(ngModel)]="selectCampus"
                 #campusSeleccionado="ngModel">
                 <mat-error *ngIf="campusSeleccionado.invalid">Por favor ingrese una opción</mat-error>
                     <mat-option value="0">Cartago</mat-option>
@@ -21,11 +22,11 @@
     </div>
 </div>
 
-<mat-button-toggle-group name="fontStyle"  [disabled]="campusSeleccionado.invalid" #group="matButtonToggleGroup"
+<mat-button-toggle-group name="fontStyle"  [disabled]="!showToggle" #group="matButtonToggleGroup"
 aria-label="Font Style" [style.flex-wrap]="pantalla_pequenia ? 'wrap' : 'nowrap'">
-    <mat-button-toggle value="adm" style="width:100%" (click)="onToggle(adm, campusSeleccionado)" #adm>Clasificar por administrativos</mat-button-toggle>
-    <mat-button-toggle value="doc" style="width:100%" (click)="onToggle(doc, campusSeleccionado)" #doc>Clasificar por docentes</mat-button-toggle>
-    <mat-button-toggle value="ambos" style="width:100%" (click)="onToggle(ambos, campusSeleccionado)" #ambos>Clasificar por ambos</mat-button-toggle>
+    <mat-button-toggle value="adm" style="width:100%" (click)="onToggle(adm, selectCampus)" #adm>Clasificar por administrativos</mat-button-toggle>
+    <mat-button-toggle value="doc" style="width:100%" (click)="onToggle(doc, selectCampus)" #doc>Clasificar por docentes</mat-button-toggle>
+    <mat-button-toggle value="ambos" style="width:100%" (click)="onToggle(ambos, selectCampus)" #ambos>Clasificar por ambos</mat-button-toggle>
 </mat-button-toggle-group>
 
 <div class="grid">
