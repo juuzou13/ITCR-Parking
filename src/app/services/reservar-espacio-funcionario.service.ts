@@ -54,4 +54,8 @@ export class ReservarEspacioFuncionarioService {
     
     return this.http.put(this.API3 + `/updateByID/${mongoIdParqueo._id}`, body,{'headers':headers})
   }
+
+  deleteReservaActiva(_id: String) {
+    return this.http.delete<any>(this.API + `/deleteReservaActiva/${_id}`);
+  }
 }
