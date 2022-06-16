@@ -176,7 +176,7 @@ const routes: Routes = [
   { path: "estadisticas-estacionamiento-particular", 
     component: EstadisticaEstacionamientoParticularComponent,
     data: {
-      usuario: 'admin-jefatura'
+      usuario: 'admin'
     }, 
     canActivate: [AuthGuard]},
   { path: "ocupacion-por-departamento", 
