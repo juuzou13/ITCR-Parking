@@ -7,7 +7,7 @@ import { DialogoInfoComponent } from '../compartido/dialogo-info/dialogo-info.co
 import { RegistrarParqueoService } from '../services/registrar-parqueo.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-
+import { ReservarEspacioFuncionarioService } from '../services/reservar-espacio-funcionario.service';
 @Component({
   selector: 'app-liberar-espacios',
   templateUrl: './liberar-espacios.component.html',
@@ -15,16 +15,18 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class LiberarEspaciosComponent implements OnInit {
 
-  parqueos_registrados = [{_id: "1", _id_parqueo: "Parqueo principal #1"}, {_id: "2", _id_parqueo: "Parqueo subcontratado #1"}];
-
-  parqueo_seleccionado = false;
-
+  reservasOficialesOVisitantes: any = [];
   cols : number = 0;
   rows: number = 0;
 
+  idParqueo = localStorage.getItem('idParqueoOperador');
+  parqueoReservado:any;
+
+  showID = false;
+
   clickedRowTable1: any;
   planillaArray : Array<any> = [];
-  displayedColumns: string[] = ['dia_semana', 'hora_entrada', 'hora_salida'];
+  displayedColumns: string[] = ['fecha','id_persona', 'hora_entrada', 'id_espacio', 'placa', 'tipo', '_id'];
   dataSource : any;
   reservas_parqueo: any = [];
 
@@ -37,7 +39,8 @@ export class LiberarEspaciosComponent implements OnInit {
   }
 
   constructor(private breakpointObserver: BreakpointObserver, 
-    config: NgbTimepickerConfig, public dialogo: MatDialog, private registrarParqueoService: RegistrarParqueoService) {
+    config: NgbTimepickerConfig, public dialogo: MatDialog, private registrarParqueoService: RegistrarParqueoService,
+    private reservarEspacioFuncionarioService: ReservarEspacioFuncionarioService) {
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,
@@ -71,16 +74,34 @@ export class LiberarEspaciosComponent implements OnInit {
     config.spinners = false;
   }
 
-  @ViewChild('paginatorAgregar') paginatorAgregar: MatPaginator | undefined;
+  @ViewChild('paginatorAgregar')
+  paginatorAgregar!: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginatorAgregar;
+    //this.dataSource.paginator = this.paginatorAgregar;
   }
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<String>(this.reservas_parqueo);
-    this.planillaArray = this.dataSource.data;
-    this.refresh();
+    this.reservarEspacioFuncionarioService.getParqueo(this.idParqueo).subscribe({
+      next: (res: any) => {
+        this.parqueoReservado = res;
+      },
+    });
+
+    this.reservarEspacioFuncionarioService.findReservasParaOperador(localStorage.getItem('idParqueoOperador')).subscribe({
+      next: (res: any) => {
+        for(let i = 0; i < res.length; i++){
+          if(res[i].idReserva == 'VIS' || res[i].idReserva == 'OF'){
+            this.reservasOficialesOVisitantes.push(res[i]);
+          }
+        }    
+        this.dataSource = new MatTableDataSource<String>(this.reservasOficialesOVisitantes);
+        this.dataSource.paginator = this.paginatorAgregar;
+        this.planillaArray = this.dataSource.data;
+        this.refresh();   
+      },
+    });
+    
   }
 
   onLiberarEspacio(form: NgForm) {
@@ -89,29 +110,48 @@ export class LiberarEspaciosComponent implements OnInit {
     } else if (this.clickedRowTable1 == null) {
       this.dialogo
       .open(DialogoInfoComponent, {
-        data: 'Error: Debe seleccionar un horario reservado de la lista.'
+        data: 'Error: Debe seleccionar un elemento de la lista.'
       });
       return;
     }
 
+    this.reservarEspacioFuncionarioService.deleteReserva(this.clickedRowTable1._id).subscribe({
+      error: (err: any) => {},
+      next: (res: any) => {}
+    });
+
+    for(let i = 0; i < this.parqueoReservado.espacios.length; i++){
+      if(this.parqueoReservado.espacios[i]._id == this.clickedRowTable1.idEspacio){
+        this.parqueoReservado.espacios[i].ocupado = '0';
+        console.log(this.parqueoReservado.espacios[i]);
+      }
+    }
+    this.reservarEspacioFuncionarioService.ocuparCampo(this.parqueoReservado).subscribe({
+      next: (res: any) => {
+      },
+      error: (err: any) => {
+      }
+    });
+
     this.dialogo
     .open(DialogoInfoComponent, {
       data: 'El espacio se ha liberado exitosamente.'
-    })
-    .afterClosed()
-      .subscribe(() => {
-        /*Eliminar reserva y refrescar consulta de reservas de la base de datos.*/
-        this.reservas_parqueo = [{rangoHorario: {dia: "lunes", hora_entrada: "5:00", 
-        hora_salida: "23:59"}, parqueo: "", placa: "", idPersona: localStorage.getItem("id"),
-        idReserva: "", idEspacio: "A1", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "",
-        sitio: "", modelo: "", color: ""},{rangoHorario: {dia: "viernes", hora_entrada: "5:00", 
-        hora_salida: "23:59"}, parqueo: "", placa: "", idPersona: localStorage.getItem("id"),
-        idReserva: "", idEspacio: "V3", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "",
-        sitio: "", modelo: "", color: ""}];
-        this.dataSource = new MatTableDataSource<String>(this.reservas_parqueo);
-        this.planillaArray = this.dataSource.data;
-        this.refresh();
-      });
+    });
+    let temp: any = [];
+    for(let i = 0; i < this.reservasOficialesOVisitantes.length; i++){
+      if(this.reservasOficialesOVisitantes[i]._id == this.clickedRowTable1._id){
+        continue;
+      }
+      else{
+        temp.push(this.reservasOficialesOVisitantes[i]._id);
+      }
+    }
+    this.reservasOficialesOVisitantes = temp;
+    
+    this.dataSource = new MatTableDataSource<any>(this.reservasOficialesOVisitantes);
+    this.dataSource.paginator = this.paginatorAgregar;
+    
+    this.refresh();
   }
 
   onClickRowTable1(row:any){
@@ -119,49 +159,8 @@ export class LiberarEspaciosComponent implements OnInit {
   }
 
   refresh() {
+    this.dataSource.paginator = this.paginatorAgregar;
     this.dataSource.data = this.dataSource.data;
-  }
-
-  clickListaParqueo(form: NgForm) {
-    form.resetForm();
-    this.parqueo_seleccionado = false;
-    this.clickedRowTable1 = null;
-    this.reservas_parqueo = [];
-    this.dataSource = new MatTableDataSource<String>(this.reservas_parqueo);
-    this.planillaArray = this.dataSource.data;
-    this.refresh();
-  }
-
-  seleccionarParqueo() {
-    this.parqueo_seleccionado = true;
-    /*Consultar las reservas que tienen el id del parqueo seleccionado.*/
-    this.reservas_parqueo = [{rangoHorario: {dia: "lunes", hora_entrada: "5:00", 
-    hora_salida: "23:59"}, parqueo: "", placa: "", idPersona: localStorage.getItem("id"),
-    idReserva: "", idEspacio: "A1", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "",
-    sitio: "", modelo: "", color: ""},{rangoHorario: {dia: "miércoles", hora_entrada: "5:00", 
-    hora_salida: "23:59"}, parqueo: "", placa: "", idPersona: localStorage.getItem("id"),
-    idReserva: "", idEspacio: "E2", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "",
-    sitio: "", modelo: "", color: ""},{rangoHorario: {dia: "viernes", hora_entrada: "5:00", 
-    hora_salida: "23:59"}, parqueo: "", placa: "", idPersona: localStorage.getItem("id"),
-    idReserva: "", idEspacio: "V3", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "",
-    sitio: "", modelo: "", color: ""}];
-  }
-
-  seleccionarEspacio() {
-    /*Consultar las reservas que tienen el id del parqueo seleccionado y el espacio seleccionado.*/
-    this.reservas_parqueo = [{rangoHorario: {dia: "lunes", hora_entrada: "5:00", 
-    hora_salida: "23:59"}, parqueo: "", placa: "", idPersona: localStorage.getItem("id"),
-    idReserva: "", idEspacio: "A1", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "",
-    sitio: "", modelo: "", color: ""},{rangoHorario: {dia: "miércoles", hora_entrada: "5:00", 
-    hora_salida: "23:59"}, parqueo: "", placa: "", idPersona: localStorage.getItem("id"),
-    idReserva: "", idEspacio: "E2", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "",
-    sitio: "", modelo: "", color: ""},{rangoHorario: {dia: "viernes", hora_entrada: "5:00", 
-    hora_salida: "23:59"}, parqueo: "", placa: "", idPersona: localStorage.getItem("id"),
-    idReserva: "", idEspacio: "V3", nombreVisitante: "", nombreJefaturaAdmin: "", motivo: "",
-    sitio: "", modelo: "", color: ""}];
-    this.dataSource = new MatTableDataSource<String>(this.reservas_parqueo);
-    this.planillaArray = this.dataSource.data;
-    this.refresh();
   }
 
 }

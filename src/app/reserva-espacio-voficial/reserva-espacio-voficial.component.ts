@@ -27,9 +27,13 @@ export class ReservaEspacioVoficialComponent implements OnInit {
   error_horario_2 = false;
   periodo_minutos = 0;
 
+  idParqueo = localStorage.getItem('idParqueoOperador');
+
   tiempo_entrada = { hour: this.horas, minute: this.minutos };
   tiempo_salida = { hour: this.horas, minute: this.minutos };
   meridian = true;
+
+  parqueoReservado:any;
 
   week_days = [
     'domingo',
@@ -56,6 +60,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
   ];
 
   parqueos_registrados: Array<any> = [];
+  horaEntradaNewHorario:string = '';
 
   estadiaVehiculoOficial: any;
 
@@ -114,13 +119,14 @@ export class ReservaEspacioVoficialComponent implements OnInit {
   ngOnInit(): void {
     let func_id: any = localStorage.getItem('id');
    
-    this.reservarEspacioService.getAllParqueos().subscribe({
+    this.reservarEspacioService.getParqueo(this.idParqueo).subscribe({
       next: (res: any) => {
         console.log('res ', res);
 
-        this.parqueos_registrados = res.filter((parqueo: any) => {
-          return (parqueo.tipo == "Subcontratado" && (parseInt(parqueo.espacios_asignados) >= 1 || parseInt(parqueo.espacios_visitantes) >= 1)) || parseInt(parqueo.espacios_visitantes) >= 1;
-        });
+        this.parqueoReservado = res;
+        // this.parqueos_registrados = res.filter((parqueo: any) => {
+        //   return (parqueo.tipo == "Subcontratado" && (parseInt(parqueo.espacios_asignados) >= 1 || parseInt(parqueo.espacios_visitantes) >= 1)) || parseInt(parqueo.espacios_visitantes) >= 1;
+        // });
 
       },
     });
@@ -133,18 +139,31 @@ export class ReservaEspacioVoficialComponent implements OnInit {
       return;
     }
 
+    if (form.controls['hora_entrada'].value.minute < 10) {
+      this.horaEntradaNewHorario =
+        form.controls['hora_entrada'].value.hour +
+        ':0' +
+        form.controls['hora_entrada'].value.minute;
+    } else {
+      this.horaEntradaNewHorario =
+        form.controls['hora_entrada'].value.hour +
+        ':' +
+        form.controls['hora_entrada'].value.minute;
+    }
+    let now: Date = new Date();
+
     this.estadiaVehiculoOficial = {
       idReserva: "OF",
       idPersona: form.value.identificacion,
       idEspacio: "",
-      idParqueo: form.value.parqueo,
+      idParqueo: this.idParqueo,
       placa: form.value.placa,
       rangoHorario: {
-        dia: "",
-        dia_mes: "",
-        mes: "",
-        anio: "",
-        hora_entrada: "",
+        dia: this.week_days[now.getDay()],
+        dia_mes: now.getDate().toString(),
+        mes: (now.getMonth() + 1).toString(),
+        anio: now.getFullYear().toString(),
+        hora_entrada: this.horaEntradaNewHorario,
         hora_salida: "",
       },
       nombreVisitante: "",
@@ -204,7 +223,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
   onConfirmarReserva(form: NgForm) {
 
     let currentEstadiaVehiculoOficial: any = {};
-    let parqueoReservado: any = {};
+    //let parqueoReservado: any = {};
 
     let horariosDeParqueo: Array<any> = [];
     let horariosDeParqueoEnRango: Array<any> = [];
@@ -213,30 +232,27 @@ export class ReservaEspacioVoficialComponent implements OnInit {
 
     currentEstadiaVehiculoOficial = this.estadiaVehiculoOficial;
     
-    parqueoReservado = this.parqueos_registrados.filter((parqueo) => {
+    /*this.parqueoReservado = this.parqueos_registrados.filter((parqueo) => {
       return parqueo._id === currentEstadiaVehiculoOficial.idParqueo;
     });
+*/
+    console.log("Parqueo reservado: ", this.parqueoReservado);
 
-    console.log("Parqueo reservado: ", parqueoReservado);
-
-    horariosDeParqueo = parqueoReservado[0].horario.filter((horario: any) => {
+    horariosDeParqueo = this.parqueoReservado.horario.filter((horario: any) => {
       return horario.dia === this.week_days[now.getDay()];
     });
 
     console.log("Horarios de parqueo: ", horariosDeParqueo);
 
-    if (horariosDeParqueo.length > 0) {
-
-      
+    if (horariosDeParqueo.length > 0) {  
 
       horariosDeParqueoEnRango = horariosDeParqueo.filter((horario: any) => {
-        let temporalDateStart = now;
+        let temporalDateStart: Date = new Date;
         temporalDateStart.setHours(horario.hora_entrada.split(':')[0]);
         temporalDateStart.setMinutes(horario.hora_entrada.split(':')[1]);
-        let temporalDateEnd = now;
+        let temporalDateEnd = new Date;
         temporalDateEnd.setHours(horario.hora_salida.split(':')[0]);
         temporalDateEnd.setMinutes(horario.hora_salida.split(':')[1]);
-
 
         return (temporalDateStart <= now && now <= temporalDateEnd);
       }
@@ -246,7 +262,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
 
       if (horariosDeParqueoEnRango.length > 0) {
 
-        let espaciosDeParqueoOcupables = parqueoReservado[0].espacios.filter((espacio: any) => {
+        let espaciosDeParqueoOcupables = this.parqueoReservado.espacios.filter((espacio: any) => {
           return espacio.tipo == "OFICIAL" && espacio.ocupado==0;
         })
 
@@ -254,7 +270,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
 
           let espacioAsignado = espaciosDeParqueoOcupables[0]._id;
           
-          this.ocuparCampo(espacioAsignado, parqueoReservado[0]);
+          this.ocuparCampo(espacioAsignado, this.parqueoReservado);
 
           currentEstadiaVehiculoOficial.idEspacio = espacioAsignado;
 

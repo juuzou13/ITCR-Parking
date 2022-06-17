@@ -2,21 +2,7 @@
 <h1>Liberar espacio</h1>
 <form (submit)="onLiberarEspacio(postForm)" #postForm="ngForm">
     <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
-        <mat-grid-tile>
-            <mat-form-field class="example-full-width" appearance="fill" (click)="clickListaParqueo(postForm)">
-                <mat-label>Parqueo</mat-label>
-                <mat-select required name="parqueo"
-                    required
-                    ngModel
-                    #parqueo="ngModel">
-                    <mat-error *ngIf="parqueo.invalid">Por favor ingrese una opción</mat-error>
-                    <mat-option *ngFor="let parqueo of parqueos_registrados" [value]="parqueo._id" (click)="seleccionarParqueo()">
-                        {{parqueo._id_parqueo}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
+        <!--<mat-grid-tile>
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Espacio</mat-label>
                 <mat-select required name="espacio"
@@ -25,21 +11,27 @@
                     ngModel
                     #espacio="ngModel">
                     <mat-error *ngIf="espacio.invalid">Por favor ingrese una opción</mat-error>
-                    <mat-option *ngFor="let reserva of reservas_parqueo" [value]="reserva.idEspacio" (click)="seleccionarEspacio()">
-                        {{reserva.idEspacio}}
+                    <mat-option *ngFor="let reserva of reservasOficialesOVisitantes" [value]="reserva.idEspacio" (click)="seleccionarEspacio()">
+                        {{reserva.idEspacio}} - {{reserva.idReserva}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile [rowspan]="3">
+        </mat-grid-tile> -->
+        <mat-grid-tile [rowspan]="3" [colspan]="cols">
             <mat-card width="auto">
                 <div class="mat-elevation-z8">
                     <table mat-table [dataSource]="dataSource " class="mat-elevation-z8 demo-table" >
                 
                     <!-- Position Column -->
-                    <ng-container  matColumnDef="dia_semana" width="auto">
-                        <th mat-header-cell *matHeaderCellDef>Día de la semana</th>
-                        <td mat-cell *matCellDef="let element"> {{element.rangoHorario.dia}} </td>
+                    <ng-container matColumnDef="fecha" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                        <td mat-cell *matCellDef="let element"> {{element.rangoHorario.dia_mes}}/{{element.rangoHorario.mes}}/{{element.rangoHorario.anio}} </td>
+                    </ng-container>
+
+                    <!-- Position Column -->
+                    <ng-container  matColumnDef="id_persona" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>ID cliente</th>
+                        <td mat-cell *matCellDef="let element"> {{element.idPersona}} </td>
                     </ng-container>
         
                     <!-- Position Column -->
@@ -49,9 +41,27 @@
                     </ng-container>
         
                     <!-- Position Column -->
-                    <ng-container matColumnDef="hora_salida" width="auto">
-                        <th mat-header-cell *matHeaderCellDef>Hora salida</th>
-                        <td mat-cell *matCellDef="let element"> {{element.rangoHorario.hora_salida}} </td>
+                    <ng-container matColumnDef="id_espacio" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>ID espacio</th>
+                        <td mat-cell *matCellDef="let element"> {{element.idEspacio}} </td>
+                    </ng-container>
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="tipo" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>Tipo espacio</th>
+                        <td mat-cell *matCellDef="let element"> {{element.idReserva}} </td>
+                    </ng-container>
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="placa" width="auto">
+                        <th mat-header-cell *matHeaderCellDef>Placa</th>
+                        <td mat-cell *matCellDef="let element"> {{element.placa}} </td>
+                    </ng-container>
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="_id" width="auto" >
+                        <th mat-header-cell *matHeaderCellDef [hidden]="true">id</th>
+                        <td mat-cell *matCellDef="let element" [hidden]="true"> {{element._id}} </td>
                     </ng-container>
                 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -71,9 +81,7 @@
             </div>
           </mat-card>
         </mat-grid-tile>
-        <mat-grid-tile></mat-grid-tile>
-        <mat-grid-tile></mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile [colspan]="cols">
             <button 
             class="liberar-espacio"
             mat-raised-button 

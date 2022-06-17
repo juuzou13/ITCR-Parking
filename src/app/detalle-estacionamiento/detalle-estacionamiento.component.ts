@@ -22,10 +22,10 @@ export class DetalleEstacionamientoComponent implements OnInit {
   dataSource: any;
   cols : number = 2;
 
-  @ViewChild(MatPaginator) paginatorHorario: MatPaginator | undefined;
+  @ViewChild(MatPaginator) paginatorHorario!: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginatorHorario;
+    //this.dataSource.paginator = this.paginatorHorario;
   }
   
   gridByBreakpoint = {

@@ -233,7 +233,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       }
 
       this.newReserva = {
-        idReserva: 'X',
+        idReserva: 'FUNC',
         idPersona: localStorage.getItem('id'),
         idEspacio: 'N/A',
         idParqueo: form.value.parqueo,
@@ -293,7 +293,7 @@ export class ReservaEspacioFuncionarioComponent implements OnInit {
       }
       
       this.newReserva = {
-        idReserva: 'X',
+        idReserva: 'FUNC',
         idPersona: localStorage.getItem('id'),
         idEspacio: 'N/A',
         idParqueo: form.value.parqueo,

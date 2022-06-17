@@ -235,7 +235,7 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
       }
       
       this.newReserva = {
-        idReserva: 'X',
+        idReserva: 'VIS',
         idPersona: form.value.identificacion,
         idEspacio: 'N/A',
         idParqueo: form.value.parqueo,
