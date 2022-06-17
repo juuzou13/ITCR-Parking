@@ -1,93 +1,37 @@
+<h1> Estadística ocupación por departamento </h1>
 <div class="title">
-    <div class="flex2">
-        <h1 >Estadística franja horaria de su departamento </h1>
-    </div>
+    <mat-form-field appearance="fill" class="width-input">
+        <mat-label>Departamento</mat-label>
+        <mat-select required name="departamento"
+            required
+            #selectDepartamento="ngModel"
+            [(ngModel)]="departamentoSeleccionado">
+            <mat-error *ngIf="selectDepartamento.invalid">Por favor ingrese una opción</mat-error>
+            <mat-option *ngFor="let departamento of departamentos" 
+                [value]="departamento">
+                {{departamento}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="buscarButton width-button" (click)="onBuscar()">Buscar</button>
 </div>
 
 <div class="grid">
-    <div>
+    <div *ngIf="busquedaOn">
         <mat-card class="boxes">
-            <h3>Lunes</h3>
-            <div>
-                <canvas
-                baseChart
-                [data]="datosGraficoL"
-                [labels]="labelsGrafico"
-                [chartType]="doughnutChartType"
-                >
-                </canvas>
+            <h3>Porcentaje de Ocupación del Departamento {{titleDepartamento}}</h3>
+            <div class="chartBox">
+                <apx-chart
+                    [series]="ChartOptions.series"
+                    [chart]="apexChart"
+                    [dataLabels]="ChartOptions.dataLabels"
+                    [plotOptions]="ChartOptions.plotOptions"
+                    [xaxis]="ChartOptions.xaxis"
+                    [yaxis]="ChartOptions.yaxis"
+                    [legend]="ChartOptions.legend"
+                    [tooltip]="ChartOptions.tooltip"
+                ></apx-chart>
             </div>
         </mat-card>
-    </div>
-    <div>
-        <mat-card class="boxes">
-            <h3>Martes</h3>
-            <div>
-                <canvas
-                baseChart
-                [data]="datosGraficoK"
-                [labels]="labelsGrafico"
-                [chartType]="doughnutChartType"
-                >
-                </canvas>
-            </div>
-        </mat-card>
-    </div>
-    <div>
-        <mat-card class="boxes">
-            <h3>Miércoles</h3>
-            <div>
-                <canvas
-                baseChart
-                [data]="datosGraficoM"
-                [labels]="labelsGrafico"
-                [chartType]="doughnutChartType"
-                >
-                </canvas>
-            </div>
-        </mat-card>
-    </div>
-    <div>
-        <mat-card class="boxes">
-            <h3>Jueves</h3>
-            <div>
-                <canvas
-                baseChart
-                [data]="datosGraficoJ"
-                [labels]="labelsGrafico"
-                [chartType]="doughnutChartType"
-                >
-                </canvas>
-            </div>
-        </mat-card>
-    </div>
-    <div>
-        <mat-card class="boxes">
-            <h3>Viernes</h3>
-            <div>
-                <canvas
-                baseChart
-                [data]="datosGraficoV"
-                [labels]="labelsGrafico"
-                [chartType]="doughnutChartType"
-                >
-                </canvas>
-            </div>
-        </mat-card>
-    </div>
-    <div>
-        <mat-card class="boxes">
-            <h3>Sábado</h3>
-        <div>
-            <canvas
-            baseChart
-            [data]="datosGraficoS"
-            [labels]="labelsGrafico"
-            [chartType]="doughnutChartType"
-            >
-            </canvas>
-        </div>
-    </mat-card>
     </div>
 </div>
-<div style="height: 2cm"></div>

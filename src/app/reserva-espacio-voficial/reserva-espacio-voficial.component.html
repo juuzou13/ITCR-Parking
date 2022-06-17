@@ -2,29 +2,6 @@
 <form (submit)="onReservarEspacio(postForm)" #postForm="ngForm">
     <mat-grid-list  #grid [cols]="cols" rowHeight="6:1" gutterSize="20px">
         <mat-grid-tile>
-            <mat-form-field appearance="fill">
-                <mat-label>Escoja una fecha</mat-label>
-                <input matInput [matDatepicker]="picker" [(ngModel)]="fechaS" [ngModelOptions]="{standalone: true}" [min]="minDate">
-                <mat-hint>MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label>Parqueos</mat-label>
-                <mat-select required name="parqueo"
-                    required
-                    ngModel
-                    #parqueo="ngModel">
-                    <mat-error *ngIf="parqueo.invalid">Por favor ingrese una opción</mat-error>
-                    <mat-option *ngFor="let parqueo of parqueos_registrados" [value]="parqueo._id">
-                        {{parqueo._id_parqueo}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Identificación del chofer</mat-label>
                 <input matInput  
@@ -72,20 +49,10 @@
                 <mat-error *ngIf="color.invalid">Por favor ingrese el color del vehículo</mat-error>
             </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile></mat-grid-tile>
         <mat-grid-tile>
             <p class="titulo_hora_entrada">Hora de entrada</p>
             <ngb-timepicker [(ngModel)]="tiempo_entrada" [meridian]="meridian" name="hora_entrada"></ngb-timepicker>
         </mat-grid-tile>
-        <mat-grid-tile>
-            <p class="titulo_hora_salida">Hora de salida</p>
-            <ngb-timepicker [(ngModel)]="tiempo_salida" [meridian]="meridian" name="hora_salida"></ngb-timepicker>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-error class="error_hora" *ngIf="error_horario">*Por favor ingrese una hora de salida superior a la hora de entrada</mat-error>
-            <mat-error class="error_hora" *ngIf="error_horario_2">*Extracto de horario debe ser mínimo de 40 minutos</mat-error>
-        </mat-grid-tile>
-        <mat-grid-tile></mat-grid-tile>
         <mat-grid-tile>
             <button 
             mat-raised-button 

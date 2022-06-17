@@ -18,32 +18,14 @@ export class DetalleEstacionamientoComponent implements OnInit {
 
   miParqueo: any = [];
 
-  // miParqueo: any = {
-  //   _id: '',
-  //   _id_parqueo: '',
-  //   tipo: 'Subcontratado',
-  //   capacidad_total: 50,
-  //   capacidad_actual: 40,
-  //   campus: 'SJ',
-  //   espacios_jefatura: 5,
-  //   espacios_VOficiales: 5,
-  //   espacios_asignados: 5,
-  //   espacios_visitantes: 5,
-  //   espacios_NEspeciales: 5,
-  //   direccion: 'Frente al TEC, Barrio Amón',
-  //   contacto: '89228252',
-  //   id_contrato: 'A-098',
-  //   nombre:"OASIS"
-  // }
-
   displayedColumns: string[] = ['dia','entrada','salida'];
   dataSource: any;
   cols : number = 2;
 
-  @ViewChild(MatPaginator) paginatorHorario: MatPaginator | undefined;
+  @ViewChild(MatPaginator) paginatorHorario!: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginatorHorario;
+    //this.dataSource.paginator = this.paginatorHorario;
   }
   
   gridByBreakpoint = {

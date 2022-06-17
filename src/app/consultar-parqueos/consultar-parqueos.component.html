@@ -78,7 +78,7 @@
                 required
                 ngModel
                 #capacidad_actual="ngModel"
-                [disabled]="sin_edicion"
+                disabled
                 [(ngModel)]="parqueoSeleccionado.capacidad_actual">
                 <mat-error *ngIf="capacidad_actual.invalid">Por favor ingrese una capacidad actual</mat-error>
             </mat-form-field>

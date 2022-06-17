@@ -60,6 +60,7 @@ import { EstadisticaEstacionamientoParticularComponent } from './estadistica-est
 import { OcupacionPorDepartamentoComponent } from './ocupacion-por-departamento/ocupacion-por-departamento.component';
 import { MenuPrincipalOperadorComponent } from './menu-principal-operador/menu-principal-operador.component';
 import { RegistrarOperadorComponent } from './registrar-operador/registrar-operador.component';
+import { NgApexchartsModule } from "ng-apexcharts";
 
 @NgModule({
   declarations: [
@@ -124,7 +125,8 @@ import { RegistrarOperadorComponent } from './registrar-operador/registrar-opera
     NgbModule,
     MatButtonToggleModule,
     ChartsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    NgApexchartsModule
   ],
   providers: [
     AuthGuard,

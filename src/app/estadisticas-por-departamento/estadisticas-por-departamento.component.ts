@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChartType } from 'chart.js';
-import { MultiDataSet, Label } from 'ng2-charts';
+import { ConsultarParqueosService } from '../services/consultar-parqueos.service';
+import { ApexChart } from "ng-apexcharts";
 
 @Component({
   selector: 'app-estadisticas-por-departamento',
@@ -23,35 +23,86 @@ export class EstadisticasPorDepartamentoComponent implements OnInit {
 
   // Datos del departamento del que es jefatura el funcionario
   // para buscar los datos de los funcionarios
-  campus_jefatura: string | null = localStorage.getItem('campus_jefatura');
-  departamento_jefatura: string | null = localStorage.getItem('dpto_jefatura');
+  busquedaOn = false;
+  parqueoNombres: any = [];
+  parqueoCounts: any = [];
 
-  public labelsGrafico: Label[] = ['Mañana', 'Tarde', 'Noche'];
+  departamentos = [];
+  departamentoSeleccionado = '';
+  titleDepartamento = '';
 
-  public datosGraficoL: MultiDataSet = [[0, 0, 0]];
-  public datosGraficoK: MultiDataSet = [[0, 0, 0]];
-  public datosGraficoM: MultiDataSet = [[0, 0, 0]];
-  public datosGraficoJ: MultiDataSet = [[0, 0, 0]];
-  public datosGraficoV: MultiDataSet = [[0, 0, 0]];
-  public datosGraficoS: MultiDataSet = [[0, 0, 0]];
+  chartColors: any[] = [
+    { 
+      backgroundColor:["#2741B9", "#FBF11D", "#4C1C6D", "#18A18A", "#248E11"] 
+    }];
 
-  public doughnutChartType: ChartType = 'doughnut';
+  ChartOptions = {
+    series: [
+      { data: [] }
+    ],
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        distributed: true
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    yaxis: {
+      labels: {
+        style: {
+          fontSize: "14px",
+          fontFamily: "Helvetica, Arial, sans-serif",
+          fontWeight: "bold"
+        }
+      },
+      min: 0,
+      max: 100
+    },
+    xaxis: {
+      categories: []
+    },
+    legend: {
+      show: false
+    },
+    tooltip: {
+      style: {
+        fontSize: '12px',
+        fontFamily: "Helvetica, Arial, sans-serif"
+      },
+      onDatasetHover: {
+          highlightDataSeries: false,
+      },
+      x: {
+          show: false
+      },
+      y: {
+          formatter: function(value: any, { series, seriesIndex, dataPointIndex, w }: any) {
+            return w.globals.labels[dataPointIndex] + ': ' + value + '%';
+          },
+          title: {
+              formatter: (seriesName: any) => '',
+          },
+      }
+    }
+  };
+
+  apexChart: ApexChart = {
+        type: "bar",
+        height: 500,
+        toolbar: {
+          show: false
+        }
+      }
 
   public total: Number = 0;
   public horarios: Array<any> = [];
 
-  public horariosLunes: Array<any> = [];
-  public horariosMartes: Array<any> = [];
-  public horariosMiercoles: Array<any> = [];
-  public horariosJueves: Array<any> = [];
-  public horariosViernes: Array<any> = [];
-  public horariosSabado: Array<any> = [];
-
-  public horariosToSort: Array<any> = [];
-
   constructor(
     private breakpointObserver: BreakpointObserver,
-    public router: Router
+    public router: Router,
+    private servicio_parqueos: ConsultarParqueosService
   ) { 
     this.breakpointObserver
       .observe([
@@ -84,15 +135,74 @@ export class EstadisticasPorDepartamentoComponent implements OnInit {
 
   resetGraphics(){
     
-    this.datosGraficoL= [[0, 0, 0]];
-    this.datosGraficoK= [[0, 0, 0]];
-    this.datosGraficoM= [[0, 0, 0]];
-    this.datosGraficoJ= [[0, 0, 0]];
-    this.datosGraficoV= [[0, 0, 0]];
-    this.datosGraficoS= [[0, 0, 0]];
   }
 
   ngOnInit(): void {
+    this.servicio_parqueos.getAllDepartamentos().subscribe({
+      complete: () => {},
+      error: (err: any) => {
+        console.log(err);
+      },
+      next: (departamentos: any) => {
+        this.departamentos = departamentos;
+      }
+    });
+
   }
+
+  onBuscar(){
+    this.busquedaOn = false;
+    this.servicio_parqueos.getAll().subscribe({
+      complete: () => {},
+      error: (err: any) => {
+        console.log(err);
+      },
+      next: (parqueos: any) => {
+        // this.parqueoNombres = Array(parqueos.length).fill('').map((x, i) => parqueos[i]._id_parqueo);
+        this.parqueoNombres = Array(parqueos.length).fill('');
+        this.parqueoCounts = Array(parqueos.length).fill(0);
+
+        parqueos.forEach((parqueo: any, index : any) => {
+          if (parqueo._id_parqueo.length > 16) {
+            this.parqueoNombres[index] = this.splitter(parqueo._id_parqueo);
+          } else {
+            this.parqueoNombres[index] = parqueo._id_parqueo;
+          }
+          parqueo.espacios.forEach((espacio: any) => {
+            if (espacio.departamentoFuncionario == this.departamentoSeleccionado && espacio.ocupado == '1') {
+              this.parqueoCounts[index]++;
+            }
+          });
+
+          this.parqueoCounts[index] = parseFloat(((this.parqueoCounts[index] / parqueo.espacios.length) * 100).toFixed(2));
+        });
+
+        console.log('parqueoNombres', this.parqueoNombres);
+        console.log('parqueoCounts', this.parqueoCounts);
+
+        this.ChartOptions.series[0].data = this.parqueoCounts;
+        this.ChartOptions.xaxis.categories = this.parqueoNombres;
+        this.titleDepartamento = this.departamentoSeleccionado;
+        this.busquedaOn = true;
+      }
+    });
+  }
+
+  splitter(string: any) {
+    var middle = Math.floor(string.length / 2);
+    var before = string.lastIndexOf(' ', middle);
+    var after = string.indexOf(' ', middle + 1);
+
+    if (before == -1 || (after != -1 && middle - before >= after - middle)) {
+        middle = after;
+    } else {
+        middle = before;
+    }
+
+    var s1 = string.substr(0, middle);
+    var s2 = string.substr(middle + 1);
+
+    return [s1, s2];
+}
 
 }

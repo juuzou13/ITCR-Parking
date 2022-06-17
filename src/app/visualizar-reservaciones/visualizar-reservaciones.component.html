@@ -1,79 +1,38 @@
 <h1> Mis reservaciones </h1>
-<form (submit)="onBuscar(postForm)" #postForm="ngForm">
-    <div class="title">
-        <mat-form-field appearance="fill" class="width-input">
-            <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-                <input matStartDate formControlName="start" placeholder="Inicio">
-                <input matEndDate formControlName="end" placeholder="Final">
+<div class="title">
+    <mat-form-field appearance="fill" class="width-input">
+        <mat-label>Ingresa un rango de fechas</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate [(ngModel)]="fechaInicio" [ngModelOptions]="{standalone: true}" placeholder="Fecha Inicio">
+            <input matEndDate [(ngModel)]="fechaFinal" [ngModelOptions]="{standalone: true}" placeholder="Fecha Final">
             </mat-date-range-input>
-            <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
-            
-            <!-- <mat-error *ngIf="range.hasError('matStartDateInvalid')">Date should be superior</mat-error> -->
-        </mat-form-field>
-        <!-- <mat-form-field style="width:80%; margin-left:10%; margin-top:2%" appearance="fill"> -->
-        <button
-            mat-raised-button 
-            color="primary"
-            type="submit"
-            class="buscarButton width-button">
-            Buscar
-        </button>
-    </div>
-    <!-- <mat-grid-list [cols]="cols" #grid rowHeight="6:1" gutterSize="20px">
-        <mat-grid-tile>
-            <mat-form-field appearance="fill">
-                <mat-label>Enter a date range</mat-label>
-                <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-                    <input matStartDate formControlName="start" placeholder="Inicio">
-                    <input matEndDate formControlName="end" placeholder="Final">
-                </mat-date-range-input>
-                <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-                
-                <mat-error *ngIf="range.hasError('matStartDateInvalid')">Date should be superior</mat-error> -->
-            <!-- </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <button
-                mat-raised-button 
-                color="primary"
-                type="submit"
-                class="buscarButton">
-                Buscar
-            </button>
-        </mat-grid-tile>
-    </mat-grid-list> -->
-</form>
-<mat-grid-list cols="1" rowHeight="10:2" *ngIf="busquedaOn">
-    <mat-grid-tile *ngFor="let cartelera of reservas">
-        <mat-card>
-            <mat-card-title>
-                <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-                    <div fxLayout="column">{{cartelera.dia}}</div>
-                    <div fxLayout="column">{{cartelera.hora_inicio}} - {{cartelera.hora_fin}}</div>
-                  </div>
+        <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="buscarButton width-button" (click)="onBuscar()">Buscar</button>
+</div>
+  <div *ngIf="busquedaOn">
+    <div class="container2" *ngFor="let cartelera of reservas">
+      <div class="subcontainer">
+        <mat-card class="card">
+          <mat-card-title style="margin-top: 8px;">
+            {{cartelera.rangoHorario.dia}}
           </mat-card-title>
-            <mat-card-content>
-              <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-                <div fxLayout="column">Tipo del parqueo: {{cartelera.tipo_parqueo}}</div>
-                <div fxLayout="column">Nombre del parqueo: {{cartelera.nombre}}</div>
-              </div>
-            </mat-card-content>
-            <mat-card-content>
-                <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-                  <div fxLayout="column">Campus: {{cartelera.campus}}</div>
-                  <div fxLayout="column">Dirección: {{cartelera.direccion}}</div>
-                </div>
-              </mat-card-content>
-              <mat-card-content>
-                <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-                  <div fxLayout="column">Id del espacio: {{cartelera.id_espacio}}</div>
-                </div>
-              </mat-card-content>
-          </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+          <h2>{{cartelera.rangoHorario.hora_entrada}} - {{cartelera.rangoHorario.hora_salida}}</h2>
+          <div style="height: 1vh;"></div>
+          <div>
+            <h4>Nombre del parqueo: {{cartelera.nombreParqueo}}
+            <br>Tipo del parqueo: {{cartelera.tipo}}
+            <br>Campus: {{cartelera.campus}}
+            <br>Dirección: {{cartelera.direccion}}
+            </h4>
+          </div>
+          <div class="textcenter">
+            Id del espacio: {{cartelera.idEspacio}}
+            <br>Fecha: {{cartelera.rangoHorario.dia_mes}}-{{cartelera.rangoHorario.mes}}-{{cartelera.rangoHorario.anio}}
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>

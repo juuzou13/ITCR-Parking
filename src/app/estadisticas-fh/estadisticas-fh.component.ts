@@ -14,9 +14,16 @@ export class EstadisticasFHComponent implements OnInit {
   cols: number = 2;
 
   campusD = ["Cartago", "San José", "Alajuela", "San Carlos", "Limón"];
-
+  selectCampus = 0;
+  
   button_toggle_active = false;
   show_chart = false;
+  showToggle = false;
+
+  admin = localStorage.getItem('admin') == '1';
+  funcionario_estandar = localStorage.getItem('jefatura') == '0';
+  campus_jefatura = localStorage.getItem('campus_jefatura')||'';
+  dpto_jefatura = localStorage.getItem('dpto_jefatura')||'';
 
   info: any;
   onAdm = false;
@@ -93,7 +100,21 @@ export class EstadisticasFHComponent implements OnInit {
   public horariosToSort: Array<any> = [];
 
   campus: String = "";
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if(!this.admin){
+      if (!this.funcionario_estandar) {
+        this.onAdm = true;
+      }
+      this.showToggle = true;
+      this.selectCampus = this.campusD.indexOf(this.campus_jefatura);
+    }else{
+      this.funcionario_estandar = true;
+    }
+  }
+
+  onBuscar(){
+    this.showToggle = true;
+  };
 
   determineDayTime(time: number): number {
     // 0 es mañana
@@ -217,12 +238,13 @@ export class EstadisticasFHComponent implements OnInit {
   }
 
   onToggle(toggleButton: any, campus:any) {
+    console.log('selectCampus', this.selectCampus);
     this.show_chart = true;
-    let campusS = this.campusD[campus.control.value];
+    let campusS = this.campusD[this.selectCampus];
     console.log("Campus: ", campusS);
     console.log(toggleButton.value);
 
-    this.campus = this.campusD[campus.control.value];
+    this.campus = this.campusD[this.selectCampus];
     this.horariosLunes = [];
     this.horariosMartes = [];
     this.horariosMiercoles = [];
@@ -244,10 +266,47 @@ export class EstadisticasFHComponent implements OnInit {
           next: (res: any) => {
             if (res) {
               this.total = res.length;
-              this.horarios = res;
+
+              
+              if(this.funcionario_estandar){
+
+                let horariosFunc = []
+                for (let index = 0; index < res.length; index++) {
+                  //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                  for (let index2 = 0; index2 < res[index].horario.length; index2++) {
+                    //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                    horariosFunc.push(res[index].horario[index2])
+                  }
+                }
+                
+                this.horarios = horariosFunc;
+              }else{
+                console.log("func: ", res);
+                let funcionarios_dpto=[]
+                funcionarios_dpto = res.filter((funcionario: any) => {
+                
+                  for(let index = 0; index < funcionario.departamentos.length; index++){
+                    if(funcionario.departamentos[index].campus == this.campus_jefatura && funcionario.departamentos[index].departamento == this.dpto_jefatura){
+                      return funcionario;
+                    }
+                  }
+  
+                });;
+
+                let horariosFunc = []
+                for (let index = 0; index < funcionarios_dpto.length; index++) {
+                  //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                  for (let index2 = 0; index2 < funcionarios_dpto[index].horario.length; index2++) {
+                    //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                    horariosFunc.push(funcionarios_dpto[index].horario[index2])
+                  }
+                }
+
+                this.horarios = horariosFunc;
+              }
 
               console.log(this.horarios);
-              for (let index = 0; index < this.total; index++) {
+              for (let index = 0; index < this.horarios.length; index++) {
                 var horario = this.horarios[index];
                 var dia = horario.dia;
                 var entrada = horario.hora_entrada;
@@ -341,10 +400,45 @@ export class EstadisticasFHComponent implements OnInit {
           next: (res: any) => {
             if (res) {
               this.total = res.length;
-              this.horarios = res;
+              if(this.funcionario_estandar){
+
+                let horariosFunc = []
+                for (let index = 0; index < res.length; index++) {
+                  //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                  for (let index2 = 0; index2 < res[index].horario.length; index2++) {
+                    //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                    horariosFunc.push(res[index].horario[index2])
+                  }
+                }
+                
+                this.horarios = horariosFunc;
+              }else{
+                console.log("func: ", res);
+                let funcionarios_dpto=[]
+                funcionarios_dpto = res.filter((funcionario: any) => {
+                
+                  for(let index = 0; index < funcionario.departamentos.length; index++){
+                    if(funcionario.departamentos[index].campus == this.campus_jefatura && funcionario.departamentos[index].departamento == this.dpto_jefatura){
+                      return funcionario;
+                    }
+                  }
+  
+                });;
+
+                let horariosFunc = []
+                for (let index = 0; index < funcionarios_dpto.length; index++) {
+                  //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                  for (let index2 = 0; index2 < funcionarios_dpto[index].horario.length; index2++) {
+                    //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                    horariosFunc.push(funcionarios_dpto[index].horario[index2])
+                  }
+                }
+
+                this.horarios = horariosFunc;
+              }
 
               console.log(this.horarios);
-              for (let index = 0; index < this.total; index++) {
+              for (let index = 0; index < this.horarios.length; index++) {
                 var horario = this.horarios[index];
                 var dia = horario.dia;
                 var entrada = horario.hora_entrada;
@@ -438,10 +532,45 @@ export class EstadisticasFHComponent implements OnInit {
           next: (res: any) => {
             if (res) {
               this.total = res.length;
-              this.horarios = res;
+              if(this.funcionario_estandar){
+
+                let horariosFunc = []
+                for (let index = 0; index < res.length; index++) {
+                  //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                  for (let index2 = 0; index2 < res[index].horario.length; index2++) {
+                    //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                    horariosFunc.push(res[index].horario[index2])
+                  }
+                }
+                
+                this.horarios = horariosFunc;
+              }else{
+                console.log("func: ", res);
+                let funcionarios_dpto=[]
+                funcionarios_dpto = res.filter((funcionario: any) => {
+                
+                  for(let index = 0; index < funcionario.departamentos.length; index++){
+                    if(funcionario.departamentos[index].campus == this.campus_jefatura && funcionario.departamentos[index].departamento == this.dpto_jefatura){
+                      return funcionario;
+                    }
+                  }
+  
+                });;
+
+                let horariosFunc = []
+                for (let index = 0; index < funcionarios_dpto.length; index++) {
+                  //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                  for (let index2 = 0; index2 < funcionarios_dpto[index].horario.length; index2++) {
+                    //console.log(placasFuncionario.placas_asociadas[index].codigo_placa);  
+                    horariosFunc.push(funcionarios_dpto[index].horario[index2])
+                  }
+                }
+
+                this.horarios = horariosFunc;
+              }
 
               console.log(this.horarios);
-              for (let index = 0; index < this.total; index++) {
+              for (let index = 0; index < this.horarios.length; index++) {
                 var horario = this.horarios[index];
                 var dia = horario.dia;
                 var entrada = horario.hora_entrada;

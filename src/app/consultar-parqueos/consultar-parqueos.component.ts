@@ -176,11 +176,16 @@ export class ConsultarParqueosComponent implements OnInit {
      })
   }
 
-  onEditarParqueo(form: NgForm){
+  departamentos : any = ["Física", "Computación", "Arquitectura", "Matemática", "Cultura y Deporte"];
+
+  async onEditarParqueo(form: NgForm){
     const capacidad_adicional = form.value.espacios_jefatura + 
     form.value.espacios_VOficiales + form.value.espacios_visitantes +
     form.value.espacios_NEspeciales;
     const asignados_tec = form.value.capacidad_total - capacidad_adicional;
+
+    console.log("capacidad_adicional", capacidad_adicional);
+    console.log("asignados_tec", asignados_tec);
     if(form.invalid){
         return;
     } else if(this.dataSource.data.length == 0) {
@@ -221,20 +226,36 @@ export class ConsultarParqueosComponent implements OnInit {
       this.newParqueo.id_contrato = '';
     }
 
+    // for (let index = 0; index < asignados_tec; index++) {
+    //   this.espacios_parqueo.push({_id: "", tipo: "COMUN", ocupado: `${Math.floor(Math.random() * 2)}`, departamentoFuncionario: `${this.departamentos[Math.floor(Math.random() * this.departamentos.length)]}`});
+    // }
+    // for (let index = 0; index < form.value.espacios_NEspeciales; index++) {
+    //   this.espacios_parqueo.push({_id: "", tipo: "ESPECIAL", ocupado: `${Math.floor(Math.random() * 2)}`, departamentoFuncionario: `${this.departamentos[Math.floor(Math.random() * this.departamentos.length)]}`});
+    // }
+    // for (let index = 0; index < form.value.espacios_jefatura; index++) {
+    //   this.espacios_parqueo.push({_id: "", tipo: "JEFATURA", ocupado: `${Math.floor(Math.random() * 2)}`, departamentoFuncionario: `${this.departamentos[Math.floor(Math.random() * this.departamentos.length)]}`});
+    // }
+    // for (let index = 0; index < form.value.espacios_VOficiales; index++) {
+    //   this.espacios_parqueo.push({_id: "", tipo: "OFICIAL", ocupado: `${Math.floor(Math.random() * 2)}`, departamentoFuncionario: `${this.departamentos[Math.floor(Math.random() * this.departamentos.length)]}`});
+    // }
+    // for (let index = 0; index < form.value.espacios_visitantes; index++) {
+    //   this.espacios_parqueo.push({_id: "", tipo: "VISITANTE", ocupado: `${Math.floor(Math.random() * 2)}`, departamentoFuncionario: `${this.departamentos[Math.floor(Math.random() * this.departamentos.length)]}`});
+    // }
+
     for (let index = 0; index < asignados_tec; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "A", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "COMUN", ocupado: "0", departamentoFuncionario: ""});
     }
-    for (let index = 0; index < form.value.espacios_especiales; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "E", ocupado: "0"});
+    for (let index = 0; index < form.value.espacios_NEspeciales; index++) {
+      this.espacios_parqueo.push({_id: "", tipo: "ESPECIAL", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_jefatura; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "J", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "JEFATURA", ocupado: "0", departamentoFuncionario: ""});
     }
-    for (let index = 0; index < form.value.espacios_vOficiales; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "O", ocupado: "0"});
+    for (let index = 0; index < form.value.espacios_VOficiales; index++) {
+      this.espacios_parqueo.push({_id: "", tipo: "OFICIAL", ocupado: "0", departamentoFuncionario: ""});
     }
     for (let index = 0; index < form.value.espacios_visitantes; index++) {
-      this.espacios_parqueo.push({_id: "", tipo: "V", ocupado: "0"});
+      this.espacios_parqueo.push({_id: "", tipo: "VISITANTE", ocupado: "0", departamentoFuncionario: ""});
     }
 
     var indice = 0;
@@ -244,6 +265,7 @@ export class ConsultarParqueosComponent implements OnInit {
     }
 
     this.newParqueo.espacios = this.espacios_parqueo;
+    // this.newParqueo.espacios = this.parqueoSeleccionado.espacios;
 
     console.log("newParqueo", this.newParqueo);
 
@@ -261,6 +283,7 @@ export class ConsultarParqueosComponent implements OnInit {
       .subscribe(() => {
         this.ngOnInit();
         this.desactivarParqueo();
+        this.espacios_parqueo = [];
         form.reset();
       });
   }
