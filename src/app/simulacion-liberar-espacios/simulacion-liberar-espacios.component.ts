@@ -264,5 +264,10 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
         error: (err: any) => {}
       });
     }
+
+    this.dialogo
+    .open(DialogoInfoComponent, {
+      data: 'Simulación finalizada exitosamente.'
+    })
   }
 }
