@@ -143,7 +143,7 @@ export class LiberarEspaciosComponent implements OnInit {
         continue;
       }
       else{
-        temp.push(this.reservasOficialesOVisitantes[i]._id);
+        temp.push(this.reservasOficialesOVisitantes[i]);
       }
     }
     this.reservasOficialesOVisitantes = temp;
