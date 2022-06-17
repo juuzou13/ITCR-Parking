@@ -180,9 +180,9 @@ export class EstadisticaEstacionamientoParticularComponent implements OnInit {
         } else if (toggleButton.value == 'tipo_espacio'){
           parqueo.espacios.forEach((espacio: any) => {
             if(espacio.tipo == 'JEFATURA' && espacio.ocupado == '1'){
-              this.countTipo[1]++;
-            } else if (espacio.tipo == 'ESPECIAL' && espacio.ocupado == '1'){
               this.countTipo[0]++;
+            } else if (espacio.tipo == 'ESPECIAL' && espacio.ocupado == '1'){
+              this.countTipo[1]++;
             } else if (espacio.tipo == 'VISITANTE' && espacio.ocupado == '1'){
               this.countTipo[2]++;
             } else if (espacio.tipo == 'OFICIAL' && espacio.ocupado == '1'){
