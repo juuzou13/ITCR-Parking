@@ -128,7 +128,7 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
       next: (res: any) => {
         this.reservasActivas = res;
         for(var i = 0; i < this.reservasActivas.length; i++) {
-          if(this.reservasActivas[i].idReserva != "X") {
+          if(this.reservasActivas[i].idReserva == "OF") {
             continue;
           }
           var id_parqueo_reserva = this.reservasActivas[i].idParqueo;
@@ -179,7 +179,7 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     for(var i = 0; i < this.reservasActivas.length; i++) {
       let reserva_actual = this.reservasActivas[i];
 
-      if(reserva_actual.idReserva != "X") {
+      if(reserva_actual.idReserva != "FUNC") {
         continue;
       }
 
@@ -232,7 +232,7 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     for(var i = 0; i < this.reservasActivas.length; i++) {
       let reserva_actual = this.reservasActivas[i];
 
-      if(reserva_actual.idReserva != "X") {
+      if(reserva_actual.idReserva == "OF") {
         continue;
       }
 
