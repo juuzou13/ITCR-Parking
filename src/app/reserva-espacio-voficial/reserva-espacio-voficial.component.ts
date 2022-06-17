@@ -139,6 +139,8 @@ export class ReservaEspacioVoficialComponent implements OnInit {
       return;
     }
 
+    console.log("Parqueo reservado "+this.parqueoReservado)
+
     if (form.controls['hora_entrada'].value.minute < 10) {
       this.horaEntradaNewHorario =
         form.controls['hora_entrada'].value.hour +
@@ -206,7 +208,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
     
     parqueoReservado.espacios = parking_spaces;
 
-    console.log("Parqueo reservado: ", parqueoReservado);
+    //console.log("Parqueo reservado: ", parqueoReservado);
 
     
     this.reservarEspacioService.ocuparCampo(parqueoReservado).subscribe({
@@ -301,5 +303,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
       console.log("El vehículo oficial no puede ingresar este día");
     }
     this.ngOnInit();
+    console.log(this.parqueoReservado)
+    console.log("ngInit hecho")
   }
 }
