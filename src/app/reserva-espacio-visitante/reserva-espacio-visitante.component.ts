@@ -476,8 +476,8 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
             for(var i = 0; i < horariosDeParqueo.length; i++) {
               horarios_dia += horariosDeParqueo[i].hora_entrada+" - "+horariosDeParqueo[i].hora_salida+"|"
             }
-            mensaje_error = "Error: No hay horarios en el parqueo que admitan esta reserva.\n"+
-            "Los horarios disponibles para el día "+this.newReserva.rangoHorario.dia+" son:\n"+horarios_dia
+            mensaje_error = "Error: No hay horarios en el parqueo que admitan esta reserva. \n"+
+            "Los horarios disponibles para el día "+this.newReserva.rangoHorario.dia+" son: \n"+horarios_dia
           } else {
             mensaje_error = "Error: No hay horarios en el parqueo que admitan esta reserva."
           }
