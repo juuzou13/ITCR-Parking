@@ -437,6 +437,7 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
                   this.error_horario_2 = false;
                   this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
                   this.tiempo_salida = {hour: this.horas, minute: this.minutos};
+                  location.reload();
                 });
               } else {
                 this.dialogo
@@ -467,6 +468,7 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
                 this.error_horario_2 = false;
                 this.tiempo_entrada = {hour: this.horas, minute: this.minutos};
                 this.tiempo_salida = {hour: this.horas, minute: this.minutos};
+                location.reload();
               });
             }
         } else {
