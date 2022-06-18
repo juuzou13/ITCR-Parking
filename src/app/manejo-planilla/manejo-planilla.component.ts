@@ -75,7 +75,9 @@ export class ManejoPlanillaComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.manejoPlanilla.getFuncionariosElegibles().subscribe({
       next: (res: any) => {
-        this.dataSource = new MatTableDataSource<String>(res);
+        let elegibles = res.filter((funcionario:any) => funcionario.tipo_funcionario != "Operador");
+        console.log(elegibles);
+        this.dataSource = new MatTableDataSource<String>(elegibles);
         this.planillaArray = this.dataSource.data;
       }
     });
