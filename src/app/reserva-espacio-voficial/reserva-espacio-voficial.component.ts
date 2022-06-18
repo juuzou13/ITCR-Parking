@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { NgForm } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgbTimepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from "@angular/material/dialog";
 import { DialogoInfoComponent } from '../compartido/dialogo-info/dialogo-info.component';
-import { RegistrarParqueoService } from '../services/registrar-parqueo.service';
 import { ReservarEspacioFuncionarioService } from '../services/reservar-espacio-funcionario.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reserva-espacio-voficial',
@@ -82,7 +79,8 @@ export class ReservaEspacioVoficialComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     config: NgbTimepickerConfig,
     public dialogo: MatDialog,
-    private reservarEspacioService: ReservarEspacioFuncionarioService
+    private reservarEspacioService: ReservarEspacioFuncionarioService,
+    public router: Router
   ) {
     this.breakpointObserver
       .observe([
@@ -124,10 +122,6 @@ export class ReservaEspacioVoficialComponent implements OnInit {
         console.log('res ', res);
 
         this.parqueoReservado = res;
-        // this.parqueos_registrados = res.filter((parqueo: any) => {
-        //   return (parqueo.tipo == "Subcontratado" && (parseInt(parqueo.espacios_asignados) >= 1 || parseInt(parqueo.espacios_visitantes) >= 1)) || parseInt(parqueo.espacios_visitantes) >= 1;
-        // });
-
       },
     });
 
@@ -176,23 +170,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
       color: form.value.color,
     };
 
-
     this.onConfirmarReserva(form);
-    //guardar new reserva
-
-    this.dialogo
-      .open(DialogoInfoComponent, {
-        data: 'La reserva se ha registrado exitosamente.'
-      })
-      .afterClosed()
-      .subscribe(() => {
-        console.log(this.estadiaVehiculoOficial);
-        form.resetForm();
-        this.error_horario = false;
-        this.error_horario_2 = false;
-        this.tiempo_entrada = { hour: this.horas, minute: this.minutos };
-        this.tiempo_salida = { hour: this.horas, minute: this.minutos };
-      });
   }
 
   ocuparCampo(espacioAOcupar: number, parqueoReservado: any): void {
@@ -225,7 +203,6 @@ export class ReservaEspacioVoficialComponent implements OnInit {
   onConfirmarReserva(form: NgForm) {
 
     let currentEstadiaVehiculoOficial: any = {};
-    //let parqueoReservado: any = {};
 
     let horariosDeParqueo: Array<any> = [];
     let horariosDeParqueoEnRango: Array<any> = [];
@@ -234,10 +211,6 @@ export class ReservaEspacioVoficialComponent implements OnInit {
 
     currentEstadiaVehiculoOficial = this.estadiaVehiculoOficial;
     
-    /*this.parqueoReservado = this.parqueos_registrados.filter((parqueo) => {
-      return parqueo._id === currentEstadiaVehiculoOficial.idParqueo;
-    });
-*/
     console.log("Parqueo reservado: ", this.parqueoReservado);
 
     horariosDeParqueo = this.parqueoReservado.horario.filter((horario: any) => {
@@ -286,24 +259,56 @@ export class ReservaEspacioVoficialComponent implements OnInit {
               console.log("Error: ", err);
             }
           });
-
-
           console.log("Estadia vehiculo oficial: ", currentEstadiaVehiculoOficial);
-          console.log("Entrada Permitida");
-
+          this.dialogo
+          .open(DialogoInfoComponent, {
+            data: 'La reserva se ha registrado exitosamente.'
+          })
+          .afterClosed()
+          .subscribe(() => {
+            form.resetForm();
+            this.error_horario = false;
+            this.error_horario_2 = false;
+            this.tiempo_entrada = { hour: this.horas, minute: this.minutos };
+            this.tiempo_salida = { hour: this.horas, minute: this.minutos };
+            location.reload();
+          });
         } else {
-          console.log("No hay espacios disponibles para vehículos oficiales");
+          this.dialogo
+          .open(DialogoInfoComponent, {
+            data: 'Error: No hay espacios disponibles para vehículos oficiales.'
+          })
+          .afterClosed()
+          .subscribe(() => {
+            form.resetForm();
+            this.router.navigate(['/menu-principal-operador']);
+          });
         }
 
       } else {
-        console.log("El vehículo oficial no puede ingresar a esta hora");
+        var mensaje_error = ""
+          var horarios_dia = "|"
+          if(horariosDeParqueo.length != 0) {
+            for(var i = 0; i < horariosDeParqueo.length; i++) {
+              horarios_dia += horariosDeParqueo[i].hora_entrada+" - "+horariosDeParqueo[i].hora_salida+"|"
+            }
+            mensaje_error = "Error: No hay horarios en el parqueo que admitan esta reserva. \n"+
+            "Los horarios disponibles para el día "+this.estadiaVehiculoOficial.rangoHorario.dia+" son: \n"+horarios_dia
+          } else {
+            mensaje_error = "Error: No hay horarios en el parqueo que admitan esta reserva."
+          }
+          
+          this.dialogo
+          .open(DialogoInfoComponent, {
+            data: mensaje_error
+          });
       }
 
     } else {
-      console.log("El vehículo oficial no puede ingresar este día");
+      this.dialogo
+      .open(DialogoInfoComponent, {
+        data: 'Error: No hay horarios de parqueo registrados para el día '+this.estadiaVehiculoOficial.rangoHorario.dia+'.'
+      });
     }
-    this.ngOnInit();
-    console.log(this.parqueoReservado)
-    console.log("ngInit hecho")
   }
 }
