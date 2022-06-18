@@ -79,6 +79,7 @@ export class ManejoPlanillaComponent implements OnInit, AfterViewInit {
         console.log(elegibles);
         this.dataSource = new MatTableDataSource<String>(elegibles);
         this.planillaArray = this.dataSource.data;
+        
       }
     });
     this.manejoPlanilla.getFuncionariosEliminables().subscribe({
