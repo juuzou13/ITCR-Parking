@@ -190,6 +190,7 @@ export class ReservaEspacioVoficialComponent implements OnInit {
         this.error_horario_2 = false;
         this.tiempo_entrada = { hour: this.horas, minute: this.minutos };
         this.tiempo_salida = { hour: this.horas, minute: this.minutos };
+        location.reload();
       });
   }
 
@@ -300,6 +301,5 @@ export class ReservaEspacioVoficialComponent implements OnInit {
     } else {
       console.log("El vehículo oficial no puede ingresar este día");
     }
-    this.ngOnInit();
   }
 }
