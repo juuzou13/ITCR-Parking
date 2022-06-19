@@ -79,7 +79,9 @@ export class VisualizarReservacionesComponent implements OnInit {
                   return await obj;
                 })
               );
-              this.reservas = reservasCompletas;
+              this.reservas = reservasCompletas.sort(
+                (objA, objB) =>  new Date(objB.rangoHorario.anio, objB.rangoHorario.mes, objB.rangoHorario.dia_mes, objB.rangoHorario.hora_entrada.split(":")[0], objB.rangoHorario.hora_entrada.split(":")[1]).getTime() - new Date(objA.rangoHorario.anio, objA.rangoHorario.mes, objA.rangoHorario.dia_mes, objA.rangoHorario.hora_entrada.split(":")[0], objA.rangoHorario.hora_entrada.split(":")[1]).getTime(),
+              );
               this.busquedaOn = true;
             }
           });
