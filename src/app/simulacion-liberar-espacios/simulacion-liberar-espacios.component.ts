@@ -7,6 +7,7 @@ import { DialogoInfoComponent } from '../compartido/dialogo-info/dialogo-info.co
 import { ConsultarParqueosService } from '../services/consultar-parqueos.service';
 import { ReservarEspacioFuncionarioService } from '../services/reservar-espacio-funcionario.service';
 import { Parqueo } from '../modelos/parqueo.model';
+import { ConsultaFuncionarioService } from '../services/consulta-funcionario.service';
 
 interface Dictionary<T> {
   [Key: string]: T;
@@ -38,6 +39,7 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
   lista_parqueos_reservas: any = new SearchParameters();
   lista_parqueos_objetos: any = []
   lista_index_eliminar: any = []
+  lista_funcionarios: any = []
 
   tiempo_entrada = {hour: this.horas, minute: this.minutos};
   meridian = true;
@@ -92,7 +94,8 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver, 
     config: NgbTimepickerConfig, public dialogo: MatDialog, 
     private consultarParqueoService: ConsultarParqueosService,
-    private reservarEspacioService: ReservarEspacioFuncionarioService) {
+    private reservarEspacioService: ReservarEspacioFuncionarioService,
+    private consultaFuncionarioService: ConsultaFuncionarioService) {
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,
@@ -140,6 +143,11 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
           });
         }
       },
+    });
+    this.consultaFuncionarioService.getAllFuncionariosData().subscribe({
+      next: (res: any) => {
+        this.lista_funcionarios = res;
+      }
     });
   }
 
@@ -199,6 +207,11 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
         if(this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo] != null) {
           this.lista_parqueos_ids.push(reserva_actual.idParqueo);
           this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].ocupado = "0";
+          for(var i = 0; i < this.lista_funcionarios.length; i++){
+            if(this.lista_funcionarios[i].identificacion == reserva_actual.idPersona) {
+              this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].departamentoFuncionario = "";
+            }
+          }
         }
         this.reservarEspacioService.deleteReservaActiva(reserva_actual._id).subscribe({
           next: (res: any) => {
@@ -252,6 +265,11 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
         if(this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo] != null) {
           this.lista_parqueos_ids.push(reserva_actual.idParqueo);
           this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].ocupado = "1";
+          for(var i = 0; i < this.lista_funcionarios.length; i++){
+            if(this.lista_funcionarios[i].identificacion == reserva_actual.idPersona) {
+              this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].departamentoFuncionario = JSON.stringify(this.lista_funcionarios[i].departamentos);
+            }
+          }
         }
       }
     }
