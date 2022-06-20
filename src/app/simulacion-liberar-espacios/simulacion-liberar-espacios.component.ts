@@ -129,6 +129,7 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
   ngOnInit(): void {
     this.reservarEspacioService.findReservas().subscribe({
       next: (res: any) => {
+        console.log("Reservas activas al inicio ",res)
         this.reservasActivas = res;
         for(var i = 0; i < this.reservasActivas.length; i++) {
           if(this.reservasActivas[i].idReserva == "OF") {
@@ -156,6 +157,8 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
       return;
     }
 
+    console.log("Desaparecen ", this.reservasActivas)
+
     let hora_actual = new Date();
     let hora_ingresada = new Date();
     hora_ingresada.setDate(this.fechaS.getDate());
@@ -178,37 +181,40 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     let fecha_reserva_entrada = new Date();
     let fecha_reserva_salida = new Date();
 
+    console.log("Lista parqueos ",this.lista_parqueos_objetos)
     for(var i = 0; i < this.lista_parqueos_objetos.length; i++) {
       if(this.lista_parqueos_reservas.SearchFor[this.lista_parqueos_objetos[i]._id] == null) {
         this.lista_parqueos_reservas.SearchFor[this.lista_parqueos_objetos[i]._id] = this.lista_parqueos_objetos[i];
       }
     }
 
-    for(var i = 0; i < this.reservasActivas.length; i++) {
-      let reserva_actual = this.reservasActivas[i];
+    console.log("Reservas activas primera llamada ",this.reservasActivas)
+    for(var indice = 0; indice < this.reservasActivas.length; indice++) {
+      console.log("Reserva actual en la iteración ", this.reservasActivas[indice]);
+      let reserva_actual = this.reservasActivas[indice];
 
       if(reserva_actual.idReserva != "FUNC") {
         continue;
       }
 
-      fecha_reserva_entrada.setDate(this.reservasActivas[i].rangoHorario.dia_mes);
-      fecha_reserva_entrada.setMonth(this.reservasActivas[i].rangoHorario.mes-1);
-      fecha_reserva_entrada.setFullYear(this.reservasActivas[i].rangoHorario.anio);
-      fecha_reserva_entrada.setHours(this.reservasActivas[i].rangoHorario.hora_entrada.split(":")[0]);
-      fecha_reserva_entrada.setMinutes(this.reservasActivas[i].rangoHorario.hora_entrada.split(":")[1]);
+      fecha_reserva_entrada.setDate(this.reservasActivas[indice].rangoHorario.dia_mes);
+      fecha_reserva_entrada.setMonth(this.reservasActivas[indice].rangoHorario.mes-1);
+      fecha_reserva_entrada.setFullYear(this.reservasActivas[indice].rangoHorario.anio);
+      fecha_reserva_entrada.setHours(this.reservasActivas[indice].rangoHorario.hora_entrada.split(":")[0]);
+      fecha_reserva_entrada.setMinutes(this.reservasActivas[indice].rangoHorario.hora_entrada.split(":")[1]);
 
-      fecha_reserva_salida.setDate(this.reservasActivas[i].rangoHorario.dia_mes);
-      fecha_reserva_salida.setMonth(this.reservasActivas[i].rangoHorario.mes-1);
-      fecha_reserva_salida.setFullYear(this.reservasActivas[i].rangoHorario.anio);
-      fecha_reserva_salida.setHours(this.reservasActivas[i].rangoHorario.hora_salida.split(":")[0]);
-      fecha_reserva_salida.setMinutes(this.reservasActivas[i].rangoHorario.hora_salida.split(":")[1]);
-
+      fecha_reserva_salida.setDate(this.reservasActivas[indice].rangoHorario.dia_mes);
+      fecha_reserva_salida.setMonth(this.reservasActivas[indice].rangoHorario.mes-1);
+      fecha_reserva_salida.setFullYear(this.reservasActivas[indice].rangoHorario.anio);
+      fecha_reserva_salida.setHours(this.reservasActivas[indice].rangoHorario.hora_salida.split(":")[0]);
+      fecha_reserva_salida.setMinutes(this.reservasActivas[indice].rangoHorario.hora_salida.split(":")[1]);
+      
       if(fecha_reserva_salida <= hora_ingresada) {
         if(this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo] != null) {
           this.lista_parqueos_ids.push(reserva_actual.idParqueo);
           this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].ocupado = "0";
-          for(var i = 0; i < this.lista_funcionarios.length; i++){
-            if(this.lista_funcionarios[i].identificacion == reserva_actual.idPersona) {
+          for(var j = 0; j < this.lista_funcionarios.length; j++){
+            if(this.lista_funcionarios[j].identificacion == reserva_actual.idPersona) {
               this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].departamentoFuncionario = "";
             }
           }
@@ -219,7 +225,7 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
           },
           error: (err: any) => {}
         });
-        this.lista_index_eliminar.push(i);
+        this.lista_index_eliminar.push(indice);
       }
     }
 
@@ -227,21 +233,26 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
       this.consultarParqueoService.updateByID(this.lista_parqueos_reservas.SearchFor[this.lista_parqueos_ids[i]]).subscribe({
         next: (res: any) => {
           console.log("Se actualizó el parqueo de id: "+this.lista_parqueos_ids[i]);
+          console.log("El parqueo durante el next "+this.lista_parqueos_reservas.SearchFor[this.lista_parqueos_ids[i]]);
         },
         error: (err: any) => {}
       });
     }
 
+    //[1,4,7]
+
     console.log("Tamaño de lista reservas anterior "+this.reservasActivas.length);
 
     for(var i = 0; i < this.lista_index_eliminar.length; i++) {
-      this.reservasActivas.splice(i, 1);
+      console.log("Se tiene que eliminar ",this.lista_index_eliminar[i])
+      this.reservasActivas.splice(this.lista_index_eliminar[i], 1);
     }
 
     console.log("Nuevo tamaño de lista reservas "+this.reservasActivas.length);
 
     this.lista_parqueos_ids = [];
 
+    console.log("Reservas activas ",this.reservasActivas)
     for(var i = 0; i < this.reservasActivas.length; i++) {
       let reserva_actual = this.reservasActivas[i];
 
@@ -262,8 +273,10 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
       fecha_reserva_salida.setMinutes(this.reservasActivas[i].rangoHorario.hora_salida.split(":")[1]);
 
       if(fecha_reserva_entrada <= hora_ingresada && hora_ingresada <= fecha_reserva_salida) {
+        console.log("primer condicional")
         if(this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo] != null) {
           this.lista_parqueos_ids.push(reserva_actual.idParqueo);
+          console.log("El parqueo después de eliminar ",this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo]);
           this.lista_parqueos_reservas.SearchFor[reserva_actual.idParqueo].espacios[reserva_actual.idEspacio].ocupado = "1";
           for(var i = 0; i < this.lista_funcionarios.length; i++){
             if(this.lista_funcionarios[i].identificacion == reserva_actual.idPersona) {
@@ -274,10 +287,14 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
       }
     }
 
+    console.log("El parqueo antes de agregar ",this.lista_parqueos_reservas.SearchFor["62af9c91881e796c704a5e64"]);
+
     for(var i = 0; i < this.lista_parqueos_ids.length; i++) {
+      console.log("El parqueo antes de agregar ",this.lista_parqueos_reservas.SearchFor[this.lista_parqueos_ids[i]]);
       this.consultarParqueoService.updateByID(this.lista_parqueos_reservas.SearchFor[this.lista_parqueos_ids[i]]).subscribe({
         next: (res: any) => {
           console.log("Se actualizó el parqueo de id: "+this.lista_parqueos_ids[i]);
+          console.log("Durante el next de agregar "+this.lista_parqueos_reservas.SearchFor[this.lista_parqueos_ids[i]]);
         },
         error: (err: any) => {}
       });
@@ -287,5 +304,9 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     .open(DialogoInfoComponent, {
       data: 'Simulación finalizada exitosamente.'
     })
+    .afterClosed()
+    .subscribe(() => {
+      location.reload();
+    });
   }
 }
