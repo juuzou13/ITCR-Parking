@@ -390,7 +390,12 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
 
             if(parqueoReservado[0].tipo == "Subcontratado"){
               listaEspacios = parqueoReservado[0].espacios.filter((espacio: any) => {
-                return espacio.tipo == "VISITANTE" || espacio.tipo == "COMUN";
+                if(espacio.tipo == "VISITANTE"){
+                  return true;
+                }else if(espacio.tipo == "COMUN"){
+                  return true
+                }
+                return false;
               })
             }else{
               listaEspacios = parqueoReservado[0].espacios.filter((espacio: any) => {
