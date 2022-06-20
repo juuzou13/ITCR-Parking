@@ -199,6 +199,7 @@ export class ConsultarFuncionarioComponent implements OnInit, AfterViewInit {
       this.servicio_consulta_func.getFuncionarioData((localStorage.getItem('id') || "")).subscribe({
         complete: () => {},
         next: (res: any) => {
+            console.log('editar_func: func:', res);
             this.jefaturaSelected = res.jefatura == 1 ? "Si": "No";
             console.log(" jefatur Selected en buscar ", this.jefaturaSelected);
             this.incapacitadoSelected = res.incapacitado == 1 ? "Si": "No";

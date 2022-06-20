@@ -207,14 +207,12 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
 
     this.reservasTerminadas.forEach((reserva_actual:any) => {
       console.log("Borrando la reserva con id: ", reserva_actual._id)
-      /*
       this.reservarEspacioService.deleteReservaActiva(reserva_actual._id).subscribe({
         next: (res: any) => {
-          console.log("Delete done.");
+          console.log("Delete done, reserva: ", reserva_actual._id, ".");
         },
         error: (err: any) => {}
       });
-      */
     })
 
     this.lista_parqueos.forEach((parqueo_actual:any) => {
