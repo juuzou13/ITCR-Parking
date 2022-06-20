@@ -145,7 +145,7 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     this.reservasTerminadas = this.reservasActivas.filter((reserva:any) => {
       let fecha = new Date(reserva.rangoHorario.anio, reserva.rangoHorario.mes-1, reserva.rangoHorario.dia_mes, reserva.rangoHorario.hora_salida.split(":")[0], reserva.rangoHorario.hora_salida.split(":")[1]);
       
-      return fecha < hora_ingresada;
+      return fecha < hora_ingresada && reserva.idReserva == "FUNC";
     })
 
     this.reservasEnRango = this.reservasActivas.filter((reserva:any) => {
@@ -162,12 +162,8 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     let espaciosDeParqueoACambiar: any = {};
     let indiceDeParqueo:number = 0;
 
-    let reservasFuncTerminadas = this.reservasTerminadas.filter((reserva:any) => {
-      return reserva.idReserva == "FUNC" ;
-    });
-
-    for(let i=0; i<reservasFuncTerminadas.length; i++){
-      reservaActual = reservasFuncTerminadas[i];
+    for(let i=0; i<this.reservasTerminadas.length; i++){
+      reservaActual = this.reservasTerminadas[i];
       indiceDeParqueo = this.lista_parqueos.map((object: { _id: any }) => object._id).indexOf(reservaActual.idParqueo)
       espaciosDeParqueoACambiar = this.lista_parqueos[indiceDeParqueo].espacios;
       
