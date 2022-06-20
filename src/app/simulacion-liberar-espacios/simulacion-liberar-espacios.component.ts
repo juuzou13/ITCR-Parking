@@ -102,7 +102,7 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     this.reservarEspacioService.findReservas().subscribe({
       next: (res: any) => {
         this.reservasActivas = res.filter((reserva:any) => {
-          return reserva.idReserva == "FUNC";
+          return reserva.idReserva != "OF";
         });
         this.idsParqueosDeReservasActivas = this.reservasActivas.map((reserva:any) => reserva.idParqueo)
         this.idsFuncionariosDeReservasActivas = this.reservasActivas.map((reserva:any) => reserva.idPersona)
@@ -162,8 +162,12 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     let espaciosDeParqueoACambiar: any = {};
     let indiceDeParqueo:number = 0;
 
-    for(let i=0; i<this.reservasTerminadas.length; i++){
-      reservaActual = this.reservasTerminadas[i];
+    let reservasFuncTerminadas = this.reservasTerminadas.filter((reserva:any) => {
+      return reserva.idReserva == "FUNC" ;
+    });
+
+    for(let i=0; i<reservasFuncTerminadas.length; i++){
+      reservaActual = reservasFuncTerminadas[i];
       indiceDeParqueo = this.lista_parqueos.map((object: { _id: any }) => object._id).indexOf(reservaActual.idParqueo)
       espaciosDeParqueoACambiar = this.lista_parqueos[indiceDeParqueo].espacios;
       
