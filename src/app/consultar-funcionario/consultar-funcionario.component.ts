@@ -383,11 +383,13 @@ export class ConsultarFuncionarioComponent implements OnInit, AfterViewInit {
         this.newFuncionario.horario = this.funcionario.horario;
         this.newFuncionario.placas_asociadas = this.funcionario.placas_asociadas;
         console.log(this.dptoSelected);
-        if(this.jefaturaSelected){
+        console.log(this.jefaturaSelected);
+        if(this.jefaturaSelected == "Si"){
           const myArray = form.value.dptoJefatura.split("-");
           this.newFuncionario.campus_departamento_jefatura = {campus:myArray[0], 
             departamento:myArray[1]};
         } else{
+          this.sin_jefatura = true;
           this.newFuncionario.campus_departamento_jefatura = {campus:"", 
             departamento:""};
         }
