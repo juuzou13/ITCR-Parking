@@ -373,6 +373,8 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
               return (currentReservation.idParqueo == reserva.idParqueo && reserva.rangoHorario.dia_mes == currentReservation.rangoHorario.dia_mes && reserva.rangoHorario.mes == currentReservation.rangoHorario.mes && reserva.rangoHorario.anio == currentReservation.rangoHorario.anio);
             })
 
+            
+
             console.log("Res mismo dia y parqueo")
             console.log(reservasEnMismoDiayMismoParqueo)
 
@@ -384,41 +386,50 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
 
             });
 
+            console.log("Res mismo dia y parqueo y rango")
+
             console.log(reservasActivasEnRango);
+
+            let espaciosOcupadosPorAlgunaResEnRango: Array<any> = [];
+
+            for (let index = 0; index < reservasActivasEnRango.length; index++) {
+
+              const espacio = reservasActivasEnRango[index].idEspacio;
+              espaciosOcupadosPorAlgunaResEnRango.push(espacio);
+
+            }
+
+            console.log("Espacios ocupados por alguna res en rango", espaciosOcupadosPorAlgunaResEnRango)
+
+            
 
             let listaEspacios;
 
+            console.log("Tipo", parqueoReservado[0].tipo)
+            
+
             if(parqueoReservado[0].tipo == "Subcontratado"){
               listaEspacios = parqueoReservado[0].espacios.filter((espacio: any) => {
-                if(espacio.tipo == "VISITANTE"){
-                  return true;
-                }else if(espacio.tipo == "COMUN"){
-                  return true
-                }
-                return false;
+                return espacio.tipo == "VISITANTE" && !espaciosOcupadosPorAlgunaResEnRango.includes(espacio._id);
               })
+              console.log("Lista of espacios: ", listaEspacios);
+              if(listaEspacios.length == 0){
+                listaEspacios = parqueoReservado[0].espacios.filter((espacio: any) => {
+                  return espacio.tipo == "COMUN" && !espaciosOcupadosPorAlgunaResEnRango.includes(espacio._id);;
+                })
+              }
+              
+              
             }else{
               listaEspacios = parqueoReservado[0].espacios.filter((espacio: any) => {
-                return espacio.tipo == "VISITANTE";
+                return espacio.tipo == "VISITANTE" && !espaciosOcupadosPorAlgunaResEnRango.includes(espacio._id);;
               })
             }
-            
+            console.log(listaEspacios)
+
             if (reservasActivasEnRango.length > 0) {
 
-              let espaciosOcupadosPorAlgunaResEnRango: Array<any> = [];
-
-              for (let index = 0; index < reservasActivasEnRango.length; index++) {
-
-                const espacio = reservasActivasEnRango[index].idEspacio;
-                espaciosOcupadosPorAlgunaResEnRango.push(espacio);
-
-              }
-
-              console.log(espaciosOcupadosPorAlgunaResEnRango)
-
-              let espaciosDeParqueoOcupables = listaEspacios.filter((espacio: any) => {
-                return !espaciosOcupadosPorAlgunaResEnRango.includes(espacio._id);
-              })
+              let espaciosDeParqueoOcupables = listaEspacios
 
               if (espaciosDeParqueoOcupables.length != 0) {
                 currentReservation.rangoHorario.dia_mes = parseInt(currentReservation.rangoHorario.dia_mes);
@@ -429,6 +440,8 @@ export class ReservaEspacioVisitanteComponent implements OnInit {
 
                 currentReservation.idEspacio = espacioAsignado;
                 console.log(espacioAsignado);
+                console.log("Current res: ", currentReservation)
+                
                 this.reservarEspacioService.registrarReserva(currentReservation).subscribe();
                 this.dialogo
                 .open(DialogoInfoComponent, {
