@@ -171,15 +171,34 @@ export class OcupacionPorDepartamentoComponent implements OnInit {
         this.parqueoCounts = Array(parqueos.length).fill(0);
 
         parqueos.forEach((parqueo: any, index : any) => {
+
           if (parqueo._id_parqueo.length > 16) {
             this.parqueoNombres[index] = this.splitter(parqueo._id_parqueo);
           } else {
             this.parqueoNombres[index] = parqueo._id_parqueo;
           }
           parqueo.espacios.forEach((espacio: any) => {
-            if (espacio.departamentoFuncionario == this.departamentoSeleccionado && espacio.ocupado == '1') {
-              this.parqueoCounts[index]++;
+
+            let departamentosEspacio: any = [];
+            let splited: any = []
+
+            if (espacio.departamentoFuncionario != '') {
+              splited = espacio.departamentoFuncionario.replaceAll('[', '').replaceAll(']', '').replaceAll('},', '}, ').split(', ');
+          
+              departamentosEspacio = splited.map((obj: any) => {
+                console.log('obj', obj);
+                return JSON.parse(obj);
+              });
             }
+
+            const departamentosFiltrados = Array.from(new Set(departamentosEspacio.map((item: any) => item.departamento)));
+
+            for (let i=0; i < departamentosFiltrados.length; i++) {
+              if (departamentosFiltrados[i] == this.departamentoSeleccionado && espacio.ocupado == '1') {
+                this.parqueoCounts[index]++;
+                break;
+              }
+            }    
           });
 
           this.parqueoCounts[index] = parseFloat(((this.parqueoCounts[index] / parqueo.espacios.length) * 100).toFixed(2));

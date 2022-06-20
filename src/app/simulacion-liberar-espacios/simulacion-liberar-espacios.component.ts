@@ -287,5 +287,9 @@ export class SimulacionLiberarEspaciosComponent implements OnInit {
     .open(DialogoInfoComponent, {
       data: 'Simulación finalizada exitosamente.'
     })
+    .afterClosed()
+    .subscribe(() => {
+      location.reload();
+    });
   }
 }

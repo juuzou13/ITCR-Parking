@@ -156,12 +156,32 @@ export class EstadisticaEstacionamientoParticularComponent implements OnInit {
               this.labelsGraficoDpto = departamentos;
 
               parqueo.espacios.forEach((espacio: any) => {
-                for (let i = 0; i < departamentos.length; i++) {
-                  if (espacio.departamentoFuncionario == departamentos[i] && espacio.ocupado == '1') {
-                    this.countDepartamento[i]++;
-                    break;
-                  }
+                let departamentosEspacio: any = [];
+                let splited: any = []
+
+                if (espacio.departamentoFuncionario != '') {
+                  splited = espacio.departamentoFuncionario.replaceAll('[', '').replaceAll(']', '').replaceAll('},', '}, ').split(', ');
+              
+                  departamentosEspacio = splited.map((obj: any) => {
+                    console.log('obj', obj);
+                    return JSON.parse(obj);
+                  });
                 }
+
+                console.log('objetos', splited);
+                console.log('departamentosEspacio', departamentosEspacio);
+
+                const filtrados = Array.from(new Set(departamentosEspacio.map((item: any) => item.departamento)));
+
+
+                filtrados.forEach((departamento: any) => {
+                  for (let i = 0; i < departamentos.length; i++) {
+                    if (departamento == departamentos[i] && espacio.ocupado == '1') {
+                      this.countDepartamento[i]++;
+                      break;
+                    }
+                  }
+                });
               })
 
               const total = this.countDepartamento.reduce((partialSum, a) => partialSum + a, 0);

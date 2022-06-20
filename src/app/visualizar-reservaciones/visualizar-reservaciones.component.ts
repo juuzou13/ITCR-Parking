@@ -39,9 +39,9 @@ export class VisualizarReservacionesComponent implements OnInit {
     }
     this.manejoReservas.getBetweenDates(fechas).subscribe({
       complete: () => {},
-      next: (res: any) => {
-        const parseado = JSON.parse(res);
-        if (parseado.length == 0) {
+      next: (reservas: any) => {
+        const reservasParseadas = JSON.parse(reservas);
+        if (reservasParseadas.length == 0) {
           this.dialogo
           .open(DialogoInfoComponent, {
             data: 'No existe ninguna reserva entre estás fechas.'
@@ -52,11 +52,13 @@ export class VisualizarReservacionesComponent implements OnInit {
         } else {
           this.manejoReservas.getAllParqueos().subscribe({
             complete: () => {},
-            next: async (res1: any) => {
+            next: async (parqueos: any) => {
 
               const reservasCompletas = await Promise.all(
-                parseado.map( async (obj: any) => {
-                  const parqueo = await res1.find( async (obj1: any) => obj1._id == obj.idParqueo);
+                reservasParseadas.map( async (obj: any) => {
+                  const parqueo = await parqueos.find((obj1: any) => {
+                    return obj1._id == obj.idParqueo;
+                  });
                   if (obj.rangoHorario.dia == "lunes") {
                     obj.rangoHorario.dia = "Lunes";
                   } else if (obj.rangoHorario.dia == "martes") {
